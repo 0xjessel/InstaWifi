@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, InstaWifiActivity!</string>
+    <string name="app_name">InstaWifi</string>
+    <string name="write_tag">Write to Tag</string>
+    <string name="tag_read_only">Tag is read-only</string>
+    <string name="tag_too_small">Tag does not have enough memory for message</string>
+    <string name="tag_format_fail">NdefFormatable format fail</string>
+    <string name="tag_format_connect_fail">NdefFormatable format.connect fail</string>
+    <string name="tag_ndef_not_supported">Tag does not support NDEF</string>
+
+</resources>
