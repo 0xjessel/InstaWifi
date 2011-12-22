@@ -5,8 +5,10 @@ import java.util.List;
 import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.Util;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -20,12 +22,25 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 public class InstaWifiHandler extends Activity implements
 		CreateNdefMessageCallback, OnNdefPushCompleteCallback {
 	// maybe this should be a dialog somehow?
 	NfcAdapter mNfcAdapter;
 	private static final int MESSAGE_SENT = 1;
+	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if (WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION.equals(action)) {
+				handleSupplicantConnectionChanged(intent.getBooleanExtra(
+						WifiManager.EXTRA_SUPPLICANT_CONNECTED, false));
+			}
+		}
+
+	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +50,15 @@ public class InstaWifiHandler extends Activity implements
 		// register callback (do i need this check?)
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			mNfcAdapter.setNdefPushMessageCallback(this, this);
+		}
+	}
+
+	private void handleSupplicantConnectionChanged(boolean booleanExtra) {
+		if (booleanExtra) {
+			// wifi success
+			Util.shortToast(this, getString(R.string.wifi_connect_success));
+		} else {
+			Util.shortToast(this, getString(R.string.wifi_connect_fail));
 		}
 	}
 
@@ -66,6 +90,9 @@ public class InstaWifiHandler extends Activity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		registerWifiReceiver();
+
 		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
 			NdefMessage[] messages = NfcUtil.getNdefMessages(getIntent());
 			String wifiString = new String(
@@ -77,6 +104,13 @@ public class InstaWifiHandler extends Activity implements
 	}
 
 	@Override
+	protected void onPause() {
+		super.onPause();
+
+		unregisterReceiver(mReceiver);
+	}
+
+	@Override
 	public void onNewIntent(Intent intent) {
 		// onResume gets called after this to handle the intent
 		setIntent(intent);
@@ -84,7 +118,7 @@ public class InstaWifiHandler extends Activity implements
 
 	private void connectToWifi(Uri wifiUri) {
 		WifiManager mWm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-		if (!mWm.isWifiEnabled()) {
+		if (!mWm.isWifiEnabled()) { // TODO: what happens in airplane mode?
 			mWm.setWifiEnabled(true);
 			Log.i(Util.TAG, "wifi was disabled, enabling wifi");
 		}
@@ -166,6 +200,13 @@ public class InstaWifiHandler extends Activity implements
 			Log.i(Util.TAG,
 					"netId == -1, failed to add network to known networks");
 		}
+	}
+
+	private void registerWifiReceiver() {
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
+
+		registerReceiver(mReceiver, intentFilter);
 	}
 
 	private boolean isHexString(String s) {

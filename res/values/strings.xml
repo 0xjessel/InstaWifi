@@ -12,5 +12,7 @@
     <string name="dialog_write_tag">Touch tag to write</string>
     <string name="nfc_not_available">NFC is not available</string>
     <string name="beam_success">Wifi configuration successfully sent!</string>
+    <string name="wifi_connect_success">Successfully connected to Wifi!</string>
+    <string name="wifi_connect_fail">Failed to connect to Wifi</string>
 
 </resources>
