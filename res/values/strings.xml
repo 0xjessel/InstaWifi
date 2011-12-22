@@ -9,5 +9,6 @@
     <string name="tag_format_fail">NdefFormatable format fail</string>
     <string name="tag_format_connect_fail">NdefFormatable format.connect fail</string>
     <string name="tag_ndef_not_supported">Tag does not support NDEF</string>
+    <string name="dialog_write_tag">Touch tag to write</string>
 
 </resources>

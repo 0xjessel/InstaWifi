@@ -35,7 +35,7 @@ public class NfcUtil {
 				msgs = new NdefMessage[] { msg };
 			}
 		} else {
-			// Log.d(TAG, "Unknown intent.");
+			 Log.i(Util.TAG, "Unknown intent.");
 			// finish();
 		}
 		return msgs;

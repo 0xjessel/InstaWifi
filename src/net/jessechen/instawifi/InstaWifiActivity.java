@@ -1,5 +1,7 @@
 package net.jessechen.instawifi;
 
+import java.nio.charset.Charset;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -28,8 +30,8 @@ public class InstaWifiActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
-		findViewById(R.id.button1).setOnClickListener(mTagWriter);
 		setContentView(R.layout.main);
+		findViewById(R.id.b_writetag).setOnClickListener(mTagWriter);
 
 		// Handle all of our received NFC intents in this activity.
 		mNfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
@@ -58,7 +60,7 @@ public class InstaWifiActivity extends Activity {
 			enableTagWriteMode();
 
 			new AlertDialog.Builder(InstaWifiActivity.this)
-					.setTitle("Touch tag to write")
+					.setTitle(getString(R.string.dialog_write_tag))
 					.setOnCancelListener(
 							new DialogInterface.OnCancelListener() {
 								@Override
@@ -71,10 +73,13 @@ public class InstaWifiActivity extends Activity {
 	};
 
 	private NdefMessage getWifiAsNdef() {
-		byte[] textBytes = "placeholder".getBytes();
-		NdefRecord textRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA,
-				"text/plain".getBytes(), new byte[] {}, textBytes);
-		return new NdefMessage(new NdefRecord[] { textRecord });
+		byte[] url = "wifi://helloworld/wpa/cabdad1234".getBytes(Charset.forName("US-ASCII"));
+
+		NdefRecord record = new NdefRecord(NdefRecord.TNF_ABSOLUTE_URI,
+				url, new byte[0], new byte[0]);
+		NdefMessage msg = new NdefMessage(new NdefRecord[] { record });
+
+		return msg;
 	}
 
 	private void enableNdefExchangeMode() {
