@@ -13,14 +13,19 @@ import android.net.wifi.WifiManager;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcAdapter.CreateNdefMessageCallback;
+import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
 import android.nfc.NfcEvent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 public class InstaWifiHandler extends Activity implements
-		CreateNdefMessageCallback { // maybe this should be a dialog somehow?
+		CreateNdefMessageCallback, OnNdefPushCompleteCallback {
+	// maybe this should be a dialog somehow?
 	NfcAdapter mNfcAdapter;
+	private static final int MESSAGE_SENT = 1;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,26 @@ public class InstaWifiHandler extends Activity implements
 	public NdefMessage createNdefMessage(NfcEvent event) {
 		return NfcUtil.getWifiAsNdef(null, null, null);
 	}
+
+	@Override
+	public void onNdefPushComplete(NfcEvent event) {
+		// A handler is needed to send messages to the activity when this
+		// callback occurs, because it happens from a binder thread
+		mHandler.obtainMessage(MESSAGE_SENT).sendToTarget();
+	}
+
+	/** This handler receives a message from onNdefPushComplete */
+	private final Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case MESSAGE_SENT:
+				Util.longToast(getApplicationContext(),
+						getString(R.string.beam_success)).show();
+				break;
+			}
+		}
+	};
 
 	@Override
 	protected void onResume() {
