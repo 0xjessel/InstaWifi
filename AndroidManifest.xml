@@ -7,6 +7,8 @@
     <uses-sdk android:minSdkVersion="10" />
     <uses-permission android:name="android.permission.NFC"/>
     <uses-feature android:name="android.hardware.nfc" android:required="true" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     
     <application
         android:icon="@drawable/ic_launcher"

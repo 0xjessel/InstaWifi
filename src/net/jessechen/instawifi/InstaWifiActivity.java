@@ -73,7 +73,7 @@ public class InstaWifiActivity extends Activity {
 	};
 
 	private NdefMessage getWifiAsNdef() {
-		byte[] url = "wifi://helloworld/wpa/cabdad1234".getBytes(Charset.forName("US-ASCII"));
+		byte[] url = "wifi://helloworld/cabdad1234/wpa".getBytes(Charset.forName("US-ASCII"));
 
 		NdefRecord record = new NdefRecord(NdefRecord.TNF_ABSOLUTE_URI,
 				url, new byte[0], new byte[0]);
