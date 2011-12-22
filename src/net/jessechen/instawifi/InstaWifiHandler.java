@@ -5,6 +5,7 @@ import java.util.List;
 import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.Util;
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -13,7 +14,8 @@ import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.util.Log;
 
-public class InstaWifiHandler extends Activity {
+public class InstaWifiHandler extends Activity { // maybe this should be a
+													// dialog somehow?
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,7 +36,7 @@ public class InstaWifiHandler extends Activity {
 	}
 
 	private void connectToWifi(Uri wifiUri) {
-		WifiManager mWm = (WifiManager) getSystemService(this.WIFI_SERVICE);
+		WifiManager mWm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		if (!mWm.isWifiEnabled()) {
 			mWm.setWifiEnabled(true);
 			Log.i(Util.TAG, "wifi was disabled, enabling wifi");
