@@ -6,20 +6,36 @@ import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.Util;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
+import android.nfc.NfcAdapter.CreateNdefMessageCallback;
+import android.nfc.NfcEvent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
-public class InstaWifiHandler extends Activity { // maybe this should be a
-													// dialog somehow?
+public class InstaWifiHandler extends Activity implements
+		CreateNdefMessageCallback { // maybe this should be a dialog somehow?
+	NfcAdapter mNfcAdapter;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.handler);
+
+		// register callback (do i need this check?)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			mNfcAdapter.setNdefPushMessageCallback(this, this);
+		}
+	}
+
+	@Override
+	public NdefMessage createNdefMessage(NfcEvent event) {
+		return NfcUtil.getWifiAsNdef(null, null, null);
 	}
 
 	@Override
@@ -33,6 +49,12 @@ public class InstaWifiHandler extends Activity { // maybe this should be a
 			Uri wifiUri = Uri.parse(wifiString);
 			connectToWifi(wifiUri);
 		}
+	}
+
+	@Override
+	public void onNewIntent(Intent intent) {
+		// onResume gets called after this to handle the intent
+		setIntent(intent);
 	}
 
 	private void connectToWifi(Uri wifiUri) {

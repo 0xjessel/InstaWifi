@@ -1,7 +1,6 @@
 package net.jessechen.instawifi;
 
-import java.nio.charset.Charset;
-
+import net.jessechen.instawifi.util.NfcUtil;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -9,8 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentFilter.MalformedMimeTypeException;
-import android.nfc.NdefMessage;
-import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.view.View;
@@ -72,19 +69,9 @@ public class InstaWifiActivity extends Activity {
 		}
 	};
 
-	private NdefMessage getWifiAsNdef() {
-		byte[] url = "wifi://helloworld/cabdad1234/wpa".getBytes(Charset.forName("US-ASCII"));
-
-		NdefRecord record = new NdefRecord(NdefRecord.TNF_ABSOLUTE_URI,
-				url, new byte[0], new byte[0]);
-		NdefMessage msg = new NdefMessage(new NdefRecord[] { record });
-
-		return msg;
-	}
-
 	private void enableNdefExchangeMode() {
 		mNfcAdapter.enableForegroundNdefPush(InstaWifiActivity.this,
-				getWifiAsNdef());
+				NfcUtil.getWifiAsNdef(null, null, null));
 		mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent,
 				mNdefExchangeFilters, null);
 	}

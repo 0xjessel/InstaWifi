@@ -1,5 +1,7 @@
 package net.jessechen.instawifi.util;
 
+import java.nio.charset.Charset;
+
 import net.jessechen.instawifi.R;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +15,20 @@ import android.os.Parcelable;
 import android.util.Log;
 
 public class NfcUtil {
+	public static NdefMessage getWifiAsNdef(String ssid, String pw,
+			String protocol) {
+//		byte[] url = String.format("wifi://%s/%s/%s", ssid, pw, protocol)
+//				.getBytes(Charset.forName("US-ASCII"));
+		byte[] url = "wifi://helloworld/cabdad1234/wpa".getBytes(Charset
+				.forName("US-ASCII"));
+
+		NdefRecord record = new NdefRecord(NdefRecord.TNF_ABSOLUTE_URI, url,
+				new byte[0], new byte[0]);
+		NdefMessage msg = new NdefMessage(new NdefRecord[] { record });
+
+		return msg;
+	}
+
 	public static NdefMessage[] getNdefMessages(Intent intent) {
 		// Parse the intent
 		NdefMessage[] msgs = null;
@@ -35,7 +51,7 @@ public class NfcUtil {
 				msgs = new NdefMessage[] { msg };
 			}
 		} else {
-			 Log.i(Util.TAG, "Unknown intent.");
+			Log.i(Util.TAG, "Unknown intent.");
 			// finish();
 		}
 		return msgs;
