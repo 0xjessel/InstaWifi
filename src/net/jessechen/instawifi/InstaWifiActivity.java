@@ -1,6 +1,8 @@
 package net.jessechen.instawifi;
 
+import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.NfcUtil;
+import net.jessechen.instawifi.util.Util;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -43,8 +45,11 @@ public class InstaWifiActivity extends Activity {
 		if (mWriteMode
 				&& NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
 			Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-			NfcUtil.writeTag(NfcUtil.getWifiAsNdef(null, null, null),
-					detectedTag, this);
+			WifiModel currentWifi = Util.getCurrentWifiModel(this);
+			NfcUtil.writeTag(
+					NfcUtil.getWifiAsNdef(currentWifi.getSSID(),
+							currentWifi.getPassword(),
+							currentWifi.getProtocol()), detectedTag, this);
 		}
 	}
 

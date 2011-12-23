@@ -2,24 +2,86 @@ package net.jessechen.instawifi.util;
 
 import java.util.List;
 
+import net.jessechen.instawifi.models.WifiModel;
+
 import android.content.Context;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 import android.widget.Toast;
 
 public class Util {
 	public static String TAG = "instawifi";
-	
+	public static String WEP = "wep";
+	public static String WPA = "wpa";
+
 	public static Toast shortToast(Context c, String msg) {
 		return Toast.makeText(c, msg, Toast.LENGTH_SHORT);
 	}
-	
+
 	public static Toast longToast(Context c, String msg) {
 		return Toast.makeText(c, msg, Toast.LENGTH_LONG);
 	}
-	
+
+	public static WifiModel getCurrentWifiModel(Context c) {
+		WifiConfiguration wc = getCurrentWifiConfig(c);
+		String ssid = wc.SSID;
+		String protocol = getWifiProtocol(wc);
+		String password = getWifiPassword(wc, protocol);
+		return new WifiModel(ssid, password, protocol);
+	}
+
+	public static WifiConfiguration getCurrentWifiConfig(Context c) {
+		WifiManager mWifiManager = (WifiManager) c
+				.getSystemService(Context.WIFI_SERVICE);
+		WifiInfo currentWifiInfo = mWifiManager.getConnectionInfo();
+		if (currentWifiInfo != null) {
+			WifiConfiguration activeConfig = null;
+			for (WifiConfiguration conn : mWifiManager.getConfiguredNetworks()) {
+				if (conn.status == WifiConfiguration.Status.CURRENT) {
+					activeConfig = conn;
+					break;
+				}
+			}
+			if (activeConfig != null) {
+				return activeConfig;
+			}
+		}
+		return null;
+	}
+
+	public static String getWifiProtocol(WifiConfiguration wc) {
+		if (wc.allowedAuthAlgorithms.isEmpty()) {
+			// this is an open network
+			return "";
+		} else if (wc.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.NONE)) {
+			// WEP network, the key is in wfc.wepKeys[wfc.wepTxKeyIndex]
+			return WEP;
+		} else if (wc.allowedKeyManagement
+				.get(WifiConfiguration.KeyMgmt.WPA_PSK)) {
+			// WPA/WPA2 network, key is in wfc.preSharedKey
+			return WPA;
+		} else {
+			// not one of the above..
+			Log.e(TAG, "Did not find wifi protocol");
+			return null;
+		}
+
+	}
+
+	public static String getWifiPassword(WifiConfiguration wc, String protocol) {
+		if (protocol.equals(WEP)) {
+			// TODO: i think this just returns '*'..needs root to get a password
+			return wc.wepKeys[wc.wepTxKeyIndex];
+		} else if (protocol.equals(WPA)) {
+			return wc.preSharedKey;
+		} else {
+			return null;
+		}
+	}
+
 	public static boolean isHexString(String s) {
 		if (s == null) {
 			return false;
@@ -38,9 +100,10 @@ public class Util {
 		}
 		return true;
 	}
-	
+
 	public static void connectToWifi(Context c, Uri wifiUri) {
-		WifiManager mWm = (WifiManager) c.getSystemService(Context.WIFI_SERVICE);
+		WifiManager mWm = (WifiManager) c
+				.getSystemService(Context.WIFI_SERVICE);
 		if (!mWm.isWifiEnabled()) { // TODO: what happens in airplane mode?
 			mWm.setWifiEnabled(true);
 			Log.i(Util.TAG, "wifi was disabled, enabling wifi");
@@ -115,6 +178,7 @@ public class Util {
 		// add network to known list
 		int netId = mWm.addNetwork(mWc);
 		if (netId != -1) {
+			mWm.saveConfiguration();
 			mWm.enableNetwork(netId, true);
 			Log.i(Util.TAG, "attemping to connect to new network");
 		} else {
