@@ -17,10 +17,10 @@ import android.util.Log;
 public class NfcUtil {
 	public static NdefMessage getWifiAsNdef(String ssid, String pw,
 			String protocol) {
-//		byte[] url = String.format("wifi://%s/%s/%s", ssid, pw, protocol)
-//				.getBytes(Charset.forName("US-ASCII"));
-		byte[] url = "wifi://helloworld/cabdad1234/wpa".getBytes(Charset
-				.forName("US-ASCII"));
+		// TODO: check behavior when protocol is open and ssid has spaces (might
+		// have to encode the ssid)
+		byte[] url = String.format("wifi://%s/%s/%s", ssid, pw, protocol)
+				.getBytes(Charset.forName("US-ASCII"));
 
 		NdefRecord record = new NdefRecord(NdefRecord.TNF_ABSOLUTE_URI, url,
 				new byte[0], new byte[0]);
