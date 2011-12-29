@@ -1,7 +1,11 @@
 package net.jessechen.instawifi;
 
+import java.util.ArrayList;
+
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.NfcUtil;
+import net.jessechen.instawifi.util.RootUtil;
+import net.jessechen.instawifi.util.RootUtil.ExecuteAsRootBase;
 import net.jessechen.instawifi.util.Util;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,6 +17,7 @@ import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 public class InstaWifiActivity extends Activity {
@@ -40,6 +45,25 @@ public class InstaWifiActivity extends Activity {
 		IntentFilter tagDetected = new IntentFilter(
 				NfcAdapter.ACTION_TAG_DISCOVERED);
 		mWriteTagFilters = new IntentFilter[] { tagDetected };
+
+		boolean root = RootUtil.ExecuteAsRootBase.canRunRootCommands();
+		if (root) {
+			RootUtil.ExecuteAsRootBase su = new ExecuteAsRootBase() {
+
+				@Override
+				protected ArrayList<String> getCommandsToExecute() {
+					ArrayList<String> toReturn = new ArrayList<String>();
+					String internalDir = getApplicationContext().getFilesDir()
+							.getAbsolutePath();
+					toReturn.add(RootUtil
+							.COPY_WIFI_CONF_FILE_COMMAND(internalDir));
+					return toReturn;
+				}
+			};
+			
+			su.execute();
+			Log.i(Util.TAG, "sudo made me a sandwich");
+		}
 	}
 
 	@Override
@@ -77,14 +101,14 @@ public class InstaWifiActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
-//			 WifiModel currentWifi = Util
-//			 .getCurrentWifiModel(getApplicationContext());
-//			 Util.longToast(getApplicationContext(), String.format(
-//			 "SSID: %s, PW: %s, PROTOCOL: %s", currentWifi.getSSID(),
-//			 currentWifi.getPassword(), currentWifi.getProtocol()));
-//
-			String url = String.format(Util.WIFI_URI_SCHEME, "clink", "5104779276",
-					"wep");
+			// WifiModel currentWifi = Util
+			// .getCurrentWifiModel(getApplicationContext());
+			// Util.longToast(getApplicationContext(), String.format(
+			// "SSID: %s, PW: %s, PROTOCOL: %s", currentWifi.getSSID(),
+			// currentWifi.getPassword(), currentWifi.getProtocol()));
+			//
+			String url = String.format(Util.WIFI_URI_SCHEME, "clink",
+					"5104779276", "wep");
 			Uri wifiUri = Uri.parse(url);
 			Util.connectToWifi(getApplicationContext(), wifiUri);
 		}
