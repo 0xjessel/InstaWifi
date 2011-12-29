@@ -14,7 +14,6 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 
 public class InstaWifiActivity extends Activity {
 	private boolean mWriteMode = false;
@@ -78,14 +77,14 @@ public class InstaWifiActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
-			// WifiModel currentWifi = Util
-			// .getCurrentWifiModel(getApplicationContext());
-			// Util.longToast(getApplicationContext(), String.format(
-			// "SSID: %s, PW: %s, PROTOCOL: %s", currentWifi.getSSID(),
-			// currentWifi.getPassword(), currentWifi.getProtocol()));
-
-			String url = String.format("wifi://%s/%s#%s", "Bruce", "2internet",
-					"wpa");
+//			 WifiModel currentWifi = Util
+//			 .getCurrentWifiModel(getApplicationContext());
+//			 Util.longToast(getApplicationContext(), String.format(
+//			 "SSID: %s, PW: %s, PROTOCOL: %s", currentWifi.getSSID(),
+//			 currentWifi.getPassword(), currentWifi.getProtocol()));
+//
+			String url = String.format(Util.WIFI_URI_SCHEME, "clink", "5104779276",
+					"wep");
 			Uri wifiUri = Uri.parse(url);
 			Util.connectToWifi(getApplicationContext(), wifiUri);
 		}

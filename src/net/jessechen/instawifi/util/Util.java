@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class Util {
+	public static String WIFI_URI_SCHEME = "wifi://%s/%s#%s";
 	public static String TAG = "instawifi";
 	public static String WEP = "wep";
 	public static String WPA = "wpa";
@@ -52,10 +53,12 @@ public class Util {
 		WifiManager mWifiManager = (WifiManager) c
 				.getSystemService(Context.WIFI_SERVICE);
 		WifiInfo currentWifiInfo = mWifiManager.getConnectionInfo();
+		String curSSID = "\"".concat(currentWifiInfo.getSSID()).concat("\"");
+		
 		if (currentWifiInfo != null) {
 			WifiConfiguration activeConfig = null;
 			for (WifiConfiguration conn : mWifiManager.getConfiguredNetworks()) {
-				if (conn.status == WifiConfiguration.Status.CURRENT) {
+				if (conn.SSID.equals(curSSID)) {
 					activeConfig = conn;
 					break;
 				}
@@ -100,9 +103,15 @@ public class Util {
 	public static boolean connectToWifi(Context c, Uri wifiUri) {
 		WifiManager mWm = (WifiManager) c
 				.getSystemService(Context.WIFI_SERVICE);
-		if (!mWm.isWifiEnabled()) { // TODO: what happens in airplane mode?
+		if (!mWm.isWifiEnabled()) { 
 			mWm.setWifiEnabled(true);
 			Log.i(Util.TAG, "wifi was disabled, enabling wifi");
+		}
+		
+		// waiting until wifi is enabled
+		while (!mWm.isWifiEnabled()) {
+			// do nothing
+			Log.v(TAG, "waiting for wifi to be enabled..");
 		}
 	
 		int netId = getNetworkId(c, wifiUri, mWm);

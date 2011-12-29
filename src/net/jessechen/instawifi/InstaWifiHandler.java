@@ -1,5 +1,6 @@
 package net.jessechen.instawifi;
 
+import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.Util;
 import android.app.Activity;
@@ -60,7 +61,10 @@ public class InstaWifiHandler extends Activity implements
 	@Override
 	public NdefMessage createNdefMessage(NfcEvent event) {
 		// TODO: android beam work
-		return NfcUtil.getWifiAsNdef(null, null, null);
+		WifiModel currentWifi = Util.getCurrentWifiModel(this);
+
+		return NfcUtil.getWifiAsNdef(currentWifi.getSSID(),
+				currentWifi.getPassword(), currentWifi.getProtocol());
 	}
 
 	@Override
