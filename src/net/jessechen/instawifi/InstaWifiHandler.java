@@ -59,6 +59,7 @@ public class InstaWifiHandler extends Activity implements
 
 	@Override
 	public NdefMessage createNdefMessage(NfcEvent event) {
+		// TODO: android beam work
 		return NfcUtil.getWifiAsNdef(null, null, null);
 	}
 

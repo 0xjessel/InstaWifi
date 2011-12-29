@@ -9,10 +9,12 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 
 public class InstaWifiActivity extends Activity {
 	private boolean mWriteMode = false;
@@ -29,6 +31,7 @@ public class InstaWifiActivity extends Activity {
 
 		setContentView(R.layout.main);
 		findViewById(R.id.b_writetag).setOnClickListener(mTagWriter);
+		findViewById(R.id.b_test).setOnClickListener(mTestButtonListener);
 
 		// Handle all of our received NFC intents in this activity.
 		mNfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
@@ -68,6 +71,23 @@ public class InstaWifiActivity extends Activity {
 									disableTagWriteMode();
 								}
 							}).create().show();
+		}
+	};
+
+	private View.OnClickListener mTestButtonListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			// WifiModel currentWifi = Util
+			// .getCurrentWifiModel(getApplicationContext());
+			// Util.longToast(getApplicationContext(), String.format(
+			// "SSID: %s, PW: %s, PROTOCOL: %s", currentWifi.getSSID(),
+			// currentWifi.getPassword(), currentWifi.getProtocol()));
+
+			String url = String.format("wifi://%s/%s#%s", "Bruce", "2internet",
+					"wpa");
+			Uri wifiUri = Uri.parse(url);
+			Util.connectToWifi(getApplicationContext(), wifiUri);
 		}
 	};
 

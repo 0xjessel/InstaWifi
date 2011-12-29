@@ -10,6 +10,12 @@
         android:layout_height="wrap_content"
         android:text="@string/write_tag" />
 
+    <Button
+        android:id="@+id/b_test"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"
+        android:text="Test BUTTON PRESS ME!" />
+    
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

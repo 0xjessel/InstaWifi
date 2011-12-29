@@ -5,9 +5,9 @@ public class WifiModel {
 	private String SSID;
 	private String password;
 	
-	public WifiModel(String id, String pw, String pt) {
+	public WifiModel(String ssid, String pw, String pt) {
 		protocol = pt;
-		SSID = id;
+		SSID = ssid;
 		password = pw;
 	}
 	
