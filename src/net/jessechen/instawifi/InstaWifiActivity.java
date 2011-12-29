@@ -46,8 +46,8 @@ public class InstaWifiActivity extends Activity {
 				NfcAdapter.ACTION_TAG_DISCOVERED);
 		mWriteTagFilters = new IntentFilter[] { tagDetected };
 
-		boolean root = RootUtil.ExecuteAsRootBase.canRunRootCommands();
-		if (root) {
+		// get wifi_supplicant.conf file if rooted
+		if (RootUtil.ExecuteAsRootBase.canRunRootCommands()) {
 			RootUtil.ExecuteAsRootBase su = new ExecuteAsRootBase() {
 
 				@Override
@@ -60,9 +60,12 @@ public class InstaWifiActivity extends Activity {
 					return toReturn;
 				}
 			};
-			
-			su.execute();
-			Log.i(Util.TAG, "sudo made me a sandwich");
+
+			if (su.execute()) {
+				Log.i(Util.TAG, "sudo made me a sandwich");
+			} else {
+				Log.e(Util.TAG, "sudo failed to make me a sandwich");
+			}
 		}
 	}
 
