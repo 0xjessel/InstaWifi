@@ -110,7 +110,7 @@ public class RootUtil {
 
 	private static HashMap<String, String> getNetworkConfigs(Context c,
 			String ssid) {
-		String fileContents = getFile(c);
+		String fileContents = getFileThenDelete(c);
 		String lines[] = fileContents.split("\\r?\\n");
 
 		boolean found = false;
@@ -148,7 +148,7 @@ public class RootUtil {
 		return toReturn;
 	}
 
-	public static String getFile(Context c) {
+	public static String getFileThenDelete(Context c) {
 		String content = "";
 		FileInputStream fis;
 		try {
@@ -166,6 +166,10 @@ public class RootUtil {
 			Log.e(Util.TAG, "IOException while reading wifi passwords file");
 			e.printStackTrace();
 		}
+		
+		// do not retain wifi password file
+		c.deleteFile(DESTINATION_FILENAME);
+		
 		return content;
 	}
 
