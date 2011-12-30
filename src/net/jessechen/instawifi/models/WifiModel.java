@@ -1,14 +1,27 @@
 package net.jessechen.instawifi.models;
 
 public class WifiModel {
-	private String protocol;
+	private String BSSID;
 	private String SSID;
 	private String password;
+	private String protocol;
 	
-	public WifiModel(String ssid, String pw, String pt) {
+	public WifiModel(String bssid, String ssid, String pw, String pt) {
+		BSSID = bssid;
 		protocol = pt;
 		SSID = ssid;
 		password = pw;
+	}
+	
+	public WifiModel(String ssid, String pw, String pt) {
+		BSSID = null;
+		protocol = pt;
+		SSID = ssid;
+		password = pw;
+	}
+	
+	public String getBSSID() {
+		return BSSID;
 	}
 	
 	public String getProtocol() {

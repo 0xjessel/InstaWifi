@@ -1,11 +1,9 @@
 package net.jessechen.instawifi;
 
-import java.util.ArrayList;
-
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.RootUtil;
-import net.jessechen.instawifi.util.RootUtil.ExecuteAsRootBase;
+import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import net.jessechen.instawifi.util.Util;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -46,26 +44,13 @@ public class InstaWifiActivity extends Activity {
 				NfcAdapter.ACTION_TAG_DISCOVERED);
 		mWriteTagFilters = new IntentFilter[] { tagDetected };
 
-		// get wifi_supplicant.conf file if rooted
-		if (RootUtil.ExecuteAsRootBase.canRunRootCommands()) {
-			RootUtil.ExecuteAsRootBase su = new ExecuteAsRootBase() {
-
-				@Override
-				protected ArrayList<String> getCommandsToExecute() {
-					ArrayList<String> toReturn = new ArrayList<String>();
-					String internalDir = getApplicationContext().getFilesDir()
-							.getAbsolutePath();
-					toReturn.add(RootUtil
-							.COPY_WIFI_CONF_FILE_COMMAND(internalDir));
-					return toReturn;
-				}
-			};
-
-			if (su.execute()) {
-				Log.i(Util.TAG, "sudo made me a sandwich");
-			} else {
-				Log.e(Util.TAG, "sudo failed to make me a sandwich");
-			}
+		try {
+			Log.i(Util.TAG,
+					RootUtil.getCurrentWifiPassword(this,
+							Util.getCurrentWifiConfig(this)));
+		} catch (PasswordNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

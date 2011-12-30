@@ -3,6 +3,7 @@ package net.jessechen.instawifi.util;
 import java.util.List;
 
 import net.jessechen.instawifi.models.WifiModel;
+import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import android.content.Context;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
@@ -29,10 +30,18 @@ public class Util {
 	public static WifiModel getCurrentWifiModel(Context c) {
 		WifiConfiguration wc = getCurrentWifiConfig(c);
 		if (wc != null) {
+			String bssid = wc.BSSID;
 			String ssid = wc.SSID;
 			String protocol = getWifiProtocol(wc);
-			String password = getWifiPassword(wc, protocol);
-			return new WifiModel(ssid, password, protocol);
+			String password = null;
+			try {
+				password = RootUtil.getCurrentWifiPassword(c, wc);
+			} catch (PasswordNotFoundException e) {
+				Log.e(Util.TAG,
+						"password not found when trying to get current wifi model");
+				e.printStackTrace();
+			} // TODO: FIX
+			return new WifiModel(bssid, ssid, password, protocol);
 		} else {
 			return null;
 		}
@@ -54,7 +63,7 @@ public class Util {
 				.getSystemService(Context.WIFI_SERVICE);
 		WifiInfo currentWifiInfo = mWifiManager.getConnectionInfo();
 		String curSSID = "\"".concat(currentWifiInfo.getSSID()).concat("\"");
-		
+
 		if (currentWifiInfo != null) {
 			WifiConfiguration activeConfig = null;
 			for (WifiConfiguration conn : mWifiManager.getConfiguredNetworks()) {
@@ -103,17 +112,17 @@ public class Util {
 	public static boolean connectToWifi(Context c, Uri wifiUri) {
 		WifiManager mWm = (WifiManager) c
 				.getSystemService(Context.WIFI_SERVICE);
-		if (!mWm.isWifiEnabled()) { 
+		if (!mWm.isWifiEnabled()) {
 			mWm.setWifiEnabled(true);
 			Log.i(Util.TAG, "wifi was disabled, enabling wifi");
 		}
-		
+
 		// waiting until wifi is enabled
 		while (!mWm.isWifiEnabled()) {
 			// do nothing
 			Log.v(TAG, "waiting for wifi to be enabled..");
 		}
-	
+
 		int netId = getNetworkId(c, wifiUri, mWm);
 		if (netId == -1) {
 			netId = addWifiNetwork(c, wifiUri, mWm);
@@ -136,6 +145,10 @@ public class Util {
 
 	public static int addWifiNetwork(Context c, Uri wifiUri, WifiManager mWm) {
 		WifiModel wm = getWifiModel(c, wifiUri);
+		if (wm == null) {
+			return -1;
+		}
+
 		String protocol = wm.getProtocol();
 		String pw = wm.getPassword();
 
