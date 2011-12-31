@@ -38,7 +38,7 @@ public class Util {
 				password = RootUtil.getWifiPassword(c, wc);
 			} catch (PasswordNotFoundException e) {
 				Log.e(Util.TAG,
-						"password not found when trying to get current wifi model");
+						"password not found when trying to get it using root access");
 				e.printStackTrace();
 			} // TODO: FIX
 			return new WifiModel(bssid, ssid, password, protocol);
@@ -62,9 +62,10 @@ public class Util {
 		WifiManager mWifiManager = (WifiManager) c
 				.getSystemService(Context.WIFI_SERVICE);
 		WifiInfo currentWifiInfo = mWifiManager.getConnectionInfo();
-		String curSSID = "\"".concat(currentWifiInfo.getSSID()).concat("\"");
+		
+		if (currentWifiInfo != null && currentWifiInfo.getSSID() != null) {
+			String curSSID = "\"".concat(currentWifiInfo.getSSID()).concat("\"");
 
-		if (currentWifiInfo != null) {
 			WifiConfiguration activeConfig = null;
 			for (WifiConfiguration conn : mWifiManager.getConfiguredNetworks()) {
 				if (conn.SSID.equals(curSSID)) {

@@ -55,12 +55,12 @@ public class RootUtil {
 	 * @throws PasswordNotFoundException
 	 *             if an error occurs during the process
 	 */
-	public static String getWifiPassword(final Context c,
-			WifiConfiguration wc) throws PasswordNotFoundException {
-		if (wc.SSID == null) {
+	public static String getWifiPassword(final Context c, WifiConfiguration wc)
+			throws PasswordNotFoundException {
+		if (wc.SSID == null || wc == null) {
 			Log.e(Util.TAG,
-					"could not get current wifi's password because ssid is null");
-			throw new PasswordNotFoundException("ssid is null");
+					"could not get wifi password because WifiConfiguration is invalid");
+			throw new PasswordNotFoundException("WifiConfiguration is invalid");
 		}
 
 		String password = null;
