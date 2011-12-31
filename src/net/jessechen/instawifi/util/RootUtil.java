@@ -22,6 +22,10 @@ import android.util.Log;
  * .stealthcopter.com/blog/2010/01/android-requesting-root-access
  * -in-your-app/
  */
+/**
+ * @author Jesse Chen
+ * 
+ */
 public class RootUtil {
 	public static String WPA_SUPPLICANT_CONF_PATH = "/data/misc/wifi/wpa_supplicant.conf";
 	public static String DESTINATION_FILENAME = "wifipw.txt";
@@ -41,7 +45,17 @@ public class RootUtil {
 		return String.format("chmod 004 %s", ABSOLUTE_DESTINATION_PATH(c));
 	}
 
-	public static String getCurrentWifiPassword(final Context c,
+	/**
+	 * gets the wifi password from the current connected network. requires root
+	 * access on phone.
+	 * 
+	 * @param c
+	 * @param wc
+	 * @return null if no root access, or the wifi's password in a String.
+	 * @throws PasswordNotFoundException
+	 *             if an error occurs during the process
+	 */
+	public static String getWifiPassword(final Context c,
 			WifiConfiguration wc) throws PasswordNotFoundException {
 		if (wc.SSID == null) {
 			Log.e(Util.TAG,
@@ -72,7 +86,13 @@ public class RootUtil {
 				throw new PasswordNotFoundException("su failed to execute");
 			}
 		}
-		return password;
+
+		if (password == null) {
+			Log.i(Util.TAG, "no root access, returning null password value");
+			return null;
+		} else {
+			return password;
+		}
 	}
 
 	public static String getPasswordFromFile(Context c, String ssid)
@@ -96,7 +116,7 @@ public class RootUtil {
 				String pw = networkConfigs.get("wep_key0");
 				if (pw == null) {
 					// OPEN
-					return null;
+					return "";
 				} else {
 					// WEP
 					return pw;
@@ -166,10 +186,10 @@ public class RootUtil {
 			Log.e(Util.TAG, "IOException while reading wifi passwords file");
 			e.printStackTrace();
 		}
-		
+
 		// do not retain wifi password file
 		c.deleteFile(DESTINATION_FILENAME);
-		
+
 		return content;
 	}
 

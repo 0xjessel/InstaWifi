@@ -35,7 +35,7 @@ public class Util {
 			String protocol = getWifiProtocol(wc);
 			String password = null;
 			try {
-				password = RootUtil.getCurrentWifiPassword(c, wc);
+				password = RootUtil.getWifiPassword(c, wc);
 			} catch (PasswordNotFoundException e) {
 				Log.e(Util.TAG,
 						"password not found when trying to get current wifi model");

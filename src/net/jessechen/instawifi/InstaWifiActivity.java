@@ -46,7 +46,7 @@ public class InstaWifiActivity extends Activity {
 
 		try {
 			Log.i(Util.TAG,
-					RootUtil.getCurrentWifiPassword(this,
+					RootUtil.getWifiPassword(this,
 							Util.getCurrentWifiConfig(this)));
 		} catch (PasswordNotFoundException e) {
 			// TODO Auto-generated catch block
