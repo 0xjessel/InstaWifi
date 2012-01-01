@@ -14,5 +14,6 @@
     <string name="beam_success">Wifi configuration successfully sent!</string>
     <string name="wifi_connect_success">Successfully connected to Wifi!</string>
     <string name="wifi_connect_fail">Failed to connect to Wifi</string>
+    <string name="invalid_wifi_sticker">Wifi sticker data is invalid.  Please rewrite wifi sticker.</string>
 
 </resources>

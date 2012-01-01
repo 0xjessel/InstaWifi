@@ -17,27 +17,6 @@ public class WifiUtil {
 	public static String WPA = "wpa";
 	public static String OPEN = "open";
 
-	/**
-	 * should call this to valid URI before calling connectToWifi()
-	 * 
-	 * @param wifiUri
-	 * @return true if valid wifi URI, false otherwise
-	 */
-	public static boolean isValidWifiUri(Uri wifiUri) {
-		if (
-				wifiUri.getScheme().equals("wifi://") && 
-				wifiUri.getHost() != null &&
-				wifiUri.getLastPathSegment() != null &&
-				wifiUri.getFragment() != null &&
-				wifiUri.getPathSegments().size() == 1 && 
-				wifiUri.getPort() == -1 &&
-				wifiUri.getQueryParameterNames().size() == 0 &&
-				wifiUri.getUserInfo() == null) {
-			return true;
-		}
-		return false;
-	}
-
 	public static WifiModel getCurrentWifiModel(Context c) {
 		WifiConfiguration wc = getCurrentWifiConfig(c);
 		if (wc != null) {
@@ -122,6 +101,25 @@ public class WifiUtil {
 		}
 	}
 
+	/**
+	 * should call this to valid URI before calling connectToWifi()
+	 * 
+	 * @param wifiUri
+	 * @return true if valid wifi URI, false otherwise
+	 */
+	public static boolean isValidWifiUri(Uri wifiUri) {
+		if (wifiUri.getScheme().equals("wifi") && wifiUri.getHost() != null
+				&& wifiUri.getLastPathSegment() != null
+				&& wifiUri.getFragment() != null
+				&& wifiUri.getPathSegments().size() == 1
+				&& wifiUri.getPort() == -1
+				&& wifiUri.getQueryParameterNames().size() == 0
+				&& wifiUri.getUserInfo() == null) {
+			return true;
+		}
+		return false;
+	}
+
 	public static boolean connectToWifi(Context c, Uri wifiUri) {
 		WifiManager mWm = (WifiManager) c
 				.getSystemService(Context.WIFI_SERVICE);
@@ -144,14 +142,26 @@ public class WifiUtil {
 	}
 
 	public static boolean connectToNetwork(int netId, WifiManager mWm) {
-		if (netId != -1 && mWm.isWifiEnabled()) {
-			Log.i(Util.TAG, "attemping to connect to new network..");
-			if (mWm.enableNetwork(netId, true)) {
-				Log.i(Util.TAG, "succesfully connected to new network!");
-				return true;
-			} else {
-				Log.e(Util.TAG, "failed to connect to new network");
+		if (netId == -1) {
+			return false;
+		}
+
+		if (!mWm.isWifiEnabled()) {
+			mWm.setWifiEnabled(true);
+
+			// waiting until wifi is enabled
+			while (!mWm.isWifiEnabled()) {
+				// do nothing, this can be bad
+				Log.v(Util.TAG, "waiting for wifi to be enabled..");
 			}
+		}
+		
+		Log.i(Util.TAG, "attemping to connect to new network..");
+		if (mWm.enableNetwork(netId, true)) {
+			Log.i(Util.TAG, "succesfully connected to new network!");
+			return true;
+		} else {
+			Log.e(Util.TAG, "failed to connect to new network");
 		}
 		return false;
 	}
@@ -234,6 +244,7 @@ public class WifiUtil {
 		}
 		if (!mWm.saveConfiguration()) {
 			Log.e(Util.TAG, "failed to save wifi configuration");
+			return -1;
 		}
 		return getNetworkId(c, wifiUri, mWm);
 	}

@@ -52,7 +52,7 @@ public class InstaWifiHandler extends Activity implements
 			finish();
 			return;
 		}
-		
+
 		// register callback (do i need this check?)
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			mNfcAdapter.setNdefPushMessageCallback(this, this);
@@ -114,7 +114,13 @@ public class InstaWifiHandler extends Activity implements
 					messages[0].getRecords()[0].getType());
 			// wifi://helloworld/cabdad1234#wpa
 			Uri wifiUri = Uri.parse(wifiString);
-			WifiUtil.connectToWifi(this, wifiUri);
+
+			if (WifiUtil.isValidWifiUri(wifiUri)) {
+				WifiUtil.connectToWifi(this, wifiUri);
+			} else {
+				Log.e(Util.TAG, "invalid wifi URI");
+				Util.shortToast(this, getString(R.string.invalid_wifi_sticker));
+			}
 		}
 	}
 
@@ -130,26 +136,26 @@ public class InstaWifiHandler extends Activity implements
 		// onResume gets called after this to handle the intent
 		setIntent(intent);
 	}
-	
-	 /**
-     * Parses the NDEF Message from the intent and prints to the TextView
-     */
-    void processIntent(Intent intent) {
-        Parcelable[] rawMsgs = intent.getParcelableArrayExtra(
-                NfcAdapter.EXTRA_NDEF_MESSAGES);
-        // only one message sent during the beam
-        NdefMessage msg = (NdefMessage) rawMsgs[0];
-        // record 0 contains the MIME type, record 1 is the AAR, if present
-        String wifiString = new String(msg.getRecords()[0].getPayload());
-        
-        Uri wifiUri = Uri.parse(wifiString);
-        if (WifiUtil.isValidWifiUri(wifiUri)) {
-            WifiUtil.connectToWifi(this, wifiUri);
-        } else {
-        	Log.e(Util.TAG, "invalid wifi uri");
-        }
-    }
 
+	/**
+	 * Parses the NDEF Message from the intent and prints to the TextView
+	 */
+	void processIntent(Intent intent) {
+		Parcelable[] rawMsgs = intent
+				.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+		// only one message sent during the beam
+		NdefMessage msg = (NdefMessage) rawMsgs[0];
+		// record 0 contains the MIME type, record 1 is the AAR, if present
+		String wifiString = new String(msg.getRecords()[0].getPayload());
+
+		Uri wifiUri = Uri.parse(wifiString);
+		if (WifiUtil.isValidWifiUri(wifiUri)) {
+			WifiUtil.connectToWifi(this, wifiUri);
+		} else {
+			Log.e(Util.TAG, "invalid wifi uri");
+			Util.shortToast(this, getString(R.string.invalid_wifi_sticker));
+		}
+	}
 
 	private void registerWifiReceiver() {
 		IntentFilter intentFilter = new IntentFilter();
