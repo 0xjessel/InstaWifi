@@ -3,6 +3,7 @@ package net.jessechen.instawifi;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.Util;
+import net.jessechen.instawifi.util.WifiUtil;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,6 +20,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
+import android.util.Log;
 
 public class InstaWifiHandler extends Activity implements
 		CreateNdefMessageCallback, OnNdefPushCompleteCallback {
@@ -43,6 +46,13 @@ public class InstaWifiHandler extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.handler);
 
+		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+		if (mNfcAdapter == null) {
+			Util.longToast(this, "NFC is not available").show();
+			finish();
+			return;
+		}
+		
 		// register callback (do i need this check?)
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			mNfcAdapter.setNdefPushMessageCallback(this, this);
@@ -61,10 +71,15 @@ public class InstaWifiHandler extends Activity implements
 	@Override
 	public NdefMessage createNdefMessage(NfcEvent event) {
 		// TODO: android beam work
-		WifiModel currentWifi = Util.getCurrentWifiModel(this);
+		WifiModel currentWifi = WifiUtil.getCurrentWifiModel(this);
 
-		return NfcUtil.getWifiAsNdef(currentWifi.getSSID(),
-				currentWifi.getPassword(), currentWifi.getProtocol());
+		if (currentWifi != null) {
+			return NfcUtil.getWifiAsNdef(currentWifi.getSSID(),
+					currentWifi.getPassword(), currentWifi.getProtocol());
+		} else {
+			Util.longToast(this, "Error: Wifi is not enabled");
+			return null;
+		}
 	}
 
 	@Override
@@ -97,9 +112,9 @@ public class InstaWifiHandler extends Activity implements
 			NdefMessage[] messages = NfcUtil.getNdefMessages(getIntent());
 			String wifiString = new String(
 					messages[0].getRecords()[0].getType());
-			// wifi://helloworld/cabdad1234/wpa
+			// wifi://helloworld/cabdad1234#wpa
 			Uri wifiUri = Uri.parse(wifiString);
-			Util.connectToWifi(this, wifiUri);
+			WifiUtil.connectToWifi(this, wifiUri);
 		}
 	}
 
@@ -115,6 +130,26 @@ public class InstaWifiHandler extends Activity implements
 		// onResume gets called after this to handle the intent
 		setIntent(intent);
 	}
+	
+	 /**
+     * Parses the NDEF Message from the intent and prints to the TextView
+     */
+    void processIntent(Intent intent) {
+        Parcelable[] rawMsgs = intent.getParcelableArrayExtra(
+                NfcAdapter.EXTRA_NDEF_MESSAGES);
+        // only one message sent during the beam
+        NdefMessage msg = (NdefMessage) rawMsgs[0];
+        // record 0 contains the MIME type, record 1 is the AAR, if present
+        String wifiString = new String(msg.getRecords()[0].getPayload());
+        
+        Uri wifiUri = Uri.parse(wifiString);
+        if (WifiUtil.isValidWifiUri(wifiUri)) {
+            WifiUtil.connectToWifi(this, wifiUri);
+        } else {
+        	Log.e(Util.TAG, "invalid wifi uri");
+        }
+    }
+
 
 	private void registerWifiReceiver() {
 		IntentFilter intentFilter = new IntentFilter();

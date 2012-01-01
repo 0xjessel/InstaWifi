@@ -19,7 +19,7 @@ public class NfcUtil {
 			String protocol) {
 		// TODO: check behavior when protocol is open and ssid has spaces (might
 		// have to encode the ssid)
-		byte[] url = String.format(Util.WIFI_URI_SCHEME, ssid, pw, protocol)
+		byte[] url = String.format(WifiUtil.WIFI_URI_SCHEME, ssid, pw, protocol)
 				.getBytes(Charset.forName("US-ASCII"));
 
 		NdefRecord record = new NdefRecord(NdefRecord.TNF_ABSOLUTE_URI, url,
