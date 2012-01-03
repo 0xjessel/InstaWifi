@@ -67,13 +67,11 @@ public class NfcUtil {
 			if (ndef != null) {
 				ndef.connect();
 				if (!ndef.isWritable()) {
-					Util.shortToast(c, c.getString(R.string.tag_read_only))
-							.show();
+					Util.shortToast(c, c.getString(R.string.tag_read_only));
 					return false;
 				}
 				if (ndef.getMaxSize() < size) {
-					Util.shortToast(c, c.getString(R.string.tag_too_small))
-							.show();
+					Util.shortToast(c, c.getString(R.string.tag_too_small));
 					return false;
 				}
 				ndef.writeNdefMessage(message);
@@ -88,13 +86,11 @@ public class NfcUtil {
 							return true;
 						} catch (Exception e) {
 							Util.shortToast(c,
-									c.getString(R.string.tag_format_fail))
-									.show();
+									c.getString(R.string.tag_format_fail));
 						}
 					} catch (Exception e) {
 						Util.shortToast(c,
-								c.getString(R.string.tag_format_connect_fail))
-								.show();
+								c.getString(R.string.tag_format_connect_fail));
 						return false;
 					} finally {
 						format.close();
