@@ -13,6 +13,7 @@ import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 public class InstaWifiActivity extends Activity {
@@ -48,10 +49,15 @@ public class InstaWifiActivity extends Activity {
 				&& NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
 			Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 			WifiModel currentWifi = WifiUtil.getCurrentWifiModel(this);
-			NfcUtil.writeTag(
-					NfcUtil.getWifiAsNdef(currentWifi.getSSID(),
-							currentWifi.getPassword(),
-							currentWifi.getProtocol()), detectedTag, this);
+			if (WifiUtil.isValidWifiModel(currentWifi)) {
+				NfcUtil.writeTag(NfcUtil.getWifiAsNdef(currentWifi.getSSID(),
+						currentWifi.getPassword(), currentWifi.getProtocol()),
+						detectedTag, this);
+				Util.longToast(this, getString(R.string.write_tag_success));
+			} else {
+				Util.shortToast(this, getString(R.string.write_tag_fail));
+				Log.e(Util.TAG, "invalid wifi model when writing tag");
+			}
 		}
 	}
 

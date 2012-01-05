@@ -20,7 +20,6 @@ public class WifiUtil {
 	public static WifiModel getCurrentWifiModel(Context c) {
 		WifiConfiguration wc = getCurrentWifiConfig(c);
 		if (wc != null) {
-			String bssid = wc.BSSID;
 			String ssid = wc.SSID;
 			String protocol = getWifiProtocol(wc);
 			String password = null;
@@ -31,7 +30,7 @@ public class WifiUtil {
 						"password not found when trying to get it using root access");
 				e.printStackTrace();
 			} // TODO: FIX
-			return new WifiModel(bssid, ssid, password, protocol);
+			return new WifiModel(ssid, password, protocol);
 		} else {
 			return null;
 		}
@@ -101,6 +100,17 @@ public class WifiUtil {
 		}
 	}
 
+	public static boolean isValidWifiModel(WifiModel wm) {
+		if (wm == null) {
+			return false;
+		} else if (wm.getPassword() == null && wm.getProtocol() == null
+				&& wm.getSSID() == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	/**
 	 * should call this to valid URI before calling connectToWifi()
 	 * 
@@ -155,7 +165,7 @@ public class WifiUtil {
 				Log.v(Util.TAG, "waiting for wifi to be enabled..");
 			}
 		}
-		
+
 		Log.i(Util.TAG, "attemping to connect to new network..");
 		if (mWm.enableNetwork(netId, true)) {
 			Log.i(Util.TAG, "succesfully connected to new network!");

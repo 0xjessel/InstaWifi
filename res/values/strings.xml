@@ -15,5 +15,7 @@
     <string name="wifi_connect_success">Successfully connected to Wifi!</string>
     <string name="wifi_connect_fail">Failed to connect to Wifi</string>
     <string name="invalid_wifi_sticker">Wifi sticker data is invalid.  Please rewrite wifi sticker.</string>
+    <string name="write_tag_fail">Failed to write to tag</string>
+    <string name="write_tag_success">Wifi configuration saved on tag!</string>
 
 </resources>
