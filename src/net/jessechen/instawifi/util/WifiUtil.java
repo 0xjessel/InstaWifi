@@ -2,6 +2,7 @@ package net.jessechen.instawifi.util;
 
 import java.util.List;
 
+import net.jessechen.instawifi.R;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import android.content.Context;
@@ -53,7 +54,8 @@ public class WifiUtil {
 				.getSystemService(Context.WIFI_SERVICE);
 		WifiInfo currentWifiInfo = mWifiManager.getConnectionInfo();
 
-		if (currentWifiInfo != null && currentWifiInfo.getSSID() != null) {
+		if (currentWifiInfo.getSSID() != null
+				&& currentWifiInfo.getNetworkId() != -1) {
 			String curSSID = Util.concatQuotes(currentWifiInfo.getSSID());
 
 			WifiConfiguration activeConfig = null;
@@ -101,7 +103,7 @@ public class WifiUtil {
 	}
 
 	/**
-	 * should call this to valid URI before calling connectToWifi()
+	 * validate incoming URI to ensure that it matches this app's URI schema
 	 * 
 	 * @param wifiUri
 	 * @return true if valid wifi URI, false otherwise
@@ -119,6 +121,12 @@ public class WifiUtil {
 		return false;
 	}
 
+	/**
+	 * should call this method before executing an action on the WifiModel
+	 * 
+	 * @param wm
+	 * @return true if valid, false otherwise
+	 */
 	public static boolean isValidWifiModel(WifiModel wm) {
 		if (wm == null) {
 			return false;
@@ -147,6 +155,9 @@ public class WifiUtil {
 		int netId = getNetworkId(c, mWifiModel, mWm);
 		if (netId == -1) {
 			netId = addWifiNetwork(c, mWifiModel, mWm);
+		} else if (netId == mWm.getConnectionInfo().getNetworkId()) {
+			Log.i(Util.TAG, "already connected to the specified network");
+			Util.shortToast(c, c.getString(R.string.wifi_connect_already));
 		}
 		return connectToNetwork(netId, mWm);
 	}
@@ -166,7 +177,7 @@ public class WifiUtil {
 			}
 		}
 
-		Log.i(Util.TAG, "attemping to connect to new network..");
+		Log.i(Util.TAG, "attemping to connect to network..");
 		if (mWm.enableNetwork(netId, true)) {
 			Log.i(Util.TAG, "succesfully connected to new network!");
 			return true;
