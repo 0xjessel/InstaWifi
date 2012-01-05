@@ -12,10 +12,10 @@
     <string name="dialog_write_tag">Touch tag to write</string>
     <string name="nfc_not_available">NFC is not available</string>
     <string name="beam_success">Wifi configuration successfully sent!</string>
-    <string name="wifi_connect_success">Successfully connected to Wifi!</string>
+    <string name="wifi_connect_success">Successfully connected to %1$s!</string>
     <string name="wifi_connect_fail">Failed to connect to Wifi</string>
     <string name="invalid_wifi_sticker">Wifi sticker data is invalid.  Please rewrite wifi sticker.</string>
     <string name="write_tag_fail">Failed to write to tag</string>
-    <string name="write_tag_success">Wifi configuration saved on tag!</string>
+    <string name="write_tag_success">Wifi configuration saved to tag!</string>
 
 </resources>

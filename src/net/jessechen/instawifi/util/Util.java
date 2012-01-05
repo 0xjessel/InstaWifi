@@ -13,6 +13,9 @@ public class Util {
 		Toast.makeText(c, msg, Toast.LENGTH_LONG).show();
 	}
 
+	public static String concatQuotes(String s) {
+		return "\"".concat(s).concat("\"");
+	}
 	public static boolean isHexString(String s) {
 		if (s == null) {
 			return false;

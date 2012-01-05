@@ -28,18 +28,7 @@ public class InstaWifiHandler extends Activity implements
 	// maybe this should be a dialog somehow?
 	NfcAdapter mNfcAdapter;
 	private static final int MESSAGE_SENT = 1;
-	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String action = intent.getAction();
-			if (WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION.equals(action)) {
-				handleSupplicantConnectionChanged(intent.getBooleanExtra(
-						WifiManager.EXTRA_SUPPLICANT_CONNECTED, false));
-			}
-		}
-
-	};
+	private String ssid = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,13 +48,88 @@ public class InstaWifiHandler extends Activity implements
 		}
 	}
 
+	private void registerWifiReceiver() {
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
+
+		registerReceiver(mReceiver, intentFilter);
+	}
+
+	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if (WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION.equals(action)) {
+				handleSupplicantConnectionChanged(intent.getBooleanExtra(
+						WifiManager.EXTRA_SUPPLICANT_CONNECTED, false));
+			}
+		}
+
+	};
+
 	private void handleSupplicantConnectionChanged(boolean booleanExtra) {
 		if (booleanExtra) {
 			// wifi success
-			Util.shortToast(this, getString(R.string.wifi_connect_success));
+			Log.i(Util.TAG, String.format(
+					"wifi connected to broadcast received on SSID: %s", ssid));
+			Util.shortToast(this, String.format(
+					getString(R.string.wifi_connect_success), ssid));
+			finish();
 		} else {
 			Util.shortToast(this, getString(R.string.wifi_connect_fail));
 		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		registerWifiReceiver();
+
+		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
+			NdefMessage[] messages = NfcUtil.getNdefMessages(getIntent());
+			String wifiString = new String(
+					messages[0].getRecords()[0].getType());
+			processWifiUri(wifiString);
+		}
+	}
+
+	/**
+	 * Parses the NDEF Message from the intent and prints to the TextView
+	 */
+	void processIntent(Intent intent) {
+		Parcelable[] rawMsgs = intent
+				.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+		// only one message sent during the beam
+		NdefMessage msg = (NdefMessage) rawMsgs[0];
+		// record 0 contains the MIME type, record 1 is the AAR, if present
+		String wifiString = new String(msg.getRecords()[0].getPayload());
+		processWifiUri(wifiString);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		unregisterReceiver(mReceiver);
+	}
+
+	private void processWifiUri(String wifiString) {
+		Uri wifiUri = Uri.parse(wifiString);
+		if (WifiUtil.isValidWifiUri(wifiUri)) {
+			WifiUtil.connectToWifi(this, wifiUri);
+			ssid = wifiUri.getHost();
+		} else {
+			Log.e(Util.TAG, "invalid wifi uri");
+			Util.shortToast(this, getString(R.string.invalid_wifi_sticker));
+		}
+	}
+
+	@Override
+	public void onNewIntent(Intent intent) {
+		// onResume gets called after this to handle the intent
+		setIntent(intent);
 	}
 
 	@Override
@@ -101,66 +165,4 @@ public class InstaWifiHandler extends Activity implements
 			}
 		}
 	};
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		registerWifiReceiver();
-
-		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
-			NdefMessage[] messages = NfcUtil.getNdefMessages(getIntent());
-			String wifiString = new String(
-					messages[0].getRecords()[0].getType());
-			// wifi://helloworld/cabdad1234#wpa
-			Uri wifiUri = Uri.parse(wifiString);
-
-			if (WifiUtil.isValidWifiUri(wifiUri)) {
-				WifiUtil.connectToWifi(this, wifiUri);
-			} else {
-				Log.e(Util.TAG, "invalid wifi URI");
-				Util.shortToast(this, getString(R.string.invalid_wifi_sticker));
-			}
-		}
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-
-		unregisterReceiver(mReceiver);
-	}
-
-	@Override
-	public void onNewIntent(Intent intent) {
-		// onResume gets called after this to handle the intent
-		setIntent(intent);
-	}
-
-	/**
-	 * Parses the NDEF Message from the intent and prints to the TextView
-	 */
-	void processIntent(Intent intent) {
-		Parcelable[] rawMsgs = intent
-				.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-		// only one message sent during the beam
-		NdefMessage msg = (NdefMessage) rawMsgs[0];
-		// record 0 contains the MIME type, record 1 is the AAR, if present
-		String wifiString = new String(msg.getRecords()[0].getPayload());
-
-		Uri wifiUri = Uri.parse(wifiString);
-		if (WifiUtil.isValidWifiUri(wifiUri)) {
-			WifiUtil.connectToWifi(this, wifiUri);
-		} else {
-			Log.e(Util.TAG, "invalid wifi uri");
-			Util.shortToast(this, getString(R.string.invalid_wifi_sticker));
-		}
-	}
-
-	private void registerWifiReceiver() {
-		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
-
-		registerReceiver(mReceiver, intentFilter);
-	}
 }

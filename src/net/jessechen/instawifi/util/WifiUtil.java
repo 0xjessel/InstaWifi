@@ -37,7 +37,7 @@ public class WifiUtil {
 	}
 
 	public static WifiModel getWifiModel(Context c, Uri wifiUri) {
-		String ssid = "\"".concat(wifiUri.getHost()).concat("\"");
+		String ssid = wifiUri.getHost();
 		String pw = wifiUri.getLastPathSegment();
 		String protocol = wifiUri.getFragment();
 		if (ssid == null) {
@@ -53,10 +53,11 @@ public class WifiUtil {
 		WifiInfo currentWifiInfo = mWifiManager.getConnectionInfo();
 
 		if (currentWifiInfo != null && currentWifiInfo.getSSID() != null) {
+			String curSSID = Util.concatQuotes(currentWifiInfo.getSSID());
 
 			WifiConfiguration activeConfig = null;
 			for (WifiConfiguration conn : mWifiManager.getConfiguredNetworks()) {
-				if (conn.SSID.equals(currentWifiInfo.getSSID())) {
+				if (conn.SSID.equals(curSSID)) {
 					activeConfig = conn;
 					break;
 				}
@@ -142,9 +143,11 @@ public class WifiUtil {
 			Log.v(Util.TAG, "waiting for wifi to be enabled..");
 		}
 
-		int netId = getNetworkId(c, wifiUri, mWm);
+		WifiModel mWifiModel = getWifiModel(c, wifiUri);
+
+		int netId = getNetworkId(c, mWifiModel, mWm);
 		if (netId == -1) {
-			netId = addWifiNetwork(c, wifiUri, mWm);
+			netId = addWifiNetwork(c, mWifiModel, mWm);
 		}
 		return connectToNetwork(netId, mWm);
 	}
@@ -174,17 +177,17 @@ public class WifiUtil {
 		return false;
 	}
 
-	public static int addWifiNetwork(Context c, Uri wifiUri, WifiManager mWm) {
-		WifiModel wm = getWifiModel(c, wifiUri);
-		if (wm == null) {
+	public static int addWifiNetwork(Context c, WifiModel mWifiModel,
+			WifiManager mWm) {
+		if (mWifiModel == null) {
 			return -1;
 		}
 
-		String protocol = wm.getProtocol();
-		String pw = wm.getPassword();
+		String protocol = mWifiModel.getProtocol();
+		String pw = mWifiModel.getPassword();
 
 		WifiConfiguration mWc = new WifiConfiguration();
-		mWc.SSID = wm.getSSID();
+		mWc.SSID = mWifiModel.getSSID();
 		mWc.status = WifiConfiguration.Status.DISABLED;
 
 		// thanks to:
@@ -223,7 +226,7 @@ public class WifiUtil {
 			if (Util.isHexString(pw)) {
 				mWc.wepKeys[0] = pw;
 			} else {
-				mWc.wepKeys[0] = "\"".concat(pw).concat("\"");
+				mWc.wepKeys[0] = Util.concatQuotes(pw);
 			}
 			mWc.wepTxKeyIndex = 0;
 		} else if (protocol.equals(WPA)) {
@@ -241,7 +244,7 @@ public class WifiUtil {
 			mWc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
 			mWc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
 
-			mWc.preSharedKey = "\"".concat(pw).concat("\"");
+			mWc.preSharedKey = Util.concatQuotes(pw);
 		}
 
 		// add network to known list
@@ -254,15 +257,15 @@ public class WifiUtil {
 			Log.e(Util.TAG, "failed to save wifi configuration");
 			return -1;
 		}
-		return getNetworkId(c, wifiUri, mWm);
+		return getNetworkId(c, mWifiModel, mWm);
 	}
 
-	public static int getNetworkId(Context c, Uri wifiUri, WifiManager mWm) {
+	public static int getNetworkId(Context c, WifiModel mWifiModel,
+			WifiManager mWm) {
 		List<WifiConfiguration> configuredNetworks = mWm
 				.getConfiguredNetworks();
 
-		WifiModel wm = getWifiModel(c, wifiUri);
-		String mSSID = wm.getSSID();
+		String mSSID = mWifiModel.getSSID();
 
 		for (WifiConfiguration wifiConfig : configuredNetworks) {
 			if (wifiConfig.SSID.equals(mSSID)) {
