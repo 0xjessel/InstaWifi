@@ -10,6 +10,7 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -48,11 +49,14 @@ public class InstaWifiActivity extends Activity {
 		if (mWriteMode
 				&& NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
 			Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+
 			WifiModel currentWifi = WifiUtil.getCurrentWifiModel(this);
 			if (WifiUtil.isValidWifiModel(currentWifi)) {
-				NfcUtil.writeTag(NfcUtil.getWifiAsNdef(currentWifi.getSSID(),
-						currentWifi.getPassword(), currentWifi.getProtocol()),
-						detectedTag, this);
+				NdefMessage wifiNdefMessage = NfcUtil.getWifiAsNdef(
+						currentWifi.getSSID(), currentWifi.getPassword(),
+						currentWifi.getProtocol());
+				NfcUtil.writeTag(wifiNdefMessage, detectedTag, this);
+
 				Log.i(Util.TAG, String.format("successfully wrote %s to tag",
 						currentWifi.getSSID()));
 				Util.longToast(this, getString(R.string.write_tag_success));
@@ -87,11 +91,9 @@ public class InstaWifiActivity extends Activity {
 		public void onClick(View v) {
 			WifiModel currentWifi = WifiUtil
 					.getCurrentWifiModel(getApplicationContext());
-			Util.longToast(
-					getApplicationContext(),
-					String.format("SSID: %s, PW: %s, PROTOCOL: %s",
-							currentWifi.getSSID(), currentWifi.getPassword(),
-							currentWifi.getProtocol()));
+			Util.longToast(getApplicationContext(), String.format(
+					"SSID: %s, PW: %s, PROTOCOL: %s", currentWifi.getSSID(),
+					currentWifi.getPassword(), currentWifi.getProtocol()));
 			//
 			// String url = String.format(Util.WIFI_URI_SCHEME, "clink",
 			// "5104779276", "wep");

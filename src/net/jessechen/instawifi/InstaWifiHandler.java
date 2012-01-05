@@ -9,7 +9,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
@@ -116,12 +115,12 @@ public class InstaWifiHandler extends Activity implements
 	}
 
 	private void processWifiUri(String wifiString) {
-		Uri wifiUri = Uri.parse(wifiString);
-		if (WifiUtil.isValidWifiUri(wifiUri)) {
-			WifiUtil.connectToWifi(this, wifiUri);
-			ssid = wifiUri.getHost();
+		WifiModel receivedWifiModel = new WifiModel(wifiString);
+		if (WifiUtil.isValidWifiModel(receivedWifiModel)) {
+			WifiUtil.connectToWifi(this, receivedWifiModel);
+			ssid = receivedWifiModel.getSSID();
 		} else {
-			Log.e(Util.TAG, "invalid wifi uri");
+			Log.e(Util.TAG, "invalid wifi model when processing wifi URI");
 			Util.shortToast(this, getString(R.string.invalid_wifi_sticker));
 		}
 	}
@@ -137,11 +136,12 @@ public class InstaWifiHandler extends Activity implements
 		// TODO: android beam work
 		WifiModel currentWifi = WifiUtil.getCurrentWifiModel(this);
 
-		if (currentWifi != null) {
+		if (WifiUtil.isValidWifiModel(currentWifi)) {
 			return NfcUtil.getWifiAsNdef(currentWifi.getSSID(),
 					currentWifi.getPassword(), currentWifi.getProtocol());
 		} else {
-			Util.longToast(this, "Error: Wifi is not enabled");
+			Util.longToast(this,
+					"Error: could not get current wifi configurations");
 			return null;
 		}
 	}

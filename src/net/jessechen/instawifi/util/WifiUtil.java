@@ -13,6 +13,7 @@ import android.util.Log;
 
 public class WifiUtil {
 	public static String WIFI_URI_SCHEME = "wifi://%s/%s#%s";
+
 	public static String WEP = "wep";
 	public static String WPA = "wpa";
 	public static String OPEN = "open";
@@ -99,17 +100,6 @@ public class WifiUtil {
 		}
 	}
 
-	public static boolean isValidWifiModel(WifiModel wm) {
-		if (wm == null) {
-			return false;
-		} else if (wm.getPassword() == null && wm.getProtocol() == null
-				&& wm.getSSID() == null) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
 	/**
 	 * should call this to valid URI before calling connectToWifi()
 	 * 
@@ -129,7 +119,18 @@ public class WifiUtil {
 		return false;
 	}
 
-	public static boolean connectToWifi(Context c, Uri wifiUri) {
+	public static boolean isValidWifiModel(WifiModel wm) {
+		if (wm == null) {
+			return false;
+		} else if (wm.getPassword() == null && wm.getProtocol() == null
+				&& wm.getSSID() == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public static boolean connectToWifi(Context c, WifiModel mWifiModel) {
 		WifiManager mWm = (WifiManager) c
 				.getSystemService(Context.WIFI_SERVICE);
 		if (!mWm.isWifiEnabled()) {
@@ -142,8 +143,6 @@ public class WifiUtil {
 			// do nothing, this can be bad
 			Log.v(Util.TAG, "waiting for wifi to be enabled..");
 		}
-
-		WifiModel mWifiModel = getWifiModel(c, wifiUri);
 
 		int netId = getNetworkId(c, mWifiModel, mWm);
 		if (netId == -1) {
