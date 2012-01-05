@@ -5,7 +5,6 @@ import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -26,8 +25,8 @@ public class InstaWifiHandler extends Activity implements
 		CreateNdefMessageCallback, OnNdefPushCompleteCallback {
 	// maybe this should be a dialog somehow?
 	NfcAdapter mNfcAdapter;
+	WifiReceiver mReceiver;
 	private static final int MESSAGE_SENT = 1;
-	private String ssid = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +40,9 @@ public class InstaWifiHandler extends Activity implements
 			return;
 		}
 
+		mReceiver = new WifiReceiver(getApplicationContext(), this,
+				(WifiManager) getSystemService(Context.WIFI_SERVICE));
+
 		// register callback (do i need this check?)
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			mNfcAdapter.setNdefPushMessageCallback(this, this);
@@ -49,35 +51,9 @@ public class InstaWifiHandler extends Activity implements
 
 	private void registerWifiReceiver() {
 		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
+		intentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
 
 		registerReceiver(mReceiver, intentFilter);
-	}
-
-	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String action = intent.getAction();
-			if (WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION.equals(action)) {
-				handleSupplicantConnectionChanged(intent.getBooleanExtra(
-						WifiManager.EXTRA_SUPPLICANT_CONNECTED, false));
-			}
-		}
-
-	};
-
-	private void handleSupplicantConnectionChanged(boolean booleanExtra) {
-		if (booleanExtra) {
-			// wifi success
-			Log.i(Util.TAG, String.format(
-					"wifi connected to broadcast received on SSID: %s", ssid));
-			Util.shortToast(this, String.format(
-					getString(R.string.wifi_connect_success), ssid));
-			finish();
-		} else {
-			Util.shortToast(this, getString(R.string.wifi_connect_fail));
-		}
 	}
 
 	@Override
@@ -94,9 +70,6 @@ public class InstaWifiHandler extends Activity implements
 		}
 	}
 
-	/**
-	 * Parses the NDEF Message from the intent and prints to the TextView
-	 */
 	void processIntent(Intent intent) {
 		Parcelable[] rawMsgs = intent
 				.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
@@ -118,7 +91,6 @@ public class InstaWifiHandler extends Activity implements
 		WifiModel receivedWifiModel = new WifiModel(wifiString);
 		if (WifiUtil.isValidWifiModel(receivedWifiModel)) {
 			WifiUtil.connectToWifi(this, receivedWifiModel);
-			ssid = receivedWifiModel.getSSID();
 		} else {
 			Log.e(Util.TAG, "invalid wifi model when processing wifi URI");
 			Util.shortToast(this, getString(R.string.invalid_wifi_sticker));

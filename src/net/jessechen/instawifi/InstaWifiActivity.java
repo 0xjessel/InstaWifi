@@ -53,7 +53,7 @@ public class InstaWifiActivity extends Activity {
 			WifiModel currentWifi = WifiUtil.getCurrentWifiModel(this);
 			if (WifiUtil.isValidWifiModel(currentWifi)) {
 				NdefMessage wifiNdefMessage = NfcUtil.getWifiAsNdef(
-						currentWifi.getSSID(), currentWifi.getPassword(),
+						currentWifi.getSSID(), "123123123",
 						currentWifi.getProtocol());
 				if (NfcUtil.writeTag(wifiNdefMessage, detectedTag, this)) {
 					Log.i(Util.TAG, String.format(
@@ -62,11 +62,13 @@ public class InstaWifiActivity extends Activity {
 					Util.longToast(this, getString(R.string.write_tag_success));
 				} else {
 					Util.longToast(this, getString(R.string.write_tag_fail));
-					Log.e(Util.TAG, "failed to write to tag, probably IOException");
+					Log.e(Util.TAG,
+							"failed to write to tag, probably IOException");
 				}
 			} else {
 				Util.shortToast(this, getString(R.string.write_tag_fail));
-				Log.e(Util.TAG, "invalid wifi model when writing tag");
+				Log.e(Util.TAG,
+						"invalid wifi model when writing tag, probably wifi not on");
 			}
 		}
 	}
@@ -93,16 +95,11 @@ public class InstaWifiActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
-			WifiModel currentWifi = WifiUtil
-					.getCurrentWifiModel(getApplicationContext());
-			Util.longToast(getApplicationContext(), String.format(
-					"SSID: %s, PW: %s, PROTOCOL: %s", currentWifi.getSSID(),
-					currentWifi.getPassword(), currentWifi.getProtocol()));
-			//
-			// String url = String.format(Util.WIFI_URI_SCHEME, "clink",
-			// "5104779276", "wep");
-			// Uri wifiUri = Uri.parse(url);
-			// Util.connectToWifi(getApplicationContext(), wifiUri);
+			// WifiModel currentWifi = WifiUtil
+			// .getCurrentWifiModel(getApplicationContext());
+			// Util.longToast(getApplicationContext(), String.format(
+			// "SSID: %s, PW: %s, PROTOCOL: %s", currentWifi.getSSID(),
+			// currentWifi.getPassword(), currentWifi.getProtocol()));
 		}
 	};
 
