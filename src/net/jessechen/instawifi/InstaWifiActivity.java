@@ -53,6 +53,8 @@ public class InstaWifiActivity extends Activity {
 				NfcUtil.writeTag(NfcUtil.getWifiAsNdef(currentWifi.getSSID(),
 						currentWifi.getPassword(), currentWifi.getProtocol()),
 						detectedTag, this);
+				Log.i(Util.TAG, String.format("successfully wrote %s to tag",
+						currentWifi.getSSID()));
 				Util.longToast(this, getString(R.string.write_tag_success));
 			} else {
 				Util.shortToast(this, getString(R.string.write_tag_fail));

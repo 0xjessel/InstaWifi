@@ -53,12 +53,10 @@ public class WifiUtil {
 		WifiInfo currentWifiInfo = mWifiManager.getConnectionInfo();
 
 		if (currentWifiInfo != null && currentWifiInfo.getSSID() != null) {
-			String curSSID = "\"".concat(currentWifiInfo.getSSID())
-					.concat("\"");
 
 			WifiConfiguration activeConfig = null;
 			for (WifiConfiguration conn : mWifiManager.getConfiguredNetworks()) {
-				if (conn.SSID.equals(curSSID)) {
+				if (conn.SSID.equals(currentWifiInfo.getSSID())) {
 					activeConfig = conn;
 					break;
 				}
