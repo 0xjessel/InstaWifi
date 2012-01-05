@@ -55,11 +55,15 @@ public class InstaWifiActivity extends Activity {
 				NdefMessage wifiNdefMessage = NfcUtil.getWifiAsNdef(
 						currentWifi.getSSID(), currentWifi.getPassword(),
 						currentWifi.getProtocol());
-				NfcUtil.writeTag(wifiNdefMessage, detectedTag, this);
-
-				Log.i(Util.TAG, String.format("successfully wrote %s to tag",
-						currentWifi.getSSID()));
-				Util.longToast(this, getString(R.string.write_tag_success));
+				if (NfcUtil.writeTag(wifiNdefMessage, detectedTag, this)) {
+					Log.i(Util.TAG, String.format(
+							"successfully wrote %s to tag",
+							currentWifi.getSSID()));
+					Util.longToast(this, getString(R.string.write_tag_success));
+				} else {
+					Util.longToast(this, getString(R.string.write_tag_fail));
+					Log.e(Util.TAG, "failed to write to tag, probably IOException");
+				}
 			} else {
 				Util.shortToast(this, getString(R.string.write_tag_fail));
 				Log.e(Util.TAG, "invalid wifi model when writing tag");

@@ -18,7 +18,7 @@ public class WifiModel {
 
 	public WifiModel(String wifiString) {
 		Uri wifiUri = Uri.parse(wifiString);
-		if (WifiUtil.isValidWifiUri(wifiUri)) {
+		if (!WifiUtil.isValidWifiUri(wifiUri)) {
 			Log.e(Util.TAG, String.format(
 					"invalid URI when creating new WifiModel: %s",
 					wifiUri.toString()));

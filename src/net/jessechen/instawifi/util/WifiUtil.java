@@ -43,6 +43,7 @@ public class WifiUtil {
 		String pw = wifiUri.getLastPathSegment();
 		String protocol = wifiUri.getFragment();
 		if (ssid == null) {
+			Log.e(Util.TAG, "SSID is null when getting wifi model");
 			Util.shortToast(c, "ERROR: SSID is null");
 			return null;
 		}
@@ -156,8 +157,14 @@ public class WifiUtil {
 		if (netId == -1) {
 			netId = addWifiNetwork(c, mWifiModel, mWm);
 		} else if (netId == mWm.getConnectionInfo().getNetworkId()) {
-			Log.i(Util.TAG, "already connected to the specified network");
-			Util.shortToast(c, c.getString(R.string.wifi_connect_already));
+			Log.i(Util.TAG,
+					String.format("already connected to %s",
+							mWifiModel.getSSID()));
+			Util.shortToast(c, String.format(
+					c.getString(R.string.wifi_connect_already),
+					mWifiModel.getSSID()));
+
+			return false;
 		}
 		return connectToNetwork(netId, mWm);
 	}
@@ -179,10 +186,10 @@ public class WifiUtil {
 
 		Log.i(Util.TAG, "attemping to connect to network..");
 		if (mWm.enableNetwork(netId, true)) {
-			Log.i(Util.TAG, "succesfully connected to new network!");
+			Log.i(Util.TAG, "succesfully connected to network!");
 			return true;
 		} else {
-			Log.e(Util.TAG, "failed to connect to new network");
+			Log.e(Util.TAG, "failed to connect to network");
 		}
 		return false;
 	}
@@ -260,11 +267,14 @@ public class WifiUtil {
 		// add network to known list
 		int netId = mWm.addNetwork(mWc);
 		if (netId == -1) {
-			Log.e(Util.TAG,
-					"netId == -1, failed to add new network to known networks");
+			Log.e(Util.TAG, String.format(
+					"netId == -1, failed to add %s to known networks",
+					mWifiModel.getSSID()));
 		}
 		if (!mWm.saveConfiguration()) {
-			Log.e(Util.TAG, "failed to save wifi configuration");
+			Log.e(Util.TAG, String.format(
+					"failed to save wifi configuration for %s",
+					mWifiModel.getSSID()));
 			return -1;
 		}
 		return getNetworkId(c, mWifiModel, mWm);
