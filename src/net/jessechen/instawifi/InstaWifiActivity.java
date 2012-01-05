@@ -53,7 +53,7 @@ public class InstaWifiActivity extends Activity {
 			WifiModel currentWifi = WifiUtil.getCurrentWifiModel(this);
 			if (WifiUtil.isValidWifiModel(currentWifi)) {
 				NdefMessage wifiNdefMessage = NfcUtil.getWifiAsNdef(
-						currentWifi.getSSID(), "123123123",
+						currentWifi.getSSID(), currentWifi.getPassword(),
 						currentWifi.getProtocol());
 				if (NfcUtil.writeTag(wifiNdefMessage, detectedTag, this)) {
 					Log.i(Util.TAG, String.format(
