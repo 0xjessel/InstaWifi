@@ -5,12 +5,12 @@ import android.content.Context;
 import android.widget.Toast;
 
 public class Util {
-	public static Toast shortToast(Context c, String msg) {
-		return Toast.makeText(c, msg, Toast.LENGTH_SHORT);
+	public static void shortToast(Context c, String msg) {
+		Toast.makeText(c, msg, Toast.LENGTH_SHORT).show();
 	}
 
-	public static Toast longToast(Context c, String msg) {
-		return Toast.makeText(c, msg, Toast.LENGTH_LONG);
+	public static void longToast(Context c, String msg) {
+		Toast.makeText(c, msg, Toast.LENGTH_LONG).show();
 	}
 
 	public static boolean isHexString(String s) {

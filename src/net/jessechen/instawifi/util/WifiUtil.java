@@ -41,7 +41,7 @@ public class WifiUtil {
 		String pw = wifiUri.getLastPathSegment();
 		String protocol = wifiUri.getFragment();
 		if (ssid == null) {
-			Util.shortToast(c, "ERROR: SSID is null").show();
+			Util.shortToast(c, "ERROR: SSID is null");
 			return null;
 		}
 		return new WifiModel(ssid, pw, protocol);

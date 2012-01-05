@@ -91,7 +91,7 @@ public class InstaWifiActivity extends Activity {
 					getApplicationContext(),
 					String.format("SSID: %s, PW: %s, PROTOCOL: %s",
 							currentWifi.getSSID(), currentWifi.getPassword(),
-							currentWifi.getProtocol())).show();
+							currentWifi.getProtocol()));
 			//
 			// String url = String.format(Util.WIFI_URI_SCHEME, "clink",
 			// "5104779276", "wep");

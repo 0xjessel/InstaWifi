@@ -48,7 +48,7 @@ public class InstaWifiHandler extends Activity implements
 
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 		if (mNfcAdapter == null) {
-			Util.longToast(this, "NFC is not available").show();
+			Util.longToast(this, "NFC is not available");
 			finish();
 			return;
 		}
@@ -96,7 +96,7 @@ public class InstaWifiHandler extends Activity implements
 			switch (msg.what) {
 			case MESSAGE_SENT:
 				Util.longToast(getApplicationContext(),
-						getString(R.string.beam_success)).show();
+						getString(R.string.beam_success));
 				break;
 			}
 		}
