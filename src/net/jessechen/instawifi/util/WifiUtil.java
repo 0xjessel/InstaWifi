@@ -160,10 +160,6 @@ public class WifiUtil {
 			Log.i(Util.TAG,
 					String.format("already connected to %s",
 							mWifiModel.getSSID()));
-			Util.shortToast(c, String.format(
-					c.getString(R.string.wifi_connect_already),
-					mWifiModel.getSSID()));
-
 			return false;
 		}
 		return connectToNetwork(netId, mWm);

@@ -26,6 +26,7 @@ public class InstaWifiHandler extends Activity implements
 	// maybe this should be a dialog somehow?
 	NfcAdapter mNfcAdapter;
 	WifiReceiver mReceiver;
+	boolean receiverRemoved;
 	private static final int MESSAGE_SENT = 1;
 
 	@Override
@@ -43,6 +44,8 @@ public class InstaWifiHandler extends Activity implements
 		mReceiver = new WifiReceiver(getApplicationContext(), this,
 				(WifiManager) getSystemService(Context.WIFI_SERVICE));
 
+		receiverRemoved = false;
+
 		// register callback (do i need this check?)
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			mNfcAdapter.setNdefPushMessageCallback(this, this);
@@ -54,6 +57,7 @@ public class InstaWifiHandler extends Activity implements
 		intentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
 
 		registerReceiver(mReceiver, intentFilter);
+		receiverRemoved = false;
 	}
 
 	@Override
@@ -70,7 +74,7 @@ public class InstaWifiHandler extends Activity implements
 		}
 	}
 
-	void processIntent(Intent intent) {
+	protected void processIntent(Intent intent) {
 		Parcelable[] rawMsgs = intent
 				.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
 		// only one message sent during the beam
@@ -84,13 +88,24 @@ public class InstaWifiHandler extends Activity implements
 	protected void onPause() {
 		super.onPause();
 
-		unregisterReceiver(mReceiver);
+		if (!receiverRemoved) {
+			unregisterReceiver(mReceiver);
+			receiverRemoved = true;
+		}
 	}
 
 	private void processWifiUri(String wifiString) {
 		WifiModel receivedWifiModel = new WifiModel(wifiString);
 		if (WifiUtil.isValidWifiModel(receivedWifiModel)) {
-			WifiUtil.connectToWifi(this, receivedWifiModel);
+			if (!WifiUtil.connectToWifi(this, receivedWifiModel)) {
+				// failed to connect, invalid pw/ssid/protocol probably
+				unregisterReceiver(mReceiver);
+				receiverRemoved = true;
+
+				Log.e(Util.TAG,
+						"failed to connect to wifi, invalid wifi configs probably");
+				Util.shortToast(this, getString(R.string.invalid_wifi_sticker));
+			}
 		} else {
 			Log.e(Util.TAG, "invalid wifi model when processing wifi URI");
 			Util.shortToast(this, getString(R.string.invalid_wifi_sticker));
