@@ -2,13 +2,10 @@ package net.jessechen.instawifi.util;
 
 import java.util.List;
 
-import net.jessechen.instawifi.R;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import android.content.Context;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;

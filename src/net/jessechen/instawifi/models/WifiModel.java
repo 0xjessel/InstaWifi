@@ -37,6 +37,14 @@ public class WifiModel {
 		return SSID;
 	}
 
+	public String getTrimmedSSID() {
+		if (SSID.startsWith("\"") && SSID.endsWith("\"")) {
+			return SSID.substring(1, SSID.length() - 1);
+		} else {
+			return SSID;
+		}
+	}
+
 	public String getPassword() {
 		return password;
 	}

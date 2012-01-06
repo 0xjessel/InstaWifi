@@ -35,20 +35,26 @@ public class WifiReceiver extends BroadcastReceiver {
 	}
 
 	private void handleConnectionChanged(SupplicantState state) {
-		if (SupplicantState.COMPLETED.equals(state)) {
+		if (SupplicantState.COMPLETED.equals(state) && triedAssociating) {
 			// wifi success
 			String ssid = mWifiManager.getConnectionInfo().getSSID();
-			Log.i(Util.TAG, String.format("wifi connected to %s", ssid));
+			
+			Log.i(Util.TAG, String.format("wifi connection completed on %s", ssid));
 			Util.shortToast(ctx, String.format(
 					ctx.getString(R.string.wifi_connect_success), ssid));
+			Log.i(Util.TAG, "finishing activity bye");
+			
 			parent.finish();
 		} else if (SupplicantState.SCANNING.equals(state)) {
 			triedAssociating = true;
+			Log.i(Util.TAG, "scanning for a network");
 			// TODO: probably needs a timer to check if wifi state is still
 			// scanning/disconnected to determine if it failed
 		} else if (SupplicantState.DISCONNECTED.equals(state)
 				&& triedAssociating) {
 			triedAssociating = false;
+			
+			Log.e(Util.TAG, "wifi connection failed");
 			Util.shortToast(ctx, ctx.getString(R.string.wifi_connect_fail));
 		}
 	}

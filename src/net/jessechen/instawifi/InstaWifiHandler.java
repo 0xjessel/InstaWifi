@@ -104,8 +104,15 @@ public class InstaWifiHandler extends Activity implements
 		if (WifiUtil.isValidWifiModel(receivedWifiModel)) {
 			switch (WifiUtil.connectToWifi(this, receivedWifiModel)) {
 			case ALREADY_CONNECTED:
+				unregisterWifiReceiver();
+
+				Log.i(Util.TAG,
+						"tried to connect to current network");
+				Util.shortToast(this, String.format(
+						getString(R.string.wifi_connect_already),
+						receivedWifiModel.getTrimmedSSID()));
+				break;
 			case INVALID_NET_ID:
-				// failed to connect, invalid pw/ssid/protocol probably
 				unregisterWifiReceiver();
 
 				Log.e(Util.TAG,
