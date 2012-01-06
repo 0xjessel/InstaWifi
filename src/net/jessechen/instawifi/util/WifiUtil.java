@@ -180,12 +180,11 @@ public class WifiUtil {
 			}
 		}
 
-		Log.i(Util.TAG, "attemping to connect to network..");
 		if (mWm.enableNetwork(netId, true)) {
-			Log.i(Util.TAG, "succesfully connected to network!");
+			Log.i(Util.TAG, "attemping to connect to network..");
 			return true;
 		} else {
-			Log.e(Util.TAG, "failed to connect to network");
+			Log.e(Util.TAG, "failed attempt to connect to network");
 		}
 		return false;
 	}
