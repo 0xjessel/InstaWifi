@@ -1,6 +1,7 @@
 package net.jessechen.instawifi;
 
 import net.jessechen.instawifi.models.WifiModel;
+import net.jessechen.instawifi.util.ConnectToWifiResult;
 import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
@@ -60,6 +61,11 @@ public class InstaWifiHandler extends Activity implements
 		receiverRemoved = false;
 	}
 
+	private void unregisterWifiReceiver() {
+		unregisterReceiver(mReceiver);
+		receiverRemoved = true;
+	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -89,22 +95,25 @@ public class InstaWifiHandler extends Activity implements
 		super.onPause();
 
 		if (!receiverRemoved) {
-			unregisterReceiver(mReceiver);
-			receiverRemoved = true;
+			unregisterWifiReceiver();
 		}
 	}
 
 	private void processWifiUri(String wifiString) {
 		WifiModel receivedWifiModel = new WifiModel(wifiString);
 		if (WifiUtil.isValidWifiModel(receivedWifiModel)) {
-			if (!WifiUtil.connectToWifi(this, receivedWifiModel)) {
+			switch (WifiUtil.connectToWifi(this, receivedWifiModel)) {
+			case ALREADY_CONNECTED:
+			case INVALID_NET_ID:
 				// failed to connect, invalid pw/ssid/protocol probably
-				unregisterReceiver(mReceiver);
-				receiverRemoved = true;
+				unregisterWifiReceiver();
 
 				Log.e(Util.TAG,
 						"failed to connect to wifi, invalid wifi configs probably");
 				Util.shortToast(this, getString(R.string.invalid_wifi_sticker));
+				break;
+			default:
+				break;
 			}
 		} else {
 			Log.e(Util.TAG, "invalid wifi model when processing wifi URI");

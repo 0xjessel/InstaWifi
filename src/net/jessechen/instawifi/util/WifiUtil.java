@@ -6,7 +6,9 @@ import net.jessechen.instawifi.R;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import android.content.Context;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -18,7 +20,7 @@ public class WifiUtil {
 	public static String WEP = "wep";
 	public static String WPA = "wpa";
 	public static String OPEN = "open";
-
+	
 	public static WifiModel getCurrentWifiModel(Context c) {
 		WifiConfiguration wc = getCurrentWifiConfig(c);
 		if (wc != null) {
@@ -139,7 +141,7 @@ public class WifiUtil {
 		}
 	}
 
-	public static boolean connectToWifi(Context c, WifiModel mWifiModel) {
+	public static ConnectToWifiResult connectToWifi(Context c, WifiModel mWifiModel) {
 		WifiManager mWm = (WifiManager) c
 				.getSystemService(Context.WIFI_SERVICE);
 		if (!mWm.isWifiEnabled()) {
@@ -160,14 +162,14 @@ public class WifiUtil {
 			Log.i(Util.TAG,
 					String.format("already connected to %s",
 							mWifiModel.getSSID()));
-			return false;
+			return ConnectToWifiResult.ALREADY_CONNECTED;
 		}
 		return connectToNetwork(netId, mWm);
 	}
 
-	public static boolean connectToNetwork(int netId, WifiManager mWm) {
+	public static ConnectToWifiResult connectToNetwork(int netId, WifiManager mWm) {
 		if (netId == -1) {
-			return false;
+			return ConnectToWifiResult.INVALID_NET_ID;
 		}
 
 		if (!mWm.isWifiEnabled()) {
@@ -182,11 +184,11 @@ public class WifiUtil {
 
 		if (mWm.enableNetwork(netId, true)) {
 			Log.i(Util.TAG, "attemping to connect to network..");
-			return true;
+			return ConnectToWifiResult.NETWORK_ENABLED;
 		} else {
 			Log.e(Util.TAG, "failed attempt to connect to network");
+			return ConnectToWifiResult.NETWORK_ENABLED_FAILED;
 		}
-		return false;
 	}
 
 	public static int addWifiNetwork(Context c, WifiModel mWifiModel,
