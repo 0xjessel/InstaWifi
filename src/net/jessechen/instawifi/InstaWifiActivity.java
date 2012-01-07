@@ -23,6 +23,8 @@ public class InstaWifiActivity extends Activity {
 
 	PendingIntent mNfcPendingIntent;
 	IntentFilter[] mWriteTagFilters;
+	
+	private static final String TAG = InstaWifiActivity.class.getName();
 
 	/** Called when the activity is first created. */
 	@Override
@@ -56,18 +58,18 @@ public class InstaWifiActivity extends Activity {
 						currentWifi.getSSID(), currentWifi.getPassword(),
 						currentWifi.getProtocol());
 				if (NfcUtil.writeTag(wifiNdefMessage, detectedTag, this)) {
-					Log.i(Util.TAG, String.format(
+					Log.i(TAG, String.format(
 							"successfully wrote %s to tag",
 							currentWifi.getTrimmedSSID()));
 					Util.longToast(this, getString(R.string.write_tag_success));
 				} else {
 					Util.longToast(this, getString(R.string.write_tag_fail));
-					Log.e(Util.TAG,
+					Log.e(TAG,
 							"failed to write to tag, probably IOException");
 				}
 			} else {
 				Util.shortToast(this, getString(R.string.write_tag_fail));
-				Log.e(Util.TAG,
+				Log.e(TAG,
 						"invalid wifi model when writing tag, probably wifi not on");
 			}
 		}

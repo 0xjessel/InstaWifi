@@ -16,6 +16,8 @@ import android.os.Parcelable;
 import android.util.Log;
 
 public class NfcUtil {
+	private static final String TAG = NfcUtil.class.getName();
+	
 	public static NdefMessage getWifiAsNdef(String ssid, String pw,
 			String protocol) {
 		// TODO: check behavior when protocol is open and ssid has spaces (might
@@ -53,7 +55,7 @@ public class NfcUtil {
 				msgs = new NdefMessage[] { msg };
 			}
 		} else {
-			Log.i(Util.TAG, "Unknown intent.");
+			Log.i(TAG, "Unknown intent.");
 			// finish();
 		}
 		return msgs;
@@ -104,7 +106,7 @@ public class NfcUtil {
 				}
 			}
 		} catch (Exception e) {
-			Log.e(Util.TAG, "Exception when writing tag", e);
+			Log.e(TAG, "Exception when writing tag", e);
 			return false;
 		}
 		return false;

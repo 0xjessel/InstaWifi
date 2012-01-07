@@ -45,6 +45,8 @@ public class RootUtil {
 		return String.format("chmod 004 %s", ABSOLUTE_DESTINATION_PATH(c));
 	}
 
+	private static final String TAG = RootUtil.class.getName();
+	
 	/**
 	 * gets the wifi password from the current connected network. requires root
 	 * access on phone.
@@ -58,7 +60,7 @@ public class RootUtil {
 	public static String getWifiPassword(final Context c, WifiConfiguration wc)
 			throws PasswordNotFoundException {
 		if (wc.SSID == null || wc == null) {
-			Log.e(Util.TAG,
+			Log.e(TAG,
 					"could not get wifi password because WifiConfiguration is invalid");
 			throw new PasswordNotFoundException("WifiConfiguration is invalid");
 		}
@@ -79,16 +81,16 @@ public class RootUtil {
 			};
 
 			if (su.execute()) {
-				Log.i(Util.TAG, "sudo made me a sandwich");
+				Log.i(TAG, "sudo made me a sandwich");
 				password = getPasswordFromFile(c, wc.SSID);
 			} else {
-				Log.e(Util.TAG, "sudo failed to make me a sandwich");
+				Log.e(TAG, "sudo failed to make me a sandwich");
 				throw new PasswordNotFoundException("su failed to execute");
 			}
 		}
 
 		if (password == null) {
-			Log.i(Util.TAG, "no root access, returning null password value");
+			Log.i(TAG, "no root access, returning null password value");
 			return null;
 		} else {
 			return password;
@@ -107,7 +109,7 @@ public class RootUtil {
 				if (pw != null) {
 					return pw;
 				} else {
-					Log.e(Util.TAG, "found WPA-PSK config with no PSK password");
+					Log.e(TAG, "found WPA-PSK config with no PSK password");
 					throw new PasswordNotFoundException(
 							"WPA-PSK config with no PSK password");
 				}
@@ -124,7 +126,7 @@ public class RootUtil {
 			}
 		}
 
-		Log.e(Util.TAG, "found no password from file");
+		Log.e(TAG, "found no password from file");
 		throw new PasswordNotFoundException("found no password from file");
 	}
 
@@ -180,10 +182,10 @@ public class RootUtil {
 				content += new String(buffer);
 			}
 		} catch (FileNotFoundException e) {
-			Log.e(Util.TAG, "wifi passwords file not found");
+			Log.e(TAG, "wifi passwords file not found");
 			e.printStackTrace();
 		} catch (IOException e) {
-			Log.e(Util.TAG, "IOException while reading wifi passwords file");
+			Log.e(TAG, "IOException while reading wifi passwords file");
 			e.printStackTrace();
 		}
 
@@ -216,16 +218,16 @@ public class RootUtil {
 					if (null == currUid) {
 						retval = false;
 						exitSu = false;
-						Log.i(Util.TAG,
+						Log.i(TAG,
 								"Can't get root access or denied by user");
 					} else if (true == currUid.contains("uid=0")) {
 						retval = true;
 						exitSu = true;
-						Log.i(Util.TAG, "Root access granted");
+						Log.i(TAG, "Root access granted");
 					} else {
 						retval = false;
 						exitSu = true;
-						Log.i(Util.TAG, "Root access rejected: " + currUid);
+						Log.i(TAG, "Root access rejected: " + currUid);
 					}
 
 					if (exitSu) {
@@ -239,7 +241,7 @@ public class RootUtil {
 				// stream after su failed, meaning that the device is not rooted
 
 				retval = false;
-				Log.i(Util.TAG, "Root access rejected ["
+				Log.i(TAG, "Root access rejected ["
 						+ e.getClass().getName() + "] : " + e.getMessage());
 			}
 
@@ -276,15 +278,15 @@ public class RootUtil {
 							retval = false;
 						}
 					} catch (Exception ex) {
-						Log.e(Util.TAG, "Error executing root action");
+						Log.e(TAG, "Error executing root action");
 					}
 				}
 			} catch (IOException ex) {
-				Log.w(Util.TAG, "Can't get root access", ex);
+				Log.w(TAG, "Can't get root access", ex);
 			} catch (SecurityException ex) {
-				Log.w(Util.TAG, "Can't get root access", ex);
+				Log.w(TAG, "Can't get root access", ex);
 			} catch (Exception ex) {
-				Log.w(Util.TAG, "Error executing internal operation", ex);
+				Log.w(TAG, "Error executing internal operation", ex);
 			}
 			return retval;
 		}

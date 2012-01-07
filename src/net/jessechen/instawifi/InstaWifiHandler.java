@@ -29,6 +29,8 @@ public class InstaWifiHandler extends Activity implements
 	boolean receiverRemoved;
 	private static final int MESSAGE_SENT = 1;
 
+	private static final String TAG = InstaWifiHandler.class.getName();
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -105,7 +107,7 @@ public class InstaWifiHandler extends Activity implements
 			case ALREADY_CONNECTED:
 				unregisterWifiReceiver();
 
-				Log.i(Util.TAG,
+				Log.i(TAG,
 						"tried to connect to current network");
 				Util.shortToast(this, String.format(
 						getString(R.string.wifi_connect_already),
@@ -116,7 +118,7 @@ public class InstaWifiHandler extends Activity implements
 			case INVALID_NET_ID:
 				unregisterWifiReceiver();
 
-				Log.e(Util.TAG,
+				Log.e(TAG,
 						"failed to connect to wifi, invalid wifi configs probably");
 				Util.shortToast(this, getString(R.string.invalid_wifi_sticker));
 				
@@ -126,7 +128,7 @@ public class InstaWifiHandler extends Activity implements
 				break;
 			}
 		} else {
-			Log.e(Util.TAG, "invalid wifi model when processing wifi URI");
+			Log.e(TAG, "invalid wifi model when processing wifi URI");
 			Util.shortToast(this, getString(R.string.invalid_wifi_sticker));
 		}
 	}

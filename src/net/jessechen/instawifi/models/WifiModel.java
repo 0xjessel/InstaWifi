@@ -1,6 +1,5 @@
 package net.jessechen.instawifi.models;
 
-import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
 import android.net.Uri;
 import android.util.Log;
@@ -9,6 +8,8 @@ public class WifiModel {
 	private String SSID;
 	private String password;
 	private String protocol;
+	
+	private static final String TAG = WifiModel.class.getName();
 
 	public WifiModel(String ssid, String pw, String pt) {
 		protocol = pt;
@@ -19,7 +20,7 @@ public class WifiModel {
 	public WifiModel(String wifiString) {
 		Uri wifiUri = Uri.parse(wifiString);
 		if (!WifiUtil.isValidWifiUri(wifiUri)) {
-			Log.e(Util.TAG, String.format(
+			Log.e(TAG, String.format(
 					"invalid URI when creating new WifiModel: %s",
 					wifiUri.toString()));
 		}

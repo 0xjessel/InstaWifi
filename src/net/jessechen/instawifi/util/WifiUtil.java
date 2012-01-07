@@ -18,6 +18,8 @@ public class WifiUtil {
 	public static String WPA = "wpa";
 	public static String OPEN = "open";
 	
+	private static final String TAG = WifiUtil.class.getName();
+	
 	public static WifiModel getCurrentWifiModel(Context c) {
 		WifiConfiguration wc = getCurrentWifiConfig(c);
 		if (wc != null) {
@@ -27,7 +29,7 @@ public class WifiUtil {
 			try {
 				password = RootUtil.getWifiPassword(c, wc);
 			} catch (PasswordNotFoundException e) {
-				Log.e(Util.TAG,
+				Log.e(TAG,
 						"password not found when trying to get it using root access");
 				e.printStackTrace();
 			} // TODO: FIX password can be null
@@ -42,7 +44,7 @@ public class WifiUtil {
 		String pw = wifiUri.getLastPathSegment();
 		String protocol = wifiUri.getFragment();
 		if (ssid == null) {
-			Log.e(Util.TAG, "SSID is null when getting wifi model");
+			Log.e(TAG, "SSID is null when getting wifi model");
 			Util.shortToast(c, "ERROR: SSID is null");
 			return null;
 		}
@@ -85,7 +87,7 @@ public class WifiUtil {
 			return WPA;
 		} else {
 			// not one of the above..
-			Log.e(Util.TAG, "Did not find wifi protocol");
+			Log.e(TAG, "Did not find wifi protocol");
 			return null;
 		}
 
@@ -143,20 +145,20 @@ public class WifiUtil {
 				.getSystemService(Context.WIFI_SERVICE);
 		if (!mWm.isWifiEnabled()) {
 			mWm.setWifiEnabled(true);
-			Log.i(Util.TAG, "wifi was disabled, enabling wifi");
+			Log.i(TAG, "wifi was disabled, enabling wifi");
 		}
 
 		// waiting until wifi is enabled
 		while (!mWm.isWifiEnabled()) {
 			// do nothing, this can be bad
-			Log.v(Util.TAG, "waiting for wifi to be enabled..");
+			Log.v(TAG, "waiting for wifi to be enabled..");
 		}
 
 		int netId = getNetworkId(c, mWifiModel, mWm);
 		if (netId == -1) {
 			netId = addWifiNetwork(c, mWifiModel, mWm);
 		} else if (netId == mWm.getConnectionInfo().getNetworkId()) {
-			Log.i(Util.TAG,
+			Log.i(TAG,
 					String.format("already connected to %s",
 							mWifiModel.getSSID()));
 			return ConnectToWifiResult.ALREADY_CONNECTED;
@@ -175,15 +177,15 @@ public class WifiUtil {
 			// waiting until wifi is enabled
 			while (!mWm.isWifiEnabled()) {
 				// do nothing, this can be bad
-				Log.v(Util.TAG, "waiting for wifi to be enabled..");
+				Log.v(TAG, "waiting for wifi to be enabled..");
 			}
 		}
 
 		if (mWm.enableNetwork(netId, true)) {
-			Log.i(Util.TAG, "attemping to connect to network..");
+			Log.i(TAG, "attemping to connect to network..");
 			return ConnectToWifiResult.NETWORK_ENABLED;
 		} else {
-			Log.e(Util.TAG, "failed attempt to connect to network");
+			Log.e(TAG, "failed attempt to connect to network");
 			return ConnectToWifiResult.NETWORK_ENABLED_FAILED;
 		}
 	}
@@ -261,12 +263,12 @@ public class WifiUtil {
 		// add network to known list
 		int netId = mWm.addNetwork(mWc);
 		if (netId == -1) {
-			Log.e(Util.TAG, String.format(
+			Log.e(TAG, String.format(
 					"netId == -1, failed to add %s to known networks",
 					mWifiModel.getSSID()));
 		}
 		if (!mWm.saveConfiguration()) {
-			Log.e(Util.TAG, String.format(
+			Log.e(TAG, String.format(
 					"failed to save wifi configuration for %s",
 					mWifiModel.getSSID()));
 			return -1;

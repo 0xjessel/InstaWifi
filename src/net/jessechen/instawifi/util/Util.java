@@ -5,6 +5,9 @@ import android.content.Context;
 import android.widget.Toast;
 
 public class Util {
+	@SuppressWarnings("unused")
+	private static final String TAG = Util.class.getName();
+
 	public static void shortToast(Context c, String msg) {
 		Toast.makeText(c, msg, Toast.LENGTH_SHORT).show();
 	}
@@ -34,6 +37,4 @@ public class Util {
 		}
 		return true;
 	}
-
-	public static String TAG = "instawifi";
 }
