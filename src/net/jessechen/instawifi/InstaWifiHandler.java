@@ -1,7 +1,6 @@
 package net.jessechen.instawifi;
 
 import net.jessechen.instawifi.models.WifiModel;
-import net.jessechen.instawifi.util.ConnectToWifiResult;
 import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
@@ -111,6 +110,8 @@ public class InstaWifiHandler extends Activity implements
 				Util.shortToast(this, String.format(
 						getString(R.string.wifi_connect_already),
 						receivedWifiModel.getTrimmedSSID()));
+				
+				finish();
 				break;
 			case INVALID_NET_ID:
 				unregisterWifiReceiver();
@@ -118,6 +119,8 @@ public class InstaWifiHandler extends Activity implements
 				Log.e(Util.TAG,
 						"failed to connect to wifi, invalid wifi configs probably");
 				Util.shortToast(this, getString(R.string.invalid_wifi_sticker));
+				
+				finish();
 				break;
 			default:
 				break;
