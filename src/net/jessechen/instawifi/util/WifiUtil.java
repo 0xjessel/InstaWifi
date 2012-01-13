@@ -90,18 +90,6 @@ public class WifiUtil {
 			Log.e(TAG, "Did not find wifi protocol");
 			return null;
 		}
-
-	}
-
-	public static String getWifiPassword(WifiConfiguration wc, String protocol) {
-		if (protocol.equals(WEP)) {
-			// TODO: i think this just returns '*'..needs root to get a password
-			return wc.wepKeys[wc.wepTxKeyIndex];
-		} else if (protocol.equals(WPA)) {
-			return wc.preSharedKey;
-		} else {
-			return null;
-		}
 	}
 
 	/**

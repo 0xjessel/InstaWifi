@@ -23,7 +23,9 @@ public class InstaWifiActivity extends Activity {
 
 	PendingIntent mNfcPendingIntent;
 	IntentFilter[] mWriteTagFilters;
-	
+
+	AlertDialog alert;
+
 	private static final String TAG = InstaWifiActivity.class.getName();
 
 	/** Called when the activity is first created. */
@@ -47,6 +49,15 @@ public class InstaWifiActivity extends Activity {
 	}
 
 	@Override
+	public void onPause() {
+		super.onPause();
+
+		if (alert != null) {
+			alert.dismiss();
+		}
+	}
+
+	@Override
 	protected void onNewIntent(Intent intent) {
 		if (mWriteMode
 				&& NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
@@ -58,14 +69,12 @@ public class InstaWifiActivity extends Activity {
 						currentWifi.getSSID(), currentWifi.getPassword(),
 						currentWifi.getProtocol());
 				if (NfcUtil.writeTag(wifiNdefMessage, detectedTag, this)) {
-					Log.i(TAG, String.format(
-							"successfully wrote %s to tag",
+					Log.i(TAG, String.format("successfully wrote %s to tag",
 							currentWifi.getTrimmedSSID()));
 					Util.longToast(this, getString(R.string.write_tag_success));
 				} else {
 					Util.longToast(this, getString(R.string.write_tag_fail));
-					Log.e(TAG,
-							"failed to write to tag, probably IOException");
+					Log.e(TAG, "failed to write to tag, probably IOException");
 				}
 			} else {
 				Util.shortToast(this, getString(R.string.write_tag_fail));
@@ -81,7 +90,7 @@ public class InstaWifiActivity extends Activity {
 			// Write to a tag for as long as the dialog is shown.
 			enableTagWriteMode();
 
-			new AlertDialog.Builder(InstaWifiActivity.this)
+			alert = new AlertDialog.Builder(InstaWifiActivity.this)
 					.setTitle(getString(R.string.dialog_write_tag))
 					.setOnCancelListener(
 							new DialogInterface.OnCancelListener() {
@@ -89,7 +98,8 @@ public class InstaWifiActivity extends Activity {
 								public void onCancel(DialogInterface dialog) {
 									disableTagWriteMode();
 								}
-							}).create().show();
+							}).create();
+			alert.show();
 		}
 	};
 
