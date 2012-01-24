@@ -4,7 +4,7 @@ import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
-import android.app.Activity;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
@@ -14,10 +14,11 @@ import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 
-public class InstaWifiActivity extends Activity {
+public class InstaWifiActivity extends FragmentActivity {
 	private boolean mWriteMode = false;
 	NfcAdapter mNfcAdapter;
 
@@ -44,6 +45,11 @@ public class InstaWifiActivity extends Activity {
 		IntentFilter tagDetected = new IntentFilter(
 				NfcAdapter.ACTION_TAG_DISCOVERED);
 		mWriteTagFilters = new IntentFilter[] { tagDetected };
+		
+		android.support.v4.app.ActionBar bar = getSupportActionBar();
+		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		bar.addTab(bar.newTab().setText("NFC"));
+		bar.addTab(bar.newTab().setText("QR"));
 	}
 
 	@Override
