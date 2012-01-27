@@ -100,18 +100,6 @@ public class InstaWifiActivity extends FragmentActivity {
 		}
 	};
 
-	private View.OnClickListener mTestButtonListener = new View.OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-			// WifiModel currentWifi = WifiUtil
-			// .getCurrentWifiModel(getApplicationContext());
-			// Util.longToast(getApplicationContext(), String.format(
-			// "SSID: %s, PW: %s, PROTOCOL: %s", currentWifi.getSSID(),
-			// currentWifi.getPassword(), currentWifi.getProtocol()));
-		}
-	};
-
 	private void enableTagWriteMode() {
 		mWriteMode = true;
 		IntentFilter tagDetected = new IntentFilter(
