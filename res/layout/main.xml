@@ -13,27 +13,28 @@
         android:layout_marginTop="20dp"
         android:drawablePadding="-25dp"
         android:drawableTop="@drawable/wifi"
-        android:text="@string/write_tag"
-        android:textColor="#000000" />
+        android:text="@string/write_tag" />
 
     <Spinner
         android:id="@+id/spinner1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp" />
 
     <com.gridlayout.GridLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:gridlayout="http://schemas.android.com/apk/res/net.jessechen.instawifi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="40dp"
         android:layout_marginRight="20dp"
         gridlayout:alignmentMode="alignBounds"
         gridlayout:columnCount="3"
         gridlayout:columnOrderPreserved="false"
-        gridlayout:useDefaultMargins="true" >
+        gridlayout:useDefaultMargins="false" >
 
         <TextView
             android:id="@+id/security_text"
@@ -41,7 +42,15 @@
             android:text="Security"
             android:textSize="16dp" />
 
+        <Space
+            android:layout_width="8dp"
+            android:layout_height="5dp" />
+
         <Spinner android:id="@+id/security_spinner" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="10dp" />
 
         <TextView
             android:id="@+id/password_text"
@@ -50,6 +59,10 @@
             android:layout_row="1"
             android:text="Password"
             android:textSize="16dp" />
+
+        <Space
+            android:layout_width="8dp"
+            android:layout_height="5dp" />
 
         <EditText
             android:id="@+id/password_field"
@@ -61,7 +74,7 @@
         android:id="@+id/password_checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="45dp"
         android:text="Show password"
         android:textSize="16dp" />
 
