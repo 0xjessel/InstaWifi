@@ -2,23 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@drawable/backrepeat" >
 
     <Button
-        android:id="@+id/b_writetag"
+        android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/write_tag" />
+        android:drawablePadding="-25dp"
+        android:drawableTop="@drawable/wifi"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/write_tag"
+        android:textColor="#000000"
+        android:layout_marginTop="20dp" />
 
-    <Button
-        android:id="@+id/b_test"
-        android:layout_width="wrap_content" 
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test BUTTON PRESS ME!" />
-    
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hello" />
+        android:layout_margin="5dp"
+        android:layout_marginTop="20dp" />
 
 </LinearLayout>

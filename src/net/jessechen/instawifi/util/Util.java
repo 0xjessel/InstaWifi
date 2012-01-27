@@ -1,13 +1,24 @@
 package net.jessechen.instawifi.util;
 
 
+import android.app.ActionBar;
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
 public class Util {
 	@SuppressWarnings("unused")
 	private static final String TAG = Util.class.getName();
 
+	public static void NfcActionBar(FragmentActivity fragActivity) {
+		android.support.v4.app.ActionBar bar = fragActivity.getSupportActionBar();
+		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		
+		bar.addTab(bar.newTab().setText("NFC"));
+		bar.addTab(bar.newTab().setText("QR"));
+		bar.setSelectedNavigationItem(0);
+	}
+	
 	public static void shortToast(Context c, String msg) {
 		Toast.makeText(c, msg, Toast.LENGTH_SHORT).show();
 	}

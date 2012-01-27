@@ -4,7 +4,6 @@ import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
@@ -15,7 +14,9 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.Menu;
 import android.util.Log;
+import android.view.MenuInflater;
 import android.view.View;
 
 public class InstaWifiActivity extends FragmentActivity {
@@ -24,7 +25,7 @@ public class InstaWifiActivity extends FragmentActivity {
 
 	PendingIntent mNfcPendingIntent;
 	IntentFilter[] mWriteTagFilters;
-	
+
 	private static final String TAG = InstaWifiActivity.class.getName();
 
 	/** Called when the activity is first created. */
@@ -34,8 +35,6 @@ public class InstaWifiActivity extends FragmentActivity {
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
 		setContentView(R.layout.main);
-		findViewById(R.id.b_writetag).setOnClickListener(mTagWriter);
-		findViewById(R.id.b_test).setOnClickListener(mTestButtonListener);
 
 		// Handle all of our received NFC intents in this activity.
 		mNfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
@@ -45,11 +44,8 @@ public class InstaWifiActivity extends FragmentActivity {
 		IntentFilter tagDetected = new IntentFilter(
 				NfcAdapter.ACTION_TAG_DISCOVERED);
 		mWriteTagFilters = new IntentFilter[] { tagDetected };
-		
-		android.support.v4.app.ActionBar bar = getSupportActionBar();
-		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		bar.addTab(bar.newTab().setText("NFC"));
-		bar.addTab(bar.newTab().setText("QR"));
+
+		Util.NfcActionBar(this);
 	}
 
 	@Override
@@ -64,14 +60,12 @@ public class InstaWifiActivity extends FragmentActivity {
 						currentWifi.getSSID(), currentWifi.getPassword(),
 						currentWifi.getProtocol());
 				if (NfcUtil.writeTag(wifiNdefMessage, detectedTag, this)) {
-					Log.i(TAG, String.format(
-							"successfully wrote %s to tag",
+					Log.i(TAG, String.format("successfully wrote %s to tag",
 							currentWifi.getTrimmedSSID()));
 					Util.longToast(this, getString(R.string.write_tag_success));
 				} else {
 					Util.longToast(this, getString(R.string.write_tag_fail));
-					Log.e(TAG,
-							"failed to write to tag, probably IOException");
+					Log.e(TAG, "failed to write to tag, probably IOException");
 				}
 			} else {
 				Util.shortToast(this, getString(R.string.write_tag_fail));
@@ -79,6 +73,13 @@ public class InstaWifiActivity extends FragmentActivity {
 						"invalid wifi model when writing tag, probably wifi not on");
 			}
 		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.nfc, menu);
+	    return true;
 	}
 
 	private View.OnClickListener mTagWriter = new View.OnClickListener() {
