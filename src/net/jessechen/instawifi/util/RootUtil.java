@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.jessechen.instawifi.models.WifiModel;
 import android.content.Context;
-import android.net.wifi.WifiConfiguration;
 import android.util.Log;
 
 /*
@@ -57,12 +57,12 @@ public class RootUtil {
 	 * @throws PasswordNotFoundException
 	 *             if an error occurs during the process
 	 */
-	public static String getWifiPassword(final Context c, WifiConfiguration wc)
+	public static String getWifiPassword(final Context c, String SSID)
 			throws PasswordNotFoundException {
-		if (wc.SSID == null || wc == null) {
+		if (SSID == null || SSID == null) {
 			Log.e(TAG,
-					"could not get wifi password because WifiConfiguration is invalid");
-			throw new PasswordNotFoundException("WifiConfiguration is invalid");
+					"could not get wifi password because WifiModel is invalid");
+			throw new PasswordNotFoundException("WifiModel is invalid");
 		}
 
 		String password = null;
@@ -82,7 +82,7 @@ public class RootUtil {
 
 			if (su.execute()) {
 				Log.i(TAG, "sudo made me a sandwich");
-				password = getPasswordFromFile(c, wc.SSID);
+				password = getPasswordFromFile(c, SSID);
 			} else {
 				Log.e(TAG, "sudo failed to make me a sandwich");
 				throw new PasswordNotFoundException("su failed to execute");

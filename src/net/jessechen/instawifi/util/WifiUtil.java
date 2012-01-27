@@ -1,5 +1,6 @@
 package net.jessechen.instawifi.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.jessechen.instawifi.models.WifiModel;
@@ -17,9 +18,17 @@ public class WifiUtil {
 	public static String WEP = "wep";
 	public static String WPA = "wpa";
 	public static String OPEN = "open";
-	
+	@SuppressWarnings("serial")
+	public static ArrayList<String> protocols = new ArrayList<String>() {
+		{
+			add(WEP);
+			add(WPA);
+			add(OPEN);
+		}
+	};
+
 	private static final String TAG = WifiUtil.class.getName();
-	
+
 	public static WifiModel getCurrentWifiModel(Context c) {
 		WifiConfiguration wc = getCurrentWifiConfig(c);
 		if (wc != null) {
@@ -27,7 +36,7 @@ public class WifiUtil {
 			String protocol = getWifiProtocol(wc);
 			String password = null;
 			try {
-				password = RootUtil.getWifiPassword(c, wc);
+				password = RootUtil.getWifiPassword(c, ssid);
 			} catch (PasswordNotFoundException e) {
 				Log.e(TAG,
 						"password not found when trying to get it using root access");
@@ -39,7 +48,7 @@ public class WifiUtil {
 		}
 	}
 
-	public static WifiModel getWifiModel(Context c, Uri wifiUri) {
+	public static WifiModel getWifiModelFromUri(Context c, Uri wifiUri) {
 		String ssid = wifiUri.getHost();
 		String pw = wifiUri.getLastPathSegment();
 		String protocol = wifiUri.getFragment();
@@ -49,6 +58,39 @@ public class WifiUtil {
 			return null;
 		}
 		return new WifiModel(ssid, pw, protocol);
+	}
+
+	public static WifiModel getWifiModelFromSsid(Context c, String SSID)
+			throws PasswordNotFoundException {
+		SSID = Util.concatQuotes(SSID);
+		WifiConfiguration wc = getWifiConfig(c, SSID);
+		String protocol = getWifiProtocol(wc);
+		String pw = RootUtil.getWifiPassword(c, SSID);
+		if (SSID == null) {
+			Log.e(TAG, "SSID is null when getting wifi model");
+			Util.shortToast(c, "ERROR: SSID is null");
+			return null;
+		}
+		return new WifiModel(SSID, pw, protocol);
+	}
+
+	public static WifiConfiguration getWifiConfig(Context c, String SSID) {
+		WifiManager mWifiManager = (WifiManager) c
+				.getSystemService(Context.WIFI_SERVICE);
+
+		WifiConfiguration toReturn = null;
+		for (WifiConfiguration conn : mWifiManager.getConfiguredNetworks()) {
+			if (conn.SSID.equals(SSID)) {
+				toReturn = conn;
+				break;
+			}
+		}
+
+		if (toReturn != null) {
+			return toReturn;
+		}
+
+		return null;
 	}
 
 	public static WifiConfiguration getCurrentWifiConfig(Context c) {
@@ -75,31 +117,18 @@ public class WifiUtil {
 	}
 
 	public static String getWifiProtocol(WifiConfiguration wc) {
-		if (wc.allowedAuthAlgorithms.isEmpty()) {
-			// this is an open network
-			return OPEN;
+		if (wc.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WPA_PSK)) {
+			// WPA/WPA2 network, key is in wfc.preSharedKey
+			return WPA;
 		} else if (wc.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.NONE)) {
 			// WEP network, the key is in wfc.wepKeys[wfc.wepTxKeyIndex]
 			return WEP;
-		} else if (wc.allowedKeyManagement
-				.get(WifiConfiguration.KeyMgmt.WPA_PSK)) {
-			// WPA/WPA2 network, key is in wfc.preSharedKey
-			return WPA;
+		} else if (wc.allowedAuthAlgorithms.isEmpty()) {
+			// this is an open network
+			return OPEN;
 		} else {
 			// not one of the above..
 			Log.e(TAG, "Did not find wifi protocol");
-			return null;
-		}
-
-	}
-
-	public static String getWifiPassword(WifiConfiguration wc, String protocol) {
-		if (protocol.equals(WEP)) {
-			// TODO: i think this just returns '*'..needs root to get a password
-			return wc.wepKeys[wc.wepTxKeyIndex];
-		} else if (protocol.equals(WPA)) {
-			return wc.preSharedKey;
-		} else {
 			return null;
 		}
 	}
@@ -140,7 +169,8 @@ public class WifiUtil {
 		}
 	}
 
-	public static ConnectToWifiResult connectToWifi(Context c, WifiModel mWifiModel) {
+	public static ConnectToWifiResult connectToWifi(Context c,
+			WifiModel mWifiModel) {
 		WifiManager mWm = (WifiManager) c
 				.getSystemService(Context.WIFI_SERVICE);
 		if (!mWm.isWifiEnabled()) {
@@ -166,7 +196,8 @@ public class WifiUtil {
 		return connectToNetwork(netId, mWm);
 	}
 
-	public static ConnectToWifiResult connectToNetwork(int netId, WifiManager mWm) {
+	public static ConnectToWifiResult connectToNetwork(int netId,
+			WifiManager mWm) {
 		if (netId == -1) {
 			return ConnectToWifiResult.INVALID_NET_ID;
 		}
@@ -203,7 +234,6 @@ public class WifiUtil {
 		mWc.SSID = mWifiModel.getSSID();
 		mWc.status = WifiConfiguration.Status.DISABLED;
 
-		// thanks to:
 		// http://kmansoft.com/2010/04/08/adding-wifi-networks-to-known-list/
 		if (protocol.equals(OPEN)) {
 			// TODO: something like this, need to check open network configs
@@ -289,5 +319,21 @@ public class WifiUtil {
 			}
 		}
 		return -1;
+	}
+
+	public static String[] getConfiguredNetworks(Context c) {
+		WifiManager mWm = (WifiManager) c
+				.getSystemService(Context.WIFI_SERVICE);
+
+		List<WifiConfiguration> configuredNetworks = mWm
+				.getConfiguredNetworks();
+
+		String[] toReturn = new String[configuredNetworks.size()];
+
+		for (int i = 0; i < configuredNetworks.size(); i++) {
+			toReturn[i] = Util.stripQuotes(configuredNetworks.get(i).SSID);
+		}
+
+		return toReturn;
 	}
 }

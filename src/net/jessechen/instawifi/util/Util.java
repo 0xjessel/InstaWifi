@@ -30,6 +30,11 @@ public class Util {
 	public static String concatQuotes(String s) {
 		return "\"".concat(s).concat("\"");
 	}
+	
+	public static String stripQuotes(String s) {
+		return s.replaceAll("^\"|\"$", "");
+	}
+	
 	public static boolean isHexString(String s) {
 		if (s == null) {
 			return false;

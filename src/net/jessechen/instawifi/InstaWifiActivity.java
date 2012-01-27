@@ -2,6 +2,7 @@ package net.jessechen.instawifi;
 
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.NfcUtil;
+import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
 import android.app.AlertDialog;
@@ -15,16 +16,33 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.Menu;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
+import android.widget.Spinner;
 
-public class InstaWifiActivity extends FragmentActivity {
+public class InstaWifiActivity extends FragmentActivity implements
+		OnItemSelectedListener {
 	private boolean mWriteMode = false;
-	NfcAdapter mNfcAdapter;
 
+	NfcAdapter mNfcAdapter;
 	PendingIntent mNfcPendingIntent;
 	IntentFilter[] mWriteTagFilters;
+
+	Button writeTag;
+	Spinner networkSpinner;
+	Spinner protocolSpinner;
+	EditText passwordField;
+	CheckBox revealPassword;
 
 	private static final String TAG = InstaWifiActivity.class.getName();
 
@@ -35,6 +53,27 @@ public class InstaWifiActivity extends FragmentActivity {
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
 		setContentView(R.layout.main);
+
+		writeTag = (Button) findViewById(R.id.b_write_tag);
+		networkSpinner = (Spinner) findViewById(R.id.network_spinner);
+		protocolSpinner = (Spinner) findViewById(R.id.security_spinner);
+		passwordField = (EditText) findViewById(R.id.password_field);
+		revealPassword = (CheckBox) findViewById(R.id.password_checkbox);
+		
+		writeTag.setOnClickListener(mTagWriter);
+
+		revealPassword.setOnCheckedChangeListener(mCheckBoxListener);
+		
+		String[] networks = WifiUtil.getConfiguredNetworks(this);
+		ArrayAdapter<String> networkAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_dropdown_item, networks);
+		networkSpinner.setAdapter(networkAdapter);
+		networkSpinner.setOnItemSelectedListener(this);
+
+		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_dropdown_item,
+				WifiUtil.protocols);
+		protocolSpinner.setAdapter(protocolAdapter);
 
 		// Handle all of our received NFC intents in this activity.
 		mNfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
@@ -74,12 +113,12 @@ public class InstaWifiActivity extends FragmentActivity {
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.nfc, menu);
-	    return true;
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.nfc, menu);
+		return true;
 	}
 
 	private View.OnClickListener mTagWriter = new View.OnClickListener() {
@@ -100,6 +139,18 @@ public class InstaWifiActivity extends FragmentActivity {
 		}
 	};
 
+	private OnCheckedChangeListener mCheckBoxListener = new CompoundButton.OnCheckedChangeListener() {
+		
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			if (isChecked) {
+				passwordField.setTransformationMethod(null);
+			} else {
+				passwordField.setTransformationMethod(new PasswordTransformationMethod());
+			}
+		}
+	};
+
 	private void enableTagWriteMode() {
 		mWriteMode = true;
 		IntentFilter tagDetected = new IntentFilter(
@@ -112,5 +163,30 @@ public class InstaWifiActivity extends FragmentActivity {
 	private void disableTagWriteMode() {
 		mWriteMode = false;
 		mNfcAdapter.disableForegroundDispatch(this);
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int pos,
+			long id) {
+		WifiModel selectedNetwork = null;
+		try {
+			selectedNetwork = WifiUtil.getWifiModelFromSsid(this, parent
+					.getItemAtPosition(pos).toString());
+		} catch (PasswordNotFoundException e) {
+			e.printStackTrace();
+			Log.e(TAG, "did not find password on item selected");
+		}
+
+		if (selectedNetwork != null) {
+			protocolSpinner.setSelection(WifiUtil.protocols
+					.indexOf(selectedNetwork.getProtocol()));
+			passwordField.setText(Util.stripQuotes(selectedNetwork.getPassword()));
+		}
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+		// TODO Auto-generated method stub
+
 	}
 }
