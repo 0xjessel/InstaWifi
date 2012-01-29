@@ -91,7 +91,7 @@ public class InstaWifiActivity extends FragmentActivity implements
 	@Override
 	public void onPause() {
 		super.onPause();
-
+		
 		if (alert != null) {
 			alert.dismiss();
 		}
