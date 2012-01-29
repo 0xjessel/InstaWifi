@@ -18,5 +18,8 @@
     <string name="write_tag_fail">Failed to write to tag</string>
     <string name="write_tag_success">Wifi configuration saved to tag!</string>
     <string name="wifi_connect_already">Already connected to %1$s</string>
+    <string name="password_text">Password</string>
+    <string name="security_text">Security</string>
+    <string name="show_password_text">Show password</string>
 
 </resources>
