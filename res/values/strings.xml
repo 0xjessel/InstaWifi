@@ -21,5 +21,6 @@
     <string name="password_text">Password</string>
     <string name="security_text">Security</string>
     <string name="show_password_text">Show password</string>
+    <string name="ssid_text">SSID</string>
 
 </resources>

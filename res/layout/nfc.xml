@@ -1,64 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/backrepeat"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/b_write_tag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:drawablePadding="-25dp"
-        android:drawableTop="@drawable/wifi"
-        android:text="@string/write_tag" />
-
-    <com.gridlayout.GridLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:gridlayout="http://schemas.android.com/apk/res/net.jessechen.instawifi"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="20dp"
-        gridlayout:alignmentMode="alignBounds"
-        gridlayout:columnCount="3"
-        gridlayout:columnOrderPreserved="false"
-        gridlayout:useDefaultMargins="false" >
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
-        <Spinner android:id="@+id/network_spinner" />
+        <Button
+            android:id="@+id/b_write_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:drawablePadding="-25dp"
+            android:drawableTop="@drawable/wifi"
+            android:text="@string/write_tag" />
 
-        <TextView
-            android:id="@+id/security_text"
-            android:layout_column="0"
-            android:layout_gravity="right"
-            android:layout_row="1"
-            android:text="@string/security_text"
+        <com.gridlayout.GridLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:gridlayout="http://schemas.android.com/apk/res/net.jessechen.instawifi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="16dp"
+            gridlayout:alignmentMode="alignBounds"
+            gridlayout:columnCount="2"
+            gridlayout:columnOrderPreserved="false"
+            gridlayout:useDefaultMargins="true" >
+
+            <TextView
+                android:id="@+id/ssid_text"
+                android:layout_column="0"
+                android:layout_gravity="right"
+                android:layout_margin="4dp"
+                android:layout_row="0"
+                android:text="@string/ssid_text"
+                android:textSize="16dp" />
+
+            <Spinner
+                android:id="@+id/network_spinner"
+                android:layout_column="1"
+                android:layout_margin="4dp"
+                android:layout_row="0" />
+
+            <TextView
+                android:id="@+id/security_text"
+                android:layout_column="0"
+                android:layout_gravity="right"
+                android:layout_margin="4dp"
+                android:layout_row="1"
+                android:text="@string/security_text"
+                android:textSize="16dp" />
+
+            <Spinner
+                android:id="@+id/security_spinner"
+                android:layout_column="1"
+                android:layout_margin="4dp"
+                android:layout_row="1" />
+
+            <TextView
+                android:id="@+id/password_text"
+                android:layout_column="0"
+                android:layout_gravity="right"
+                android:layout_margin="4dp"
+                android:layout_row="2"
+                android:text="@string/password_text"
+                android:textSize="16dp" />
+
+            <EditText
+                android:id="@+id/password_field"
+                android:layout_margin="4dp"
+                android:ems="7"
+                android:password="true" />
+        </com.gridlayout.GridLayout>
+
+        <CheckBox
+            android:id="@+id/password_checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:text="@string/show_password_text"
             android:textSize="16dp" />
+    </LinearLayout>
 
-        <Spinner android:id="@+id/security_spinner" />
-
-        <TextView
-            android:id="@+id/password_text"
-            android:layout_column="0"
-            android:layout_gravity="right"
-            android:layout_row="2"
-            android:text="@string/password_text"
-            android:textSize="16dp" />
-
-        <EditText
-            android:id="@+id/password_field"
-            android:ems="8"
-            android:password="true" />
-    </com.gridlayout.GridLayout>
-
-    <CheckBox
-        android:id="@+id/password_checkbox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="45dp"
-        android:text="show_password_text"
-        android:textSize="16dp" />
-
-</LinearLayout>
+</ScrollView>
