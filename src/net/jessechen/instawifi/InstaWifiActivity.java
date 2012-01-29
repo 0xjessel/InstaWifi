@@ -53,7 +53,7 @@ public class InstaWifiActivity extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
-		setContentView(R.layout.main);
+		setContentView(R.layout.nfc);
 
 		writeTag = (Button) findViewById(R.id.b_write_tag);
 		networkSpinner = (Spinner) findViewById(R.id.network_spinner);
@@ -67,13 +67,15 @@ public class InstaWifiActivity extends FragmentActivity implements
 		
 		String[] networks = WifiUtil.getConfiguredNetworks(this);
 		ArrayAdapter<String> networkAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_dropdown_item, networks);
+				android.R.layout.simple_spinner_item, networks);
+		networkAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		networkSpinner.setAdapter(networkAdapter);
 		networkSpinner.setOnItemSelectedListener(this);
 
 		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_dropdown_item,
+				android.R.layout.simple_spinner_item,
 				WifiUtil.protocols);
+		protocolAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		protocolSpinner.setAdapter(protocolAdapter);
 
 		// Handle all of our received NFC intents in this activity.
