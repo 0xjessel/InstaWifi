@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.jessechen.instawifi.models.WifiModel;
 import android.content.Context;
 import android.util.Log;
 
