@@ -30,7 +30,6 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-// TODO: create custom theme with Theme.Sherlock.Light as parent.  refactor hardcoded strings into strings.xml
 public class InstaWifiActivity extends FragmentActivity implements
 		OnItemSelectedListener {
 	private boolean mWriteMode = false;
@@ -61,11 +60,11 @@ public class InstaWifiActivity extends FragmentActivity implements
 		protocolSpinner = (Spinner) findViewById(R.id.security_spinner);
 		passwordField = (EditText) findViewById(R.id.password_field);
 		revealPassword = (CheckBox) findViewById(R.id.password_checkbox);
-
+		
 		writeTag.setOnClickListener(mTagWriter);
 
 		revealPassword.setOnCheckedChangeListener(mCheckBoxListener);
-
+		
 		String[] networks = WifiUtil.getConfiguredNetworks(this);
 		ArrayAdapter<String> networkAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_dropdown_item, networks);
@@ -104,16 +103,14 @@ public class InstaWifiActivity extends FragmentActivity implements
 				&& NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
 			Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
-			WifiModel selectedWifi = new WifiModel(networkSpinner
-					.getSelectedItem().toString(), passwordField.getText()
-					.toString(), protocolSpinner.getSelectedItem().toString());
-			if (WifiUtil.isValidWifiModel(selectedWifi)) {
+			WifiModel currentWifi = WifiUtil.getCurrentWifiModel(this);
+			if (WifiUtil.isValidWifiModel(currentWifi)) {
 				NdefMessage wifiNdefMessage = NfcUtil.getWifiAsNdef(
-						selectedWifi.getSSID(), selectedWifi.getPassword(),
-						selectedWifi.getProtocol());
+						currentWifi.getSSID(), currentWifi.getPassword(),
+						currentWifi.getProtocol());
 				if (NfcUtil.writeTag(wifiNdefMessage, detectedTag, this)) {
 					Log.i(TAG, String.format("successfully wrote %s to tag",
-							selectedWifi.getTrimmedSSID()));
+							currentWifi.getTrimmedSSID()));
 					Util.longToast(this, getString(R.string.write_tag_success));
 				} else {
 					Util.longToast(this, getString(R.string.write_tag_fail));
@@ -154,15 +151,13 @@ public class InstaWifiActivity extends FragmentActivity implements
 	};
 
 	private OnCheckedChangeListener mCheckBoxListener = new CompoundButton.OnCheckedChangeListener() {
-
+		
 		@Override
-		public void onCheckedChanged(CompoundButton buttonView,
-				boolean isChecked) {
+		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 			if (isChecked) {
 				passwordField.setTransformationMethod(null);
 			} else {
-				passwordField
-						.setTransformationMethod(new PasswordTransformationMethod());
+				passwordField.setTransformationMethod(new PasswordTransformationMethod());
 			}
 		}
 	};
@@ -196,8 +191,7 @@ public class InstaWifiActivity extends FragmentActivity implements
 		if (selectedNetwork != null) {
 			protocolSpinner.setSelection(WifiUtil.protocols
 					.indexOf(selectedNetwork.getProtocol()));
-			passwordField.setText(Util.stripQuotes(selectedNetwork
-					.getPassword()));
+			passwordField.setText(Util.stripQuotes(selectedNetwork.getPassword()));
 		}
 	}
 
