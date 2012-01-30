@@ -15,7 +15,10 @@ import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.support.v4.app.ActionBar.Tab;
+import android.support.v4.app.ActionBar.TabListener;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.Menu;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -54,7 +57,7 @@ public class NfcActivity extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
-		setContentView(R.layout.nfc);
+		setContentView(R.layout.nfc_activity);
 
 		writeTag = (Button) findViewById(R.id.b_write_tag);
 		networkSpinner = (Spinner) findViewById(R.id.network_spinner);
@@ -93,10 +96,47 @@ public class NfcActivity extends FragmentActivity implements
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		bar.addTab(bar.newTab().setText(getString(R.string.nfc_tab))
-				.setTabListener(new TabListener(getString(R.string.nfc_tab))));
+				.setTabListener(new TabListener() {
+
+					@Override
+					public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onTabSelected(Tab tab, FragmentTransaction ft) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onTabReselected(Tab tab, FragmentTransaction ft) {
+						// TODO Auto-generated method stub
+
+					}
+				}));
 		bar.addTab(bar.newTab().setText(getString(R.string.qr_tab))
-				.setTabListener(new TabListener(getString(R.string.qr_tab))));
-		bar.setSelectedNavigationItem(0);
+				.setTabListener(new TabListener() {
+
+					@Override
+					public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onTabSelected(Tab tab, FragmentTransaction ft) {
+						startActivity(new Intent(getApplicationContext(),
+								QrActivity.class));
+					}
+
+					@Override
+					public void onTabReselected(Tab tab, FragmentTransaction ft) {
+						// TODO Auto-generated method stub
+
+					}
+				}));
 	}
 
 	@Override
@@ -141,35 +181,6 @@ public class NfcActivity extends FragmentActivity implements
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.nfc, menu);
 		return true;
-	}
-
-	private class TabListener implements
-			android.support.v4.app.ActionBar.TabListener {
-		private String tag;
-
-		public TabListener(String tag) {
-			this.tag = tag;
-		}
-
-		@Override
-		public void onTabReselected(android.support.v4.app.ActionBar.Tab tab,
-				android.support.v4.app.FragmentTransaction ft) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onTabSelected(android.support.v4.app.ActionBar.Tab tab,
-				android.support.v4.app.FragmentTransaction ft) {
-			Util.shortToast(getApplicationContext(), tag + " selected!");
-		}
-
-		@Override
-		public void onTabUnselected(android.support.v4.app.ActionBar.Tab tab,
-				android.support.v4.app.FragmentTransaction ft) {
-			// TODO Auto-generated method stub
-
-		}
 	}
 
 	private View.OnClickListener mTagWriter = new View.OnClickListener() {
