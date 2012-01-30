@@ -22,5 +22,7 @@
     <string name="security_text">Security</string>
     <string name="show_password_text">Show password</string>
     <string name="ssid_text">SSID</string>
+    <string name="nfc_tab">NFC</string>
+    <string name="qr_tab">QR</string>
 
 </resources>

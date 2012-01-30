@@ -5,6 +5,7 @@ import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
@@ -88,7 +89,14 @@ public class InstaWifiActivity extends FragmentActivity implements
 				NfcAdapter.ACTION_TAG_DISCOVERED);
 		mWriteTagFilters = new IntentFilter[] { tagDetected };
 
-		Util.NfcActionBar(this);
+		android.support.v4.app.ActionBar bar = getSupportActionBar();
+		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+		bar.addTab(bar.newTab().setText(getString(R.string.nfc_tab))
+				.setTabListener(new TabListener(getString(R.string.nfc_tab))));
+		bar.addTab(bar.newTab().setText(getString(R.string.qr_tab))
+				.setTabListener(new TabListener(getString(R.string.qr_tab))));
+		bar.setSelectedNavigationItem(0);
 	}
 
 	@Override
@@ -123,8 +131,7 @@ public class InstaWifiActivity extends FragmentActivity implements
 				}
 			} else {
 				Util.shortToast(this, getString(R.string.write_tag_fail));
-				Log.e(TAG,
-						"invalid wifi model when writing tag");
+				Log.e(TAG, "invalid wifi model when writing tag");
 			}
 		}
 	}
@@ -134,6 +141,35 @@ public class InstaWifiActivity extends FragmentActivity implements
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.nfc, menu);
 		return true;
+	}
+
+	private class TabListener implements
+			android.support.v4.app.ActionBar.TabListener {
+		private String tag;
+
+		public TabListener(String tag) {
+			this.tag = tag;
+		}
+
+		@Override
+		public void onTabReselected(android.support.v4.app.ActionBar.Tab tab,
+				android.support.v4.app.FragmentTransaction ft) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onTabSelected(android.support.v4.app.ActionBar.Tab tab,
+				android.support.v4.app.FragmentTransaction ft) {
+			Util.shortToast(getApplicationContext(), tag + " selected!");
+		}
+
+		@Override
+		public void onTabUnselected(android.support.v4.app.ActionBar.Tab tab,
+				android.support.v4.app.FragmentTransaction ft) {
+			// TODO Auto-generated method stub
+
+		}
 	}
 
 	private View.OnClickListener mTagWriter = new View.OnClickListener() {
