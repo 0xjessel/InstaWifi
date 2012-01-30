@@ -25,7 +25,7 @@
         android:theme="@style/Theme.InstaWifi" >
         <activity
             android:label="@string/app_name"
-            android:name=".InstaWifiActivity"
+            android:name=".NfcActivity"
             android:windowSoftInputMode="stateUnchanged" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
