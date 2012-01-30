@@ -75,7 +75,8 @@
                 android:id="@+id/password_field"
                 android:layout_margin="4dp"
                 android:ems="7"
-                android:password="true" />
+                android:password="true"
+                android:inputType="textPassword" />
         </com.gridlayout.GridLayout>
 
         <CheckBox
