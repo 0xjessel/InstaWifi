@@ -42,7 +42,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".QrActivity"></activity>
+        <activity android:name=".QrFragment"></activity>
     </application>
 
 </manifest>

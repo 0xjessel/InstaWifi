@@ -1,5 +1,6 @@
 package net.jessechen.instawifi;
 
+import net.jessechen.instawifi.misc.WifiReceiver;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.Util;

@@ -1,8 +1,7 @@
 package net.jessechen.instawifi.util;
 
-import net.jessechen.instawifi.QrActivity;
+import net.jessechen.instawifi.QrFragment;
 import net.jessechen.instawifi.R;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
@@ -68,7 +67,7 @@ public class Util {
 				android.support.v4.app.FragmentTransaction ft) {
 			Util.shortToast(a, tag + " selected!");
 			if (tag.equals(a.getString(R.string.qr_tab))) {
-				a.startActivity(new Intent(a, QrActivity.class));
+				a.startActivity(new Intent(a, QrFragment.class));
 			}
 		}
 

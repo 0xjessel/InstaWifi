@@ -1,5 +1,6 @@
 package net.jessechen.instawifi;
 
+import net.jessechen.instawifi.misc.MyTabListener;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
@@ -15,10 +16,7 @@ import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
-import android.support.v4.app.ActionBar.Tab;
-import android.support.v4.app.ActionBar.TabListener;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.Menu;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -95,48 +93,18 @@ public class NfcActivity extends FragmentActivity implements
 		android.support.v4.app.ActionBar bar = getSupportActionBar();
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		bar.addTab(bar.newTab().setText(getString(R.string.nfc_tab))
-				.setTabListener(new TabListener() {
-
-					@Override
-					public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void onTabSelected(Tab tab, FragmentTransaction ft) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void onTabReselected(Tab tab, FragmentTransaction ft) {
-						// TODO Auto-generated method stub
-
-					}
-				}));
-		bar.addTab(bar.newTab().setText(getString(R.string.qr_tab))
-				.setTabListener(new TabListener() {
-
-					@Override
-					public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void onTabSelected(Tab tab, FragmentTransaction ft) {
-						startActivity(new Intent(getApplicationContext(),
-								QrActivity.class));
-					}
-
-					@Override
-					public void onTabReselected(Tab tab, FragmentTransaction ft) {
-						// TODO Auto-generated method stub
-
-					}
-				}));
+		bar.addTab(bar
+				.newTab()
+				.setText(getString(R.string.nfc_tab))
+				.setTabListener(
+						new MyTabListener(this, getSupportFragmentManager(),
+								getString(R.string.nfc_tab))));
+		bar.addTab(bar
+				.newTab()
+				.setText(getString(R.string.qr_tab))
+				.setTabListener(
+						new MyTabListener(this, getSupportFragmentManager(),
+								getString(R.string.qr_tab))));
 	}
 
 	@Override

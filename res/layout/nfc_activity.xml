@@ -4,8 +4,12 @@
     android:layout_height="match_parent"
     android:background="@drawable/backrepeat"
     android:orientation="vertical" >
-
-    <LinearLayout
+   <FrameLayout
+        android:id="@+id/fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+	<LinearLayout
+		android:id="@+id/nfc_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
@@ -87,5 +91,5 @@
             android:text="@string/show_password_text"
             android:textSize="16dp" />
     </LinearLayout>
-
+  </FrameLayout>
 </ScrollView>
