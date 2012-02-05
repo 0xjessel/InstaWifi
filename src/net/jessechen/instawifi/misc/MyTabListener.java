@@ -39,6 +39,9 @@ public class MyTabListener implements TabListener {
 
 		if (mTag.equals(nfc_tab)) {
 			layout.setVisibility(View.VISIBLE);
+			if (mFragment != null) {
+				fm.beginTransaction().detach(mFragment).commit();
+			}
 		} else if (mTag.equals(qr_tab)) {
 			layout.setVisibility(View.GONE);
 

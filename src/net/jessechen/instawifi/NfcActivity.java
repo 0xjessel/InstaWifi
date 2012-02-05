@@ -53,6 +53,7 @@ public class NfcActivity extends FragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
 		setContentView(R.layout.nfc_activity);
@@ -90,21 +91,40 @@ public class NfcActivity extends FragmentActivity implements
 				NfcAdapter.ACTION_TAG_DISCOVERED);
 		mWriteTagFilters = new IntentFilter[] { tagDetected };
 
+		boolean nfcTabSelected = true;
+
+		if (savedInstanceState != null
+				&& savedInstanceState.getString("tab").equals(
+						getApplicationContext().getString(R.string.qr_tab))) {
+			nfcTabSelected = false;
+		}
+
 		android.support.v4.app.ActionBar bar = getSupportActionBar();
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		bar.addTab(bar
-				.newTab()
-				.setText(getString(R.string.nfc_tab))
-				.setTabListener(
-						new MyTabListener(this, getSupportFragmentManager(),
-								getString(R.string.nfc_tab))));
-		bar.addTab(bar
-				.newTab()
-				.setText(getString(R.string.qr_tab))
-				.setTabListener(
-						new MyTabListener(this, getSupportFragmentManager(),
-								getString(R.string.qr_tab))));
+		bar.addTab(
+				bar.newTab()
+						.setText(getString(R.string.nfc_tab))
+						.setTabListener(
+								new MyTabListener(this,
+										getSupportFragmentManager(),
+										getString(R.string.nfc_tab))),
+				nfcTabSelected);
+
+		bar.addTab(
+				bar.newTab()
+						.setText(getString(R.string.qr_tab))
+						.setTabListener(
+								new MyTabListener(this,
+										getSupportFragmentManager(),
+										getString(R.string.qr_tab))),
+				!nfcTabSelected);
+	}
+
+	@Override
+	protected void onSaveInstanceState(final Bundle outState) {
+		outState.putString("tab", getSupportActionBar().getSelectedTab()
+				.getText().toString());
 	}
 
 	@Override
