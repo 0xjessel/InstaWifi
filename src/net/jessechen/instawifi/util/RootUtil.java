@@ -41,7 +41,7 @@ public class RootUtil {
 	}
 
 	private static final String TAG = RootUtil.class.getSimpleName();
-	
+
 	/**
 	 * gets the wifi password from the current connected network. requires root
 	 * access on phone.
@@ -60,10 +60,10 @@ public class RootUtil {
 			throw new PasswordNotFoundException("WifiModel is invalid");
 		}
 
-		String password = null;
-
-		// get wifi_supplicant.conf file if rooted
-		if (ExecuteAsRootBase.canRunRootCommands()) {
+		String password = getPasswordFromFile(c, SSID);
+		
+		if (password == null && ExecuteAsRootBase.canRunRootCommands()) {
+			// get wifi_supplicant.conf file if rooted
 			ExecuteAsRootBase su = new ExecuteAsRootBase() {
 
 				@Override
@@ -95,7 +95,10 @@ public class RootUtil {
 	public static String getPasswordFromFile(Context c, String ssid)
 			throws PasswordNotFoundException {
 		HashMap<String, String> networkConfigs = getNetworkConfigs(c, ssid);
-
+		if (networkConfigs == null) {
+			return null;
+		}
+		
 		String key_mgmt = networkConfigs.get("key_mgmt");
 		if (key_mgmt != null) {
 			if (key_mgmt.equals("WPA-PSK")) {
@@ -128,6 +131,10 @@ public class RootUtil {
 	private static HashMap<String, String> getNetworkConfigs(Context c,
 			String ssid) {
 		String fileContents = getFile(c);
+		if (fileContents == null || fileContents.equals("")) {
+			return null;
+		}
+		
 		String lines[] = fileContents.split("\\r?\\n");
 
 		boolean found = false;
@@ -179,17 +186,19 @@ public class RootUtil {
 		} catch (FileNotFoundException e) {
 			Log.e(TAG, "wifi passwords file not found");
 			e.printStackTrace();
+			return null;
 		} catch (IOException e) {
 			Log.e(TAG, "IOException while reading wifi passwords file");
 			e.printStackTrace();
+			return null;
 		}
-		
+
 		return content;
 	}
-	
+
 	public static String getFileThenDelete(Context c) {
 		String content = getFile(c);
-		
+
 		// do not retain wifi password file
 		c.deleteFile(DESTINATION_FILENAME);
 
@@ -219,8 +228,7 @@ public class RootUtil {
 					if (null == currUid) {
 						retval = false;
 						exitSu = false;
-						Log.i(TAG,
-								"Can't get root access or denied by user");
+						Log.i(TAG, "Can't get root access or denied by user");
 					} else if (true == currUid.contains("uid=0")) {
 						retval = true;
 						exitSu = true;
@@ -242,8 +250,8 @@ public class RootUtil {
 				// stream after su failed, meaning that the device is not rooted
 
 				retval = false;
-				Log.i(TAG, "Root access rejected ["
-						+ e.getClass().getName() + "] : " + e.getMessage());
+				Log.i(TAG, "Root access rejected [" + e.getClass().getName()
+						+ "] : " + e.getMessage());
 			}
 
 			return retval;
