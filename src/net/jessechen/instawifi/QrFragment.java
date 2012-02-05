@@ -16,6 +16,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 public class QrFragment extends Fragment {
+	private static final String TAG = QrFragment.class.getSimpleName();
 
 	public static QrFragment getInstance() {
 		QrFragment fragment = new QrFragment();

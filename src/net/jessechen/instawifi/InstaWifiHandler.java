@@ -30,7 +30,7 @@ public class InstaWifiHandler extends Activity implements
 	boolean receiverRemoved;
 	private static final int MESSAGE_SENT = 1;
 
-	private static final String TAG = InstaWifiHandler.class.getName();
+	private static final String TAG = InstaWifiHandler.class.getSimpleName();
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

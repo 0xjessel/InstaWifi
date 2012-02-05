@@ -16,7 +16,7 @@ public class WifiReceiver extends BroadcastReceiver {
 	WifiManager mWifiManager;
 	boolean triedAssociating;
 	
-	private static final String TAG = WifiReceiver.class.getName();
+	private static final String TAG = WifiReceiver.class.getSimpleName();
 
 	public WifiReceiver(Context c, Activity wifiHandler, WifiManager wifiManager) {
 		this.ctx = c;

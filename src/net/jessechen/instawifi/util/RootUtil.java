@@ -21,10 +21,6 @@ import android.util.Log;
  * .stealthcopter.com/blog/2010/01/android-requesting-root-access
  * -in-your-app/
  */
-/**
- * @author Jesse Chen
- * 
- */
 public class RootUtil {
 	public static String WPA_SUPPLICANT_CONF_PATH = "/data/misc/wifi/wpa_supplicant.conf";
 	public static String DESTINATION_FILENAME = "wifipw.txt";
@@ -44,7 +40,7 @@ public class RootUtil {
 		return String.format("chmod 004 %s", ABSOLUTE_DESTINATION_PATH(c));
 	}
 
-	private static final String TAG = RootUtil.class.getName();
+	private static final String TAG = RootUtil.class.getSimpleName();
 	
 	/**
 	 * gets the wifi password from the current connected network. requires root

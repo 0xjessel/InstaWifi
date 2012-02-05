@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 public class Util {
 	@SuppressWarnings("unused")
-	private static final String TAG = Util.class.getName();
+	private static final String TAG = Util.class.getSimpleName();
 
 	public static void shortToast(Context c, String msg) {
 		Toast.makeText(c, msg, Toast.LENGTH_SHORT).show();

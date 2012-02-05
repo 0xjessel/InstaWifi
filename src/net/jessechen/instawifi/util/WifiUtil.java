@@ -28,7 +28,7 @@ public class WifiUtil {
 		}
 	};
 
-	private static final String TAG = WifiUtil.class.getName();
+	private static final String TAG = WifiUtil.class.getSimpleName();
 
 	public static WifiModel getCurrentWifiModel(Context c) {
 		WifiConfiguration wc = getCurrentWifiConfig(c);

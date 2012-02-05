@@ -16,7 +16,7 @@ import android.os.Parcelable;
 import android.util.Log;
 
 public class NfcUtil {
-	private static final String TAG = NfcUtil.class.getName();
+	private static final String TAG = NfcUtil.class.getSimpleName();
 	
 	public static NdefMessage getWifiAsNdef(String ssid, String pw,
 			String protocol) {

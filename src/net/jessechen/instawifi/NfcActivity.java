@@ -47,7 +47,7 @@ public class NfcActivity extends FragmentActivity implements
 	EditText passwordField;
 	CheckBox revealPassword;
 
-	private static final String TAG = NfcActivity.class.getName();
+	private static final String TAG = NfcActivity.class.getSimpleName();
 
 	/** Called when the activity is first created. */
 	@Override
