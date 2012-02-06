@@ -23,6 +23,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+/*
+ * TODO: update qrImage when changing password field
+ */
 public class QrFragment extends Fragment implements OnItemSelectedListener {
 	private static final String TAG = QrFragment.class.getSimpleName();
 
@@ -76,12 +79,12 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 		protocolSpinner_qr.setOnItemSelectedListener(this);
 
 		qrImage = (ImageView) view.findViewById(R.id.qr_code_image);
-		qrImage.setImageBitmap(getSelectedWifiBitmap(view));
+		qrImage.setImageBitmap(getSelectedWifiBitmap());
 
 		return view;
 	}
 
-	private Bitmap getSelectedWifiBitmap(View view) {
+	private Bitmap getSelectedWifiBitmap() {
 		WifiModel selectedWifi = new WifiModel(networkSpinner_qr
 				.getSelectedItem().toString(), passwordField_qr.getText()
 				.toString(), protocolSpinner_qr.getSelectedItem().toString());
@@ -123,7 +126,6 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 						.indexOf(selectedNetwork.getProtocol()));
 				passwordField_qr.setText(Util.stripQuotes(selectedNetwork
 						.getPassword()));
-				qrImage.setImageBitmap(getSelectedWifiBitmap(view));
 			}
 			break;
 		case R.id.protocol_spinner_qr:
@@ -136,6 +138,8 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 			}
 			break;
 		}
+		
+		qrImage.setImageBitmap(getSelectedWifiBitmap());
 	}
 
 	@Override
