@@ -66,14 +66,14 @@ public class NfcActivity extends FragmentActivity implements
 
 		writeTag = (Button) findViewById(R.id.b_write_tag);
 		networkSpinner = (Spinner) findViewById(R.id.network_spinner);
-		protocolSpinner = (Spinner) findViewById(R.id.security_spinner);
+		protocolSpinner = (Spinner) findViewById(R.id.protocol_spinner);
 		passwordField = (EditText) findViewById(R.id.password_field);
 		revealPassword = (CheckBox) findViewById(R.id.password_checkbox);
 
 		writeTag.setOnClickListener(mTagWriter);
 
 		revealPassword.setOnCheckedChangeListener(mCheckBoxListener);
-
+		
 		String[] networks = WifiUtil.getConfiguredNetworks(this);
 		ArrayAdapter<String> networkAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, networks);
@@ -81,13 +81,14 @@ public class NfcActivity extends FragmentActivity implements
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		networkSpinner.setAdapter(networkAdapter);
 		networkSpinner.setOnItemSelectedListener(this);
-
+		
 		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, WifiUtil.protocols);
 		protocolAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		protocolSpinner.setAdapter(protocolAdapter);
-
+		protocolSpinner.setOnItemSelectedListener(this);
+		
 		// Handle all of our received NFC intents in this activity.
 		mNfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
 				getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
@@ -227,20 +228,33 @@ public class NfcActivity extends FragmentActivity implements
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int pos,
 			long id) {
-		WifiModel selectedNetwork = null;
-		try {
-			selectedNetwork = WifiUtil.getWifiModelFromSsid(this, parent
-					.getItemAtPosition(pos).toString());
-		} catch (PasswordNotFoundException e) {
-			e.printStackTrace();
-			Log.e(TAG, "did not find password on item selected");
-		}
+		switch (parent.getId()) {
+		case R.id.network_spinner:
+			WifiModel selectedNetwork = null;
+			try {
+				selectedNetwork = WifiUtil.getWifiModelFromSsid(this, parent
+						.getItemAtPosition(pos).toString());
+			} catch (PasswordNotFoundException e) {
+				e.printStackTrace();
+				Log.e(TAG, "did not find password on item selected");
+			}
 
-		if (selectedNetwork != null) {
-			protocolSpinner.setSelection(WifiUtil.protocols
-					.indexOf(selectedNetwork.getProtocol()));
-			passwordField.setText(Util.stripQuotes(selectedNetwork
-					.getPassword()));
+			if (selectedNetwork != null) {
+				protocolSpinner.setSelection(WifiUtil.protocols
+						.indexOf(selectedNetwork.getProtocol()));
+				passwordField.setText(Util.stripQuotes(selectedNetwork
+						.getPassword()));
+			}
+			break;
+		case R.id.protocol_spinner:
+			if (protocolSpinner.getSelectedItem().toString()
+					.equals(WifiUtil.OPEN)) {
+				passwordField.setText("");
+				passwordField.setEnabled(false);
+			} else {
+				passwordField.setEnabled(true);
+			}
+			break;
 		}
 	}
 

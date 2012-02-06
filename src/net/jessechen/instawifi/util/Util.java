@@ -4,6 +4,9 @@ import net.jessechen.instawifi.QrFragment;
 import net.jessechen.instawifi.R;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class Util {
@@ -43,6 +46,24 @@ public class Util {
 			return false;
 		}
 		return true;
+	}
+	
+	public static void initNetworkSpinner(Context c, Spinner spinner, OnItemSelectedListener listener) {
+		String[] networks = WifiUtil.getConfiguredNetworks(c);
+		ArrayAdapter<String> networkAdapter = new ArrayAdapter<String>(c,
+				android.R.layout.simple_spinner_item, networks);
+		networkAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(networkAdapter);
+		spinner.setOnItemSelectedListener(listener);
+	}
+	
+	public static void initProtocolSpinner(Context c, Spinner spinner) {
+		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(c,
+				android.R.layout.simple_spinner_item, WifiUtil.protocols);
+		protocolAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(protocolAdapter);
 	}
 
 	public static class TabListener implements

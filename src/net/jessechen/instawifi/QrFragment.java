@@ -52,7 +52,7 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 		networkSpinner_qr = (Spinner) view
 				.findViewById(R.id.network_spinner_qr);
 		protocolSpinner_qr = (Spinner) view
-				.findViewById(R.id.security_spinner_qr);
+				.findViewById(R.id.protocol_spinner_qr);
 		passwordField_qr = (EditText) view.findViewById(R.id.password_field_qr);
 		revealPassword_qr = (CheckBox) view
 				.findViewById(R.id.password_checkbox_qr);
@@ -73,6 +73,7 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 		protocolAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		protocolSpinner_qr.setAdapter(protocolAdapter);
+		protocolSpinner_qr.setOnItemSelectedListener(this);
 
 		qrImage = (ImageView) view.findViewById(R.id.qr_code_image);
 		qrImage.setImageBitmap(getSelectedWifiBitmap(view));
@@ -106,21 +107,34 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int pos,
 			long id) {
-		WifiModel selectedNetwork = null;
-		try {
-			selectedNetwork = WifiUtil.getWifiModelFromSsid(getActivity(),
-					parent.getItemAtPosition(pos).toString());
-		} catch (PasswordNotFoundException e) {
-			e.printStackTrace();
-			Log.e(TAG, "did not find password on item selected");
-		}
+		switch (parent.getId()) {
+		case R.id.network_spinner_qr:
+			WifiModel selectedNetwork = null;
+			try {
+				selectedNetwork = WifiUtil.getWifiModelFromSsid(getActivity(),
+						parent.getItemAtPosition(pos).toString());
+			} catch (PasswordNotFoundException e) {
+				e.printStackTrace();
+				Log.e(TAG, "did not find password on item selected");
+			}
 
-		if (selectedNetwork != null) {
-			protocolSpinner_qr.setSelection(WifiUtil.protocols
-					.indexOf(selectedNetwork.getProtocol()));
-			passwordField_qr.setText(Util.stripQuotes(selectedNetwork
-					.getPassword()));
-			qrImage.setImageBitmap(getSelectedWifiBitmap(view));
+			if (selectedNetwork != null) {
+				protocolSpinner_qr.setSelection(WifiUtil.protocols
+						.indexOf(selectedNetwork.getProtocol()));
+				passwordField_qr.setText(Util.stripQuotes(selectedNetwork
+						.getPassword()));
+				qrImage.setImageBitmap(getSelectedWifiBitmap(view));
+			}
+			break;
+		case R.id.protocol_spinner_qr:
+			if (protocolSpinner_qr.getSelectedItem().toString()
+					.equals(WifiUtil.OPEN)) {
+				passwordField_qr.setText("");
+				passwordField_qr.setEnabled(false);
+			} else {
+				passwordField_qr.setEnabled(true);
+			}
+			break;
 		}
 	}
 
