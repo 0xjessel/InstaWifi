@@ -3,10 +3,17 @@ package net.jessechen.instawifi.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+
 import net.jessechen.instawifi.misc.ConnectToWifiResult;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
@@ -15,7 +22,7 @@ import android.util.Log;
 
 public class WifiUtil {
 	public static String WIFI_URI_SCHEME = "wifi://%s/%s#%s";
-
+	public static String QR_WIFI_URI_SCHEME = "WIFI:T:%s;S:%s;P:%s;;";
 	public static String WEP = "wep";
 	public static String WPA = "wpa";
 	public static String OPEN = "open";
@@ -30,6 +37,34 @@ public class WifiUtil {
 
 	private static final String TAG = WifiUtil.class.getSimpleName();
 
+	public static Bitmap generateQrImage(String ssid, String protocol, String password) {
+		QRCodeWriter writer = new QRCodeWriter();
+		BitMatrix bm = null;
+		try {
+			bm = writer.encode(String.format(QR_WIFI_URI_SCHEME, ssid, protocol, password),
+					BarcodeFormat.QR_CODE, 250, 250);
+		} catch (WriterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		int width = bm.getWidth();
+		int height = bm.getHeight();
+		int[] pixels = new int[width * height];
+		for (int y = 0; y < height; y++) {
+			int offset = y * width;
+			for (int x = 0; x < width; x++) {
+				pixels[offset + x] = bm.get(x, y) ? Color.BLACK : Color.WHITE;
+			}
+		}
+
+		Bitmap bitmap = Bitmap.createBitmap(width, height,
+				Bitmap.Config.ARGB_8888);
+		bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+
+		return bitmap;
+	}
+	
 	public static WifiModel getCurrentWifiModel(Context c) {
 		WifiConfiguration wc = getCurrentWifiConfig(c);
 		if (wc != null) {
