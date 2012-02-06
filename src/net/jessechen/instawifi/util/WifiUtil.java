@@ -25,7 +25,9 @@ public class WifiUtil {
 	public static String QR_WIFI_URI_SCHEME = "WIFI:T:%s;S:%s;P:%s;;";
 	public static String WEP = "WEP";
 	public static String WPA = "WPA";
-	public static String OPEN = "";
+	public static String OPEN = "OPEN";
+	public static String NOPASS = "nopass";
+	
 	@SuppressWarnings("serial")
 	public static ArrayList<String> protocols = new ArrayList<String>() {
 		{
@@ -37,12 +39,20 @@ public class WifiUtil {
 
 	private static final String TAG = WifiUtil.class.getSimpleName();
 
-	public static Bitmap generateQrImage(String ssid, String protocol, String password) {
+	public static Bitmap generateQrImage(String ssid, String protocol,
+			String password) {
 		QRCodeWriter writer = new QRCodeWriter();
 		BitMatrix bm = null;
 		try {
-			bm = writer.encode(String.format(QR_WIFI_URI_SCHEME, protocol, ssid, password),
-					BarcodeFormat.QR_CODE, 250, 250);
+			// a little hack for open network configurations s.t. barcode
+			// scanner is happy
+			if (protocol.equals(OPEN)) {
+				protocol = NOPASS;
+			}
+
+			bm = writer
+					.encode(String.format(QR_WIFI_URI_SCHEME, protocol, ssid,
+							password), BarcodeFormat.QR_CODE, 250, 250);
 		} catch (WriterException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,7 +74,7 @@ public class WifiUtil {
 
 		return bitmap;
 	}
-	
+
 	public static WifiModel getCurrentWifiModel(Context c) {
 		WifiConfiguration wc = getCurrentWifiConfig(c);
 		if (wc != null) {
@@ -156,12 +166,12 @@ public class WifiUtil {
 		if (wc.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WPA_PSK)) {
 			// WPA/WPA2 network, key is in wfc.preSharedKey
 			return WPA;
-		} else if (wc.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.NONE)) {
-			// WEP network, the key is in wfc.wepKeys[wfc.wepTxKeyIndex]
-			return WEP;
 		} else if (wc.allowedAuthAlgorithms.isEmpty()) {
 			// this is an open network
 			return OPEN;
+		} else if (wc.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.NONE)) {
+			// WEP network, the key is in wfc.wepKeys[wfc.wepTxKeyIndex]
+			return WEP;
 		} else {
 			// not one of the above..
 			Log.e(TAG, "Did not find wifi protocol");
