@@ -32,6 +32,12 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+/* 
+ * TODO: if connected to wifi, auto fill spinners with current wifi
+ * TODO: share app, share qr code
+ * TOOD: add new network activity
+ * TODO: write to tag button
+ */
 public class NfcActivity extends FragmentActivity implements
 		OnItemSelectedListener {
 	private boolean mWriteMode = false;

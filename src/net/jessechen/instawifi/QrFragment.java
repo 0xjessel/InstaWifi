@@ -56,7 +56,7 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 		passwordField_qr = (EditText) view.findViewById(R.id.password_field_qr);
 		revealPassword_qr = (CheckBox) view
 				.findViewById(R.id.password_checkbox_qr);
-		
+
 		revealPassword_qr.setOnCheckedChangeListener(mCheckBoxListener);
 
 		String[] networks = WifiUtil.getConfiguredNetworks(getActivity());
@@ -73,7 +73,7 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 		protocolAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		protocolSpinner_qr.setAdapter(protocolAdapter);
-		
+
 		qrImage = (ImageView) view.findViewById(R.id.qr_code_image);
 		qrImage.setImageBitmap(getSelectedWifiBitmap(view));
 
@@ -82,9 +82,8 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 
 	private Bitmap getSelectedWifiBitmap(View view) {
 		WifiModel selectedWifi = new WifiModel(networkSpinner_qr
-				.getSelectedItem().toString(), protocolSpinner_qr
 				.getSelectedItem().toString(), passwordField_qr.getText()
-				.toString());
+				.toString(), protocolSpinner_qr.getSelectedItem().toString());
 
 		return WifiUtil.generateQrImage(selectedWifi.getSSID(),
 				selectedWifi.getProtocol(), selectedWifi.getPassword());
@@ -103,7 +102,7 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 			}
 		}
 	};
-	
+
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int pos,
 			long id) {

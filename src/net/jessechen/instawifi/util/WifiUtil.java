@@ -23,9 +23,9 @@ import android.util.Log;
 public class WifiUtil {
 	public static String WIFI_URI_SCHEME = "wifi://%s/%s#%s";
 	public static String QR_WIFI_URI_SCHEME = "WIFI:T:%s;S:%s;P:%s;;";
-	public static String WEP = "wep";
-	public static String WPA = "wpa";
-	public static String OPEN = "open";
+	public static String WEP = "WEP";
+	public static String WPA = "WPA";
+	public static String OPEN = "";
 	@SuppressWarnings("serial")
 	public static ArrayList<String> protocols = new ArrayList<String>() {
 		{
@@ -41,7 +41,7 @@ public class WifiUtil {
 		QRCodeWriter writer = new QRCodeWriter();
 		BitMatrix bm = null;
 		try {
-			bm = writer.encode(String.format(QR_WIFI_URI_SCHEME, ssid, protocol, password),
+			bm = writer.encode(String.format(QR_WIFI_URI_SCHEME, protocol, ssid, password),
 					BarcodeFormat.QR_CODE, 250, 250);
 		} catch (WriterException e) {
 			// TODO Auto-generated catch block
