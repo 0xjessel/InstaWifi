@@ -79,6 +79,7 @@
 
         <CheckBox
             android:id="@+id/password_checkbox_qr"
+            style="@style/white_inset_shadow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"

@@ -3,11 +3,12 @@
 
     <style name="Theme.InstaWifi" parent="Theme.Sherlock"></style>
 
-    <style name="white_inset_shadow" parent="@android:style/TextAppearance.DeviceDefault">
+    <style name="white_inset_shadow" parent="@android:style/TextAppearance">
         <item name="android:shadowColor">#FFF</item>
         <item name="android:shadowRadius">.1</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">-1.5</item>
+        <item name="android:textColor">#000</item>
     </style>
 
 </resources>
