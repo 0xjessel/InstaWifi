@@ -27,7 +27,7 @@ public class WifiUtil {
 	public static String WPA = "WPA";
 	public static String OPEN = "OPEN";
 	public static String NOPASS = "nopass";
-	
+
 	@SuppressWarnings("serial")
 	public static ArrayList<String> protocols = new ArrayList<String>() {
 		{
@@ -41,6 +41,8 @@ public class WifiUtil {
 
 	public static Bitmap generateQrImage(String ssid, String protocol,
 			String password) {
+		final int MAGIC_NUMBER = 50;
+		
 		QRCodeWriter writer = new QRCodeWriter();
 		BitMatrix bm = null;
 		try {
@@ -52,19 +54,19 @@ public class WifiUtil {
 
 			bm = writer
 					.encode(String.format(QR_WIFI_URI_SCHEME, protocol, ssid,
-							password), BarcodeFormat.QR_CODE, 250, 250);
+							password), BarcodeFormat.QR_CODE, 450, 450);
 		} catch (WriterException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		int width = bm.getWidth();
-		int height = bm.getHeight();
+		int width = bm.getWidth() - (MAGIC_NUMBER * 2);
+		int height = bm.getHeight() - (MAGIC_NUMBER * 2);
 		int[] pixels = new int[width * height];
-		for (int y = 0; y < height; y++) {
-			int offset = y * width;
-			for (int x = 0; x < width; x++) {
-				pixels[offset + x] = bm.get(x, y) ? Color.BLACK : Color.WHITE;
+		for (int y = MAGIC_NUMBER; y < bm.getHeight() - MAGIC_NUMBER; y++) {
+			int offset = (y - MAGIC_NUMBER) * width;
+			for (int x = MAGIC_NUMBER; x < bm.getWidth() - MAGIC_NUMBER; x++) {
+				pixels[offset + (x - MAGIC_NUMBER)] = bm.get(x, y) ? Color.BLACK : Color.WHITE;
 			}
 		}
 
