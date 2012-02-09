@@ -41,7 +41,8 @@ public class WifiUtil {
 
 	public static Bitmap generateQrImage(String ssid, String protocol,
 			String password) {
-		final int MAGIC_NUMBER = 50;
+		final int MAGIC_NUMBER = 30;
+        final int DIMENSION = 400;
 		
 		QRCodeWriter writer = new QRCodeWriter();
 		BitMatrix bm = null;
@@ -54,7 +55,7 @@ public class WifiUtil {
 
 			bm = writer
 					.encode(String.format(QR_WIFI_URI_SCHEME, protocol, ssid,
-							password), BarcodeFormat.QR_CODE, 450, 450);
+							password), BarcodeFormat.QR_CODE, DIMENSION, DIMENSION);
 		} catch (WriterException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
