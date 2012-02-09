@@ -99,11 +99,13 @@ public class RootUtil {
 			return null;
 		}
 		
+		String pw = null;
+		
 		String key_mgmt = networkConfigs.get("key_mgmt");
 		if (key_mgmt != null) {
 			if (key_mgmt.equals("WPA-PSK")) {
 				// WPA protocol
-				String pw = networkConfigs.get("psk");
+				pw = networkConfigs.get("psk");
 				if (pw != null) {
 					return pw;
 				} else {
@@ -113,7 +115,7 @@ public class RootUtil {
 				}
 			} else if (key_mgmt.equals("NONE")) {
 				// WEP or OPEN
-				String pw = networkConfigs.get("wep_key0");
+				pw = networkConfigs.get("wep_key0");
 				if (pw == null) {
 					// OPEN
 					return "";
@@ -121,6 +123,14 @@ public class RootUtil {
 					// WEP
 					return pw;
 				}
+			} 
+		} else {
+			// wild shot, try and grab psk value
+			Log.i(TAG, "did not find key_mgmt value, guessing pw");
+
+			pw = networkConfigs.get("psk");
+			if (pw != null) {
+				return pw;
 			}
 		}
 
