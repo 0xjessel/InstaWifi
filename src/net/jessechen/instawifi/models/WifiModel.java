@@ -1,5 +1,6 @@
 package net.jessechen.instawifi.models;
 
+import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
 import android.net.Uri;
 import android.util.Log;
@@ -8,12 +9,17 @@ public class WifiModel {
 	private String SSID;
 	private String password;
 	private String protocol;
-	
+
 	private static final String TAG = WifiModel.class.getName();
 
+	// ssid needs quotes
 	public WifiModel(String ssid, String pw, String pt) {
 		protocol = pt;
-		SSID = ssid;
+		if (Util.hasQuotes(ssid)) {
+			SSID = ssid;
+		} else {
+			SSID = Util.concatQuotes(ssid);
+		}
 		password = pw;
 	}
 
@@ -39,7 +45,7 @@ public class WifiModel {
 	}
 
 	public String getTrimmedSSID() {
-		if (SSID.startsWith("\"") && SSID.endsWith("\"")) {
+		if (Util.hasQuotes(SSID)) {
 			return SSID.substring(1, SSID.length() - 1);
 		} else {
 			return SSID;

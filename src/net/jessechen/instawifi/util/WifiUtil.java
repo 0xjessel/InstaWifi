@@ -42,7 +42,7 @@ public class WifiUtil {
 	public static Bitmap generateQrImage(String ssid, String protocol,
 			String password) {
 		final int MAGIC_NUMBER = 30;
-        final int DIMENSION = 400;
+        final int DIMENSION = 350;
 		
 		QRCodeWriter writer = new QRCodeWriter();
 		BitMatrix bm = null;

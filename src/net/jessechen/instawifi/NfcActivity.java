@@ -8,20 +8,28 @@ import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.Menu;
+import android.support.v4.view.MenuItem;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -35,8 +43,8 @@ import android.widget.Spinner;
 /* 
  * TODO: if connected to wifi, auto fill spinners with current wifi
  * TODO: share app, share qr code
- * TOOD: add new network activity
  * TODO: write to tag button
+ * TODO: revealPassword on landscape looks bad
  */
 public class NfcActivity extends FragmentActivity implements
 		OnItemSelectedListener {
@@ -73,7 +81,7 @@ public class NfcActivity extends FragmentActivity implements
 		writeTag.setOnClickListener(mTagWriter);
 
 		revealPassword.setOnCheckedChangeListener(mCheckBoxListener);
-		
+
 		String[] networks = WifiUtil.getConfiguredNetworks(this);
 		ArrayAdapter<String> networkAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, networks);
@@ -81,14 +89,14 @@ public class NfcActivity extends FragmentActivity implements
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		networkSpinner.setAdapter(networkAdapter);
 		networkSpinner.setOnItemSelectedListener(this);
-		
+
 		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, WifiUtil.protocols);
 		protocolAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		protocolSpinner.setAdapter(protocolAdapter);
 		protocolSpinner.setOnItemSelectedListener(this);
-		
+
 		// Handle all of our received NFC intents in this activity.
 		mNfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
 				getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
@@ -99,7 +107,6 @@ public class NfcActivity extends FragmentActivity implements
 		mWriteTagFilters = new IntentFilter[] { tagDetected };
 
 		boolean nfcTabSelected = true;
-
 		if (savedInstanceState != null
 				&& savedInstanceState.getString("tab").equals(
 						getApplicationContext().getString(R.string.qr_tab))) {
@@ -178,6 +185,18 @@ public class NfcActivity extends FragmentActivity implements
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.share:
+			break;
+		case R.id.add:
+			buildDialog().show();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
 	private View.OnClickListener mTagWriter = new View.OnClickListener() {
 		@Override
 		public void onClick(View arg0) {
@@ -251,8 +270,10 @@ public class NfcActivity extends FragmentActivity implements
 					.equals(WifiUtil.OPEN)) {
 				passwordField.setText("");
 				passwordField.setEnabled(false);
+				revealPassword.setEnabled(false);
 			} else {
 				passwordField.setEnabled(true);
+				revealPassword.setEnabled(true);
 			}
 			break;
 		}
@@ -260,7 +281,82 @@ public class NfcActivity extends FragmentActivity implements
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
-		// TODO Auto-generated method stub
+	}
 
+	private Dialog buildDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, android.R.style.Theme_Holo_Light_Dialog));
+
+		LayoutInflater inflator = (LayoutInflater) getApplicationContext()
+				.getSystemService(LAYOUT_INFLATER_SERVICE);
+		View layout = inflator.inflate(R.layout.add_dialog,
+				(ViewGroup) findViewById(R.id.dialog_root));
+		builder.setView(layout);
+
+		final EditText newSsidField = (EditText) layout
+				.findViewById(R.id.add_network_ssid);
+		final EditText newPasswordField = (EditText) layout
+				.findViewById(R.id.add_network_password);
+		final Spinner newProtocolSpinner = (Spinner) layout
+				.findViewById(R.id.add_protocol_spinner);
+
+		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, WifiUtil.protocols);
+		protocolAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		newProtocolSpinner.setAdapter(protocolAdapter);
+		newProtocolSpinner
+				.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+					@Override
+					public void onItemSelected(AdapterView<?> parent,
+							View view, int pos, long id) {
+						switch (parent.getId()) {
+						case R.id.add_protocol_spinner:
+							if (newProtocolSpinner.getSelectedItem().toString()
+									.equals(WifiUtil.OPEN)) {
+								newPasswordField.setText("");
+								newPasswordField.setEnabled(false);
+							} else {
+								newPasswordField.setEnabled(true);
+							}
+							break;
+						}
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> arg0) {
+					}
+				});
+
+		builder.setTitle(getString(R.string.add_new_network));
+
+		builder.setPositiveButton(getString(R.string.add_button),
+				new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						WifiModel newWifiModel = new WifiModel(newSsidField
+								.getText().toString(), newPasswordField
+								.getText().toString(), newProtocolSpinner
+								.getSelectedItem().toString());
+
+						WifiManager mWm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+
+						int netId = WifiUtil.addWifiNetwork(
+								getApplicationContext(), newWifiModel, mWm);
+						if (netId != -1) {
+							// TODO: update network spinner on NFC/QR
+							Util.shortToast(getApplicationContext(),
+									getString(R.string.success));
+						} else {
+							Util.shortToast(getApplicationContext(),
+									getString(R.string.add_new_network_fail));
+						}
+					}
+				});
+
+		builder.setNegativeButton(getString(R.string.cancel), null);
+
+		return builder.create();
 	}
 }

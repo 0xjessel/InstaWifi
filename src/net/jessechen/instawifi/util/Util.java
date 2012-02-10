@@ -20,7 +20,15 @@ public class Util {
 	public static void longToast(Context c, String msg) {
 		Toast.makeText(c, msg, Toast.LENGTH_LONG).show();
 	}
-
+	
+	public static boolean hasQuotes(String s) {
+		if (s.startsWith("\"") && s.endsWith("\"")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public static String concatQuotes(String s) {
 		return "\"".concat(s).concat("\"");
 	}

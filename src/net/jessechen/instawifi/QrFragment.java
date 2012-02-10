@@ -133,8 +133,10 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 					.equals(WifiUtil.OPEN)) {
 				passwordField_qr.setText("");
 				passwordField_qr.setEnabled(false);
+				revealPassword_qr.setEnabled(false);
 			} else {
 				passwordField_qr.setEnabled(true);
+				revealPassword_qr.setEnabled(true);
 			}
 			break;
 		}
