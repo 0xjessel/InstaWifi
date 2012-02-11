@@ -3,4 +3,7 @@
 
     <style name="Theme.InstaWifi" parent="@android:style/Theme.Holo.Light.DarkActionBar"></style>
 
-</resources>
+    <style name="InstaWifiEditText" parent="@android:style/Widget.Holo.EditText">
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
+</resources>

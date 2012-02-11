@@ -11,6 +11,7 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Context;
@@ -85,7 +86,8 @@ public class NfcActivity extends FragmentActivity implements
 		revealPassword.setOnCheckedChangeListener(mCheckBoxListener);
 
 		String[] networks = WifiUtil.getConfiguredNetworks(this);
-		networkAdapter = new SpinnerArrayAdapter<String>(this, networks);
+		networkAdapter = new SpinnerArrayAdapter<String>(getApplication(),
+				networks);
 		networkAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		networkSpinner.setAdapter(networkAdapter);
@@ -285,12 +287,9 @@ public class NfcActivity extends FragmentActivity implements
 	}
 
 	private Dialog buildDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(
-				new ContextThemeWrapper(this,
-						android.R.style.Theme_Holo_Light_Dialog));
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-		LayoutInflater inflator = (LayoutInflater) getApplicationContext()
-				.getSystemService(LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflator = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 		View layout = inflator.inflate(R.layout.add_dialog,
 				(ViewGroup) findViewById(R.id.dialog_root));
 		builder.setView(layout);
@@ -352,7 +351,7 @@ public class NfcActivity extends FragmentActivity implements
 							String[] updatedNetworks = WifiUtil
 									.getConfiguredNetworks(getApplicationContext());
 							networkAdapter = new SpinnerArrayAdapter<String>(
-									getApplicationContext(), updatedNetworks);
+									getApplication(), updatedNetworks);
 							networkAdapter
 									.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 							networkSpinner.setAdapter(networkAdapter);
