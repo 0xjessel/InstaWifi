@@ -11,10 +11,9 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
-import android.content.ContextWrapper;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
@@ -27,7 +26,6 @@ import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -43,7 +41,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 /* 
- * TODO: if connected to wifi, auto fill spinners with current wifi
+ * TODO: droid x edittext is see through
+ * TODO: droid x text is white
  * TODO: share app, share qr code
  * TODO: write to tag button
  * TODO: revealPassword on landscape looks bad
@@ -92,6 +91,16 @@ public class NfcActivity extends FragmentActivity implements
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		networkSpinner.setAdapter(networkAdapter);
 		networkSpinner.setOnItemSelectedListener(this);
+
+		// set spinner to current wifi config if connected to wifi
+		WifiModel curWifi = WifiUtil.getCurrentWifiModel(this);
+		if (curWifi != null) {
+			for (int i = 0; i < networks.length; i++) {
+				if (curWifi.getTrimmedSSID().equals(networks[i])) {
+					networkSpinner.setSelection(i);
+				}
+			}
+		}
 
 		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, WifiUtil.protocols);
@@ -355,6 +364,10 @@ public class NfcActivity extends FragmentActivity implements
 							networkAdapter
 									.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 							networkSpinner.setAdapter(networkAdapter);
+
+							// set spinner to the network just added
+							networkSpinner
+									.setSelection(updatedNetworks.length - 1);
 
 							Util.shortToast(getApplicationContext(),
 									getString(R.string.success));

@@ -69,6 +69,16 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		networkSpinner_qr.setAdapter(networkAdapter);
 		networkSpinner_qr.setOnItemSelectedListener(this);
+		
+		// set spinner to current wifi config if connected to wifi
+		WifiModel curWifi = WifiUtil.getCurrentWifiModel(getActivity().getApplicationContext());
+		if (curWifi != null) {
+			for (int i = 0; i < networks.length; i++) {
+				if (curWifi.getTrimmedSSID().equals(networks[i])) {
+					networkSpinner_qr.setSelection(i);
+				}
+			}
+		}
 
 		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(
 				getActivity(), android.R.layout.simple_spinner_item,
