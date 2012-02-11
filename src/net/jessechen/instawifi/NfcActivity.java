@@ -30,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -375,6 +376,12 @@ public class NfcActivity extends FragmentActivity implements
 							Util.shortToast(getApplicationContext(),
 									getString(R.string.add_new_network_fail));
 						}
+
+						// hide keyboard after closing dialog
+						InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+						inputManager.hideSoftInputFromWindow(newSsidField
+								.getWindowToken(),
+								InputMethodManager.HIDE_NOT_ALWAYS);
 					}
 				});
 
