@@ -1,6 +1,7 @@
 package net.jessechen.instawifi;
 
 import net.jessechen.instawifi.misc.MyTabListener;
+import net.jessechen.instawifi.misc.SpinnerArrayAdapter;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
@@ -57,6 +58,7 @@ public class NfcActivity extends FragmentActivity implements
 	AlertDialog alert;
 	Button writeTag;
 	Spinner networkSpinner;
+	ArrayAdapter<String> networkAdapter;
 	Spinner protocolSpinner;
 	EditText passwordField;
 	CheckBox revealPassword;
@@ -83,8 +85,7 @@ public class NfcActivity extends FragmentActivity implements
 		revealPassword.setOnCheckedChangeListener(mCheckBoxListener);
 
 		String[] networks = WifiUtil.getConfiguredNetworks(this);
-		ArrayAdapter<String> networkAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, networks);
+		networkAdapter = new SpinnerArrayAdapter<String>(this, networks);
 		networkAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		networkSpinner.setAdapter(networkAdapter);
@@ -284,7 +285,9 @@ public class NfcActivity extends FragmentActivity implements
 	}
 
 	private Dialog buildDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, android.R.style.Theme_Holo_Light_Dialog));
+		AlertDialog.Builder builder = new AlertDialog.Builder(
+				new ContextThemeWrapper(this,
+						android.R.style.Theme_Holo_Light_Dialog));
 
 		LayoutInflater inflator = (LayoutInflater) getApplicationContext()
 				.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -345,7 +348,15 @@ public class NfcActivity extends FragmentActivity implements
 						int netId = WifiUtil.addWifiNetwork(
 								getApplicationContext(), newWifiModel, mWm);
 						if (netId != -1) {
-							// TODO: update network spinner on NFC/QR
+							// TODO: update network spinner on QR
+							String[] updatedNetworks = WifiUtil
+									.getConfiguredNetworks(getApplicationContext());
+							networkAdapter = new SpinnerArrayAdapter<String>(
+									getApplicationContext(), updatedNetworks);
+							networkAdapter
+									.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+							networkSpinner.setAdapter(networkAdapter);
+
 							Util.shortToast(getApplicationContext(),
 									getString(R.string.success));
 						} else {
