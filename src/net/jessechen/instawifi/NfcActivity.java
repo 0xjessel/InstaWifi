@@ -39,7 +39,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
-import android.widget.ShareActionProvider;
 import android.widget.Spinner;
 
 /* 
@@ -47,7 +46,6 @@ import android.widget.Spinner;
  * TODO: droid x text is white
  * TODO: share app, share qr code
  * TODO: write to tag button
- * TODO: revealPassword on landscape looks bad
  */
 public class NfcActivity extends FragmentActivity implements
 		OnItemSelectedListener {

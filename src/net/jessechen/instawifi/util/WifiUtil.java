@@ -3,12 +3,6 @@ package net.jessechen.instawifi.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
-
-import net.jessechen.instawifi.misc.ConnectToWifiResult;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import android.content.Context;
@@ -19,6 +13,11 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 
 public class WifiUtil {
 	public static String WIFI_URI_SCHEME = "wifi://%s/%s#%s";
@@ -36,6 +35,10 @@ public class WifiUtil {
 			add(OPEN);
 		}
 	};
+	
+	public enum ConnectToWifiResult {
+		ALREADY_CONNECTED, INVALID_NET_ID, NETWORK_ENABLED, NETWORK_ENABLED_FAILED
+	}
 
 	private static final String TAG = WifiUtil.class.getSimpleName();
 
