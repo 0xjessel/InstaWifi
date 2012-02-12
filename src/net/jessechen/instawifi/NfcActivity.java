@@ -195,11 +195,11 @@ public class NfcActivity extends FragmentActivity implements
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.nfc, menu);
 
-//		ShareActionProvider mShareActionProvider = (ShareActionProvider) menu
-//				.findItem(R.id.share).getActionProvider();
-//		Intent picIntent = new Intent(android.content.Intent.ACTION_SEND);
-//		picIntent.setType("image/*");
-//		mShareActionProvider.setShareIntent(picIntent);
+		// ShareActionProvider mShareActionProvider = (ShareActionProvider) menu
+		// .findItem(R.id.share).getActionProvider();
+		// Intent picIntent = new Intent(android.content.Intent.ACTION_SEND);
+		// picIntent.setType("image/*");
+		// mShareActionProvider.setShareIntent(picIntent);
 
 		return true;
 	}
@@ -361,7 +361,6 @@ public class NfcActivity extends FragmentActivity implements
 						int netId = WifiUtil.addWifiNetwork(
 								getApplicationContext(), newWifiModel, mWm);
 						if (netId != -1) {
-							// TODO: update network spinner on QR
 							String[] updatedNetworks = WifiUtil
 									.getConfiguredNetworks(getApplicationContext());
 							networkAdapter = new SpinnerArrayAdapter<String>(
@@ -372,7 +371,13 @@ public class NfcActivity extends FragmentActivity implements
 
 							// set spinner to the network just added
 							networkSpinner
-									.setSelection(updatedNetworks.length - 1);
+									.setSelection(networkAdapter.getCount() - 1);
+
+							QrFragment qrFrag = (QrFragment) getSupportFragmentManager()
+									.findFragmentById(R.id.fragment);
+							if (qrFrag != null) {
+								qrFrag.updateNetworkSpinner(networkAdapter);
+							}
 
 							Util.shortToast(getApplicationContext(),
 									getString(R.string.success));

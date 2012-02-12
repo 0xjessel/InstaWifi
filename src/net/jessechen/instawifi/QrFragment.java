@@ -159,4 +159,12 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 		// TODO Auto-generated method stub
 
 	}
+
+	// update network spinner after add network dialog
+	public void updateNetworkSpinner(ArrayAdapter<String> networkAdapter) {
+		if (networkSpinner_qr != null) {
+			networkSpinner_qr.setAdapter(networkAdapter);
+			networkSpinner_qr.setSelection(networkAdapter.getCount() - 1);
+		}
+	}
 }
