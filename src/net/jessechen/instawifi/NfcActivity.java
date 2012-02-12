@@ -39,6 +39,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.ShareActionProvider;
 import android.widget.Spinner;
 
 /* 
@@ -195,14 +196,19 @@ public class NfcActivity extends FragmentActivity implements
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.nfc, menu);
+
+//		ShareActionProvider mShareActionProvider = (ShareActionProvider) menu
+//				.findItem(R.id.share).getActionProvider();
+//		Intent picIntent = new Intent(android.content.Intent.ACTION_SEND);
+//		picIntent.setType("image/*");
+//		mShareActionProvider.setShareIntent(picIntent);
+
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.share:
-			break;
 		case R.id.add:
 			buildDialog().show();
 			break;
@@ -379,8 +385,8 @@ public class NfcActivity extends FragmentActivity implements
 
 						// hide keyboard after closing dialog
 						InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-						inputManager.hideSoftInputFromWindow(newSsidField
-								.getWindowToken(),
+						inputManager.hideSoftInputFromWindow(
+								newSsidField.getWindowToken(),
 								InputMethodManager.HIDE_NOT_ALWAYS);
 					}
 				});

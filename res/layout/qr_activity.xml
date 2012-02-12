@@ -34,8 +34,7 @@
                 android:layout_gravity="right"
                 android:layout_margin="4dp"
                 android:layout_row="0"
-                android:text="@string/ssid_text"
-                android:textSize="16dp" />
+                android:text="@string/ssid_text" />
 
             <Spinner
                 android:id="@+id/network_spinner_qr"
@@ -50,8 +49,7 @@
                 android:layout_gravity="right"
                 android:layout_margin="4dp"
                 android:layout_row="1"
-                android:text="@string/protocol_text"
-                android:textSize="16dp" />
+                android:text="@string/protocol_text" />
 
             <Spinner
                 android:id="@+id/protocol_spinner_qr"
@@ -80,11 +78,10 @@
         <CheckBox
             android:id="@+id/password_checkbox_qr"
             style="@style/white_inset_shadow"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:text="@string/show_password_text"
-            android:textSize="16dp" />
+            android:layout_gravity="center_horizontal"
+            android:text="@string/show_password_text" />
     </LinearLayout>
 
 </ScrollView>
