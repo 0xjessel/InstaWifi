@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <com.gridlayout.GridLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:gridlayout="http://schemas.android.com/apk/res/net.jessechen.instawifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            gridlayout:alignmentMode="alignBounds"
+            gridlayout:columnCount="2"
+            gridlayout:columnOrderPreserved="false"
+            gridlayout:useDefaultMargins="true" >
+
+            <TextView
+                android:id="@+id/add_ssid_text"
+                style="@style/white_inset_shadow"
+                android:layout_column="0"
+                android:layout_gravity="right"
+                android:layout_margin="4dp"
+                android:layout_row="0"
+                android:text="@string/ssid_text"
+                android:textSize="16dp" />
+
+            <EditText
+                android:id="@+id/add_network_ssid"
+                style="@style/InstaWifiEditText"
+                android:layout_column="1"
+                android:layout_margin="4dp"
+                android:layout_row="0"
+                android:ems="7"
+                android:inputType="text|textNoSuggestions" />
+
+            <TextView
+                android:id="@+id/add_protocol_text"
+                style="@style/white_inset_shadow"
+                android:layout_column="0"
+                android:layout_gravity="right"
+                android:layout_margin="4dp"
+                android:layout_row="1"
+                android:text="@string/protocol_text"
+                android:textSize="16dp" />
+
+            <Spinner
+                android:id="@+id/add_protocol_spinner"
+                android:layout_column="1"
+                android:layout_margin="4dp"
+                android:layout_row="1" />
+
+            <TextView
+                android:id="@+id/add_password_text"
+                style="@style/white_inset_shadow"
+                android:layout_column="0"
+                android:layout_gravity="right"
+                android:layout_margin="4dp"
+                android:layout_row="2"
+                android:text="@string/password_text"
+                android:textSize="16dp" />
+
+            <EditText
+                android:id="@+id/add_network_password"
+                android:layout_margin="4dp"
+                android:ems="7"
+                android:inputType="textPassword"
+                android:password="true" />
+        </com.gridlayout.GridLayout>
+    </LinearLayout>
+
+</ScrollView>
