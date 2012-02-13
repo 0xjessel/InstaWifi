@@ -20,7 +20,9 @@ public class WifiModel {
 		} else {
 			SSID = Util.concatQuotes(ssid);
 		}
-		password = pw;
+		if (!protocol.equals(WifiUtil.OPEN)) {
+			password = pw;
+		}
 	}
 
 	public WifiModel(String wifiString) {

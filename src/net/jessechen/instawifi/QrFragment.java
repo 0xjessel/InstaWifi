@@ -22,6 +22,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 /*
  * TODO: update qrImage when changing password field
@@ -32,6 +33,7 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 	Button qwriteTag_qr;
 	Spinner networkSpinner_qr;
 	Spinner protocolSpinner_qr;
+	TextView passwordText_qr;
 	EditText passwordField_qr;
 	CheckBox revealPassword_qr;
 	ImageView qrImage;
@@ -56,6 +58,7 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 				.findViewById(R.id.network_spinner_qr);
 		protocolSpinner_qr = (Spinner) view
 				.findViewById(R.id.protocol_spinner_qr);
+		passwordText_qr = (TextView) view.findViewById(R.id.password_text_qr);
 		passwordField_qr = (EditText) view.findViewById(R.id.password_field_qr);
 		revealPassword_qr = (CheckBox) view
 				.findViewById(R.id.password_checkbox_qr);
@@ -141,12 +144,13 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 		case R.id.protocol_spinner_qr:
 			if (protocolSpinner_qr.getSelectedItem().toString()
 					.equals(WifiUtil.OPEN)) {
-				passwordField_qr.setText("");
-				passwordField_qr.setEnabled(false);
-				revealPassword_qr.setEnabled(false);
+				passwordText_qr.setVisibility(View.GONE);
+				passwordField_qr.setVisibility(View.GONE);
+				revealPassword_qr.setVisibility(View.GONE);
 			} else {
-				passwordField_qr.setEnabled(true);
-				revealPassword_qr.setEnabled(true);
+				passwordText_qr.setVisibility(View.VISIBLE);
+				passwordField_qr.setVisibility(View.VISIBLE);
+				revealPassword_qr.setVisibility(View.VISIBLE);
 			}
 			break;
 		}

@@ -41,6 +41,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 /* 
  * TODO: droid x edittext is see through
@@ -61,6 +62,7 @@ public class NfcActivity extends FragmentActivity implements
 	Spinner networkSpinner;
 	ArrayAdapter<String> networkAdapter;
 	Spinner protocolSpinner;
+	TextView passwordText;
 	EditText passwordField;
 	CheckBox revealPassword;
 
@@ -79,6 +81,7 @@ public class NfcActivity extends FragmentActivity implements
 		writeTag = (Button) findViewById(R.id.b_write_tag);
 		networkSpinner = (Spinner) findViewById(R.id.network_spinner);
 		protocolSpinner = (Spinner) findViewById(R.id.protocol_spinner);
+		passwordText = (TextView) findViewById(R.id.password_text);
 		passwordField = (EditText) findViewById(R.id.password_field);
 		revealPassword = (CheckBox) findViewById(R.id.password_checkbox);
 
@@ -120,17 +123,16 @@ public class NfcActivity extends FragmentActivity implements
 				NfcAdapter.ACTION_TAG_DISCOVERED);
 		mWriteTagFilters = new IntentFilter[] { tagDetected };
 
-		boolean nfcTabSelected = true;
-		// restore QR tab if it was previously selected
-		if (savedInstanceState != null
-				&& savedInstanceState.getString("tab").equals(
-						getString(R.string.qr_tab))) {
-			nfcTabSelected = false;
-		}
-
 		if (Util.hasNfc(mNfcAdapter)) {
+			boolean nfcTabSelected = true;
+			// restore QR tab if it was previously selected
+			if (savedInstanceState != null
+					&& savedInstanceState.getString("tab").equals(
+							getString(R.string.qr_tab))) {
+				nfcTabSelected = false;
+			}
+			
 			android.support.v4.app.ActionBar bar = getSupportActionBar();
-
 			bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 			bar.addTab(
@@ -163,8 +165,12 @@ public class NfcActivity extends FragmentActivity implements
 
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
-		outState.putString("tab", getSupportActionBar().getSelectedTab()
-				.getText().toString());
+		android.support.v4.app.ActionBar.Tab curTab = getSupportActionBar()
+				.getSelectedTab();
+
+		if (curTab != null) {
+			outState.putString("tab", curTab.getText().toString());
+		}
 	}
 
 	@Override
@@ -302,12 +308,13 @@ public class NfcActivity extends FragmentActivity implements
 		case R.id.protocol_spinner:
 			if (protocolSpinner.getSelectedItem().toString()
 					.equals(WifiUtil.OPEN)) {
-				passwordField.setText("");
-				passwordField.setEnabled(false);
-				revealPassword.setEnabled(false);
+				passwordText.setVisibility(View.GONE);
+				passwordField.setVisibility(View.GONE);
+				revealPassword.setVisibility(View.GONE);
 			} else {
-				passwordField.setEnabled(true);
-				revealPassword.setEnabled(true);
+				passwordText.setVisibility(View.VISIBLE);
+				passwordField.setVisibility(View.VISIBLE);
+				revealPassword.setVisibility(View.VISIBLE);
 			}
 			break;
 		}
