@@ -19,6 +19,7 @@ import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
+import android.nfc.NfcManager;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -70,7 +71,8 @@ public class NfcActivity extends FragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+		NfcManager manager = (NfcManager) getSystemService(Context.NFC_SERVICE);
+		mNfcAdapter = manager.getDefaultAdapter();
 
 		setContentView(R.layout.nfc_activity);
 
@@ -119,32 +121,44 @@ public class NfcActivity extends FragmentActivity implements
 		mWriteTagFilters = new IntentFilter[] { tagDetected };
 
 		boolean nfcTabSelected = true;
+		// restore QR tab if it was previously selected
 		if (savedInstanceState != null
 				&& savedInstanceState.getString("tab").equals(
-						getApplicationContext().getString(R.string.qr_tab))) {
+						getString(R.string.qr_tab))) {
 			nfcTabSelected = false;
 		}
 
-		android.support.v4.app.ActionBar bar = getSupportActionBar();
-		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		if (Util.hasNfc(mNfcAdapter)) {
+			android.support.v4.app.ActionBar bar = getSupportActionBar();
 
-		bar.addTab(
-				bar.newTab()
-						.setText(getString(R.string.nfc_tab))
-						.setTabListener(
-								new MyTabListener(this,
-										getSupportFragmentManager(),
-										getString(R.string.nfc_tab))),
-				nfcTabSelected);
+			bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		bar.addTab(
-				bar.newTab()
-						.setText(getString(R.string.qr_tab))
-						.setTabListener(
-								new MyTabListener(this,
-										getSupportFragmentManager(),
-										getString(R.string.qr_tab))),
-				!nfcTabSelected);
+			bar.addTab(
+					bar.newTab()
+							.setText(getString(R.string.nfc_tab))
+							.setTabListener(
+									new MyTabListener(this,
+											getSupportFragmentManager(),
+											getString(R.string.nfc_tab))),
+					nfcTabSelected);
+
+			bar.addTab(
+					bar.newTab()
+							.setText(getString(R.string.qr_tab))
+							.setTabListener(
+									new MyTabListener(this,
+											getSupportFragmentManager(),
+											getString(R.string.qr_tab))),
+					!nfcTabSelected);
+		} else {
+			// hide NFC layout
+			View layout = findViewById(R.id.nfc_layout);
+			layout.setVisibility(View.GONE);
+
+			// set QR layout
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.fragment, QrFragment.getInstance()).commit();
+		}
 	}
 
 	@Override
@@ -217,19 +231,22 @@ public class NfcActivity extends FragmentActivity implements
 	private View.OnClickListener mTagWriter = new View.OnClickListener() {
 		@Override
 		public void onClick(View arg0) {
-			// Write to a tag for as long as the dialog is shown.
-			enableTagWriteMode();
+			if (Util.hasNfc(mNfcAdapter)) {
+				// adapter exists and is enabled.
+				// Write to a tag for as long as the dialog is shown.
+				enableTagWriteMode();
 
-			alert = new AlertDialog.Builder(NfcActivity.this)
-					.setTitle(getString(R.string.dialog_write_tag))
-					.setOnCancelListener(
-							new DialogInterface.OnCancelListener() {
-								@Override
-								public void onCancel(DialogInterface dialog) {
-									disableTagWriteMode();
-								}
-							}).create();
-			alert.show();
+				alert = new AlertDialog.Builder(NfcActivity.this)
+						.setTitle(getString(R.string.dialog_write_tag))
+						.setOnCancelListener(
+								new DialogInterface.OnCancelListener() {
+									@Override
+									public void onCancel(DialogInterface dialog) {
+										disableTagWriteMode();
+									}
+								}).create();
+				alert.show();
+			}
 		}
 	};
 
@@ -370,8 +387,8 @@ public class NfcActivity extends FragmentActivity implements
 							networkSpinner.setAdapter(networkAdapter);
 
 							// set spinner to the network just added
-							networkSpinner
-									.setSelection(networkAdapter.getCount() - 1);
+							networkSpinner.setSelection(networkAdapter
+									.getCount() - 1);
 
 							QrFragment qrFrag = (QrFragment) getSupportFragmentManager()
 									.findFragmentById(R.id.fragment);

@@ -12,14 +12,14 @@ import android.view.View;
 
 public class MyTabListener implements TabListener {
 	private String mTag;
-	private Activity a;
+	private Activity activity;
 	private FragmentManager fm;
 	private Fragment mFragment;
 	private String nfc_tab, qr_tab;
 
 	public MyTabListener(Activity a,
 			android.support.v4.app.FragmentManager fragmentManager, String tag) {
-		this.a = a;
+		this.activity = a;
 		fm = fragmentManager;
 		mTag = tag;
 
@@ -35,7 +35,7 @@ public class MyTabListener implements TabListener {
 
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		View layout = a.findViewById(R.id.nfc_layout);
+		View layout = activity.findViewById(R.id.nfc_layout);
 
 		if (mTag.equals(nfc_tab)) {
 			layout.setVisibility(View.VISIBLE);
