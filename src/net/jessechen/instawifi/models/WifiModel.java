@@ -5,10 +5,24 @@ import net.jessechen.instawifi.util.WifiUtil;
 import android.net.Uri;
 import android.util.Log;
 
+/**
+ * WifiModel has 3 internal data fields.
+ * 
+ * SSID is the name of the network, which must have enclosing quotes around the
+ * ssid. The constructor will take care of adding quotes if it doesn't have it.
+ * 
+ * protocol is the type of security/encryption used for the network. WifiUtil
+ * has 3 constants that should be consistently used across the app. 
+ * 
+ * password should just be text not enclosed in quotes
+ * 
+ * @author Jesse Chen
+ * 
+ */
 public class WifiModel {
-	private String SSID;
-	private String password;
-	private String protocol;
+	private String SSID; // must be in quotes
+	private String password; // when network has no pw, password should be ""
+	private String protocol; // use WifiUtil constants
 
 	private static final String TAG = WifiModel.class.getName();
 
@@ -22,6 +36,8 @@ public class WifiModel {
 		}
 		if (!protocol.equals(WifiUtil.OPEN)) {
 			password = pw;
+		} else {
+			password = "";
 		}
 	}
 
