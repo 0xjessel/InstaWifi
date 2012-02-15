@@ -131,7 +131,7 @@ public class NfcActivity extends FragmentActivity implements
 							getString(R.string.qr_tab))) {
 				nfcTabSelected = false;
 			}
-			
+
 			android.support.v4.app.ActionBar bar = getSupportActionBar();
 			bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -334,10 +334,12 @@ public class NfcActivity extends FragmentActivity implements
 
 		final EditText newSsidField = (EditText) layout
 				.findViewById(R.id.add_network_ssid);
-		final EditText newPasswordField = (EditText) layout
-				.findViewById(R.id.add_network_password);
 		final Spinner newProtocolSpinner = (Spinner) layout
 				.findViewById(R.id.add_protocol_spinner);
+		final TextView newPasswordText = (TextView) layout
+				.findViewById(R.id.add_password_text);
+		final EditText newPasswordField = (EditText) layout
+				.findViewById(R.id.add_network_password);
 
 		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, WifiUtil.protocols);
@@ -354,10 +356,11 @@ public class NfcActivity extends FragmentActivity implements
 						case R.id.add_protocol_spinner:
 							if (newProtocolSpinner.getSelectedItem().toString()
 									.equals(WifiUtil.OPEN)) {
-								newPasswordField.setText("");
-								newPasswordField.setEnabled(false);
+								newPasswordField.setVisibility(View.GONE);
+								newPasswordText.setVisibility(View.GONE);
 							} else {
-								newPasswordField.setEnabled(true);
+								newPasswordField.setVisibility(View.VISIBLE);
+								newPasswordText.setVisibility(View.VISIBLE);
 							}
 							break;
 						}
