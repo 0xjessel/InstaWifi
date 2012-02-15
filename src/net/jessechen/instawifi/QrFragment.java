@@ -1,12 +1,20 @@
 package net.jessechen.instawifi;
 
+import java.io.FileOutputStream;
+
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItem;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,11 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -38,6 +46,8 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 	CheckBox revealPassword_qr;
 	ImageView qrImage;
 
+	Intent picIntent;
+
 	public static QrFragment getInstance() {
 		QrFragment fragment = new QrFragment();
 
@@ -47,12 +57,16 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.qr_activity, container, false);
+
+		picIntent = new Intent(android.content.Intent.ACTION_SEND);
+		picIntent.setType("image/*");
 
 		networkSpinner_qr = (Spinner) view
 				.findViewById(R.id.network_spinner_qr);
@@ -72,9 +86,10 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		networkSpinner_qr.setAdapter(networkAdapter);
 		networkSpinner_qr.setOnItemSelectedListener(this);
-		
+
 		// set spinner to current wifi config if connected to wifi
-		WifiModel curWifi = WifiUtil.getCurrentWifiModel(getActivity().getApplicationContext());
+		WifiModel curWifi = WifiUtil.getCurrentWifiModel(getActivity()
+				.getApplicationContext());
 		if (curWifi != null) {
 			for (int i = 0; i < networks.length; i++) {
 				if (curWifi.getTrimmedSSID().equals(networks[i])) {
@@ -121,6 +136,50 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 	};
 
 	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.share:
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+				qrImage.setDrawingCacheEnabled(true);
+				Bitmap bitmap = qrImage.getDrawingCache();
+				String filename = "";
+				try {
+					filename = getQrFilename(networkSpinner_qr
+							.getSelectedItem().toString());
+					FileOutputStream fos = getActivity().openFileOutput(
+							filename, Context.MODE_WORLD_READABLE);
+					bitmap.compress(CompressFormat.JPEG, 100, fos);
+					fos.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+					Log.e(TAG, "failed to generate qr image file");
+				}
+
+				Uri photoUri = Uri
+						.parse(getActivity().getFilesDir() + filename);
+				picIntent.setData(photoUri);
+				picIntent.putExtra(Intent.EXTRA_STREAM, photoUri);
+
+				startActivity(Intent.createChooser(picIntent,
+						"Share QR Image via"));
+			}
+			break;
+		case R.id.add:
+			// buildDialog().show();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	private String getQrFilename(String ssid) {
+		if (ssid != null) {
+			return "instawifi_" + ssid + "qr.jpg";
+		} else {
+			throw new NullPointerException("null ssid");
+		}
+	}
+
+	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int pos,
 			long id) {
 		switch (parent.getId()) {
@@ -154,7 +213,7 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 			}
 			break;
 		}
-		
+
 		qrImage.setImageBitmap(getSelectedWifiBitmap());
 	}
 

@@ -21,6 +21,7 @@ import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.Menu;
@@ -40,6 +41,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.ShareActionProvider;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -51,7 +53,7 @@ import android.widget.TextView;
  */
 public class NfcActivity extends FragmentActivity implements
 		OnItemSelectedListener {
-	private boolean mWriteMode = false;
+	boolean mWriteMode = false;
 
 	NfcAdapter mNfcAdapter;
 	PendingIntent mNfcPendingIntent;
@@ -65,6 +67,8 @@ public class NfcActivity extends FragmentActivity implements
 	TextView passwordText;
 	EditText passwordField;
 	CheckBox revealPassword;
+	
+	Intent picIntent;
 
 	private static final String TAG = NfcActivity.class.getSimpleName();
 
@@ -123,6 +127,9 @@ public class NfcActivity extends FragmentActivity implements
 				NfcAdapter.ACTION_TAG_DISCOVERED);
 		mWriteTagFilters = new IntentFilter[] { tagDetected };
 
+		picIntent = new Intent(android.content.Intent.ACTION_SEND);
+		picIntent.setType("image/*");
+		
 		if (Util.hasNfc(mNfcAdapter)) {
 			boolean nfcTabSelected = true;
 			// restore QR tab if it was previously selected
@@ -215,18 +222,21 @@ public class NfcActivity extends FragmentActivity implements
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.nfc, menu);
 
-		// ShareActionProvider mShareActionProvider = (ShareActionProvider) menu
-		// .findItem(R.id.share).getActionProvider();
-		// Intent picIntent = new Intent(android.content.Intent.ACTION_SEND);
-		// picIntent.setType("image/*");
-		// mShareActionProvider.setShareIntent(picIntent);
-
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			ShareActionProvider mShareActionProvider = (ShareActionProvider) menu
+					.findItem(R.id.share).getActionProvider();
+			mShareActionProvider.setShareIntent(picIntent);
+		}
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.share:
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			}
+			break;
 		case R.id.add:
 			buildDialog().show();
 			break;
