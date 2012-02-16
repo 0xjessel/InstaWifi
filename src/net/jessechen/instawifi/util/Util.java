@@ -1,9 +1,10 @@
 package net.jessechen.instawifi.util;
 
-import net.jessechen.instawifi.QrFragment;
-import net.jessechen.instawifi.R;
+import java.io.File;
+
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -83,38 +84,12 @@ public class Util {
 		spinner.setAdapter(protocolAdapter);
 	}
 
-	public static class TabListener implements
-			android.support.v4.app.ActionBar.TabListener {
-		private String tag;
-		private Context a;
-
-		public TabListener(Context a, String tag) {
-			this.tag = tag;
-			this.a = a;
-		}
-
-		@Override
-		public void onTabReselected(android.support.v4.app.ActionBar.Tab tab,
-				android.support.v4.app.FragmentTransaction ft) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onTabSelected(android.support.v4.app.ActionBar.Tab tab,
-				android.support.v4.app.FragmentTransaction ft) {
-			Util.shortToast(a, tag + " selected!");
-			if (tag.equals(a.getString(R.string.qr_tab))) {
-				a.startActivity(new Intent(a, QrFragment.class));
-			}
-		}
-
-		@Override
-		public void onTabUnselected(android.support.v4.app.ActionBar.Tab tab,
-				android.support.v4.app.FragmentTransaction ft) {
-			// TODO Auto-generated method stub
-
-		}
+	public static Intent buildQrShareIntent(File file) {
+		Intent picIntent = new Intent(Intent.ACTION_SEND);
+		picIntent.setType("image/*");
+		Uri uri = Uri.fromFile(file);
+		picIntent.putExtra(Intent.EXTRA_STREAM, uri);
+		
+		return picIntent;
 	}
-
 }

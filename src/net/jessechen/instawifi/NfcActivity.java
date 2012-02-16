@@ -41,7 +41,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
-import android.widget.ShareActionProvider;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -93,6 +92,7 @@ public class NfcActivity extends FragmentActivity implements
 
 		revealPassword.setOnCheckedChangeListener(mCheckBoxListener);
 
+		// TODO: stupid getconfigurednetworks sometimes returns empty..
 		String[] networks = WifiUtil.getConfiguredNetworks(this);
 		networkAdapter = new SpinnerArrayAdapter<String>(getApplication(),
 				networks);
@@ -223,9 +223,9 @@ public class NfcActivity extends FragmentActivity implements
 		inflater.inflate(R.menu.nfc, menu);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			ShareActionProvider mShareActionProvider = (ShareActionProvider) menu
-					.findItem(R.id.share).getActionProvider();
-			mShareActionProvider.setShareIntent(picIntent);
+//			ShareActionProvider mShareActionProvider = (ShareActionProvider) menu
+//					.findItem(R.id.share).getActionProvider();
+//			mShareActionProvider.setShareIntent(picIntent);
 		}
 		return true;
 	}

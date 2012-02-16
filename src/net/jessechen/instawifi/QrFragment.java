@@ -10,8 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItem;
@@ -139,30 +137,7 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.share:
-			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-				qrImage.setDrawingCacheEnabled(true);
-				Bitmap bitmap = qrImage.getDrawingCache();
-				String filename = "";
-				try {
-					filename = getQrFilename(networkSpinner_qr
-							.getSelectedItem().toString());
-					FileOutputStream fos = getActivity().openFileOutput(
-							filename, Context.MODE_WORLD_READABLE);
-					bitmap.compress(CompressFormat.JPEG, 100, fos);
-					fos.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-					Log.e(TAG, "failed to generate qr image file");
-				}
-
-				Uri photoUri = Uri
-						.parse(getActivity().getFilesDir() + filename);
-				picIntent.setData(photoUri);
-				picIntent.putExtra(Intent.EXTRA_STREAM, photoUri);
-
-				startActivity(Intent.createChooser(picIntent,
-						"Share QR Image via"));
-			}
+			shareQrImage();
 			break;
 		case R.id.add:
 			// buildDialog().show();
@@ -171,9 +146,32 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 		return super.onOptionsItemSelected(item);
 	}
 
+	private void shareQrImage() {
+		qrImage.setDrawingCacheEnabled(true);
+		Bitmap bitmap = qrImage.getDrawingCache();
+		String filename = "";
+		try {
+			filename = getQrFilename(networkSpinner_qr.getSelectedItem()
+					.toString());
+			FileOutputStream fos = getActivity().openFileOutput(filename,
+					Context.MODE_WORLD_READABLE);
+			bitmap.compress(CompressFormat.JPEG, 100, fos);
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e(TAG, "failed to generate qr image file");
+		}
+
+		// TODO: sharing pic via Gmail doesn't work
+		Intent picIntent = Util.buildQrShareIntent(getActivity()
+				.getFileStreamPath(filename));
+
+		startActivity(Intent.createChooser(picIntent, "Share QR Image via"));
+	}
+
 	private String getQrFilename(String ssid) {
 		if (ssid != null) {
-			return "instawifi_" + ssid + "qr.jpg";
+			return "instawifi_" + ssid + "_qr.jpg";
 		} else {
 			throw new NullPointerException("null ssid");
 		}
