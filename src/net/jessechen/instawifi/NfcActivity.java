@@ -48,7 +48,9 @@ import android.widget.TextView;
 /* 
  * TODO: droid x edittext is see through
  * TODO: droid x text is white
- * TODO: share app, share qr code
+ * TODO: share app
+ * TODO: seems to not be able to add network if not connected to wifi (look at the android source code)
+ * TODO: ridiculously long ssid breaks gridlayout, maybe when getting configured networks, automatically clip long ssids and append '...'
  * TODO: write to tag button
  */
 public class NfcActivity extends FragmentActivity implements
