@@ -1,16 +1,18 @@
 package net.jessechen.instawifi;
 
+import java.io.File;
 import java.io.FileOutputStream;
 
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
-import android.content.Context;
+import net.jessechen.instawifi.util.WifiUtil.QrImageSize;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItem;
 import android.text.method.PasswordTransformationMethod;
@@ -105,18 +107,18 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 		protocolSpinner_qr.setOnItemSelectedListener(this);
 
 		qrImage = (ImageView) view.findViewById(R.id.qr_code_image);
-		qrImage.setImageBitmap(getSelectedWifiBitmap());
+		qrImage.setImageBitmap(getSelectedWifiBitmap(QrImageSize.SMALL));
 
 		return view;
 	}
 
-	private Bitmap getSelectedWifiBitmap() {
+	private Bitmap getSelectedWifiBitmap(QrImageSize size) {
 		WifiModel selectedWifi = new WifiModel(networkSpinner_qr
 				.getSelectedItem().toString(), passwordField_qr.getText()
 				.toString(), protocolSpinner_qr.getSelectedItem().toString());
 
 		return WifiUtil.generateQrImage(selectedWifi.getSSID(),
-				selectedWifi.getProtocol(), selectedWifi.getPassword());
+				selectedWifi.getProtocol(), selectedWifi.getPassword(), size);
 	}
 
 	private OnCheckedChangeListener mCheckBoxListener = new CompoundButton.OnCheckedChangeListener() {
@@ -147,26 +149,28 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 	}
 
 	private void shareQrImage() {
-		qrImage.setDrawingCacheEnabled(true);
-		Bitmap bitmap = qrImage.getDrawingCache();
+		Bitmap bitmap = getSelectedWifiBitmap(QrImageSize.LARGE);
+		File file = null;
 		String filename = "";
 		try {
 			filename = getQrFilename(networkSpinner_qr.getSelectedItem()
 					.toString());
-			FileOutputStream fos = getActivity().openFileOutput(filename,
-					Context.MODE_WORLD_READABLE);
+			file = new File(Environment.getExternalStorageDirectory()
+					.toString(), filename);
+			
+			FileOutputStream fos = new FileOutputStream(file);
 			bitmap.compress(CompressFormat.JPEG, 100, fos);
+			
+			fos.flush();
 			fos.close();
+
+			Intent picIntent = Util.buildQrShareIntent(file);
+			startActivity(Intent.createChooser(picIntent, "Share QR Image via"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.e(TAG, "failed to generate qr image file");
+			Util.shortToast(getActivity(), getString(R.string.qr_share_fail));
 		}
-
-		// TODO: sharing pic via Gmail doesn't work
-		Intent picIntent = Util.buildQrShareIntent(getActivity()
-				.getFileStreamPath(filename));
-
-		startActivity(Intent.createChooser(picIntent, "Share QR Image via"));
 	}
 
 	private String getQrFilename(String ssid) {
@@ -212,7 +216,7 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 			break;
 		}
 
-		qrImage.setImageBitmap(getSelectedWifiBitmap());
+		qrImage.setImageBitmap(getSelectedWifiBitmap(QrImageSize.SMALL));
 	}
 
 	@Override

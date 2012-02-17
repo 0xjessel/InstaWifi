@@ -40,12 +40,16 @@ public class WifiUtil {
 		ALREADY_CONNECTED, INVALID_NET_ID, NETWORK_ENABLED, NETWORK_ENABLED_FAILED
 	}
 
+	public enum QrImageSize {
+		SMALL, LARGE
+	}
+	
 	private static final String TAG = WifiUtil.class.getSimpleName();
 
 	public static Bitmap generateQrImage(String ssid, String protocol,
-			String password) {
-		final int MAGIC_NUMBER = 30;
-        final int DIMENSION = 350;
+			String password, QrImageSize size) {
+		final int MAGIC_NUMBER = (size.equals(QrImageSize.SMALL)) ? 30 : 60;
+        final int DIMENSION = (size.equals(QrImageSize.SMALL)) ? 350 : 700;
 		
 		QRCodeWriter writer = new QRCodeWriter();
 		BitMatrix bm = null;
