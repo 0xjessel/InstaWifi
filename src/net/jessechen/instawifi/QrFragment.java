@@ -100,7 +100,7 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 
 		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(
 				getActivity(), android.R.layout.simple_spinner_item,
-				WifiUtil.protocols);
+				WifiUtil.protocolStrings);
 		protocolAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		protocolSpinner_qr.setAdapter(protocolAdapter);
@@ -115,10 +115,9 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 	private Bitmap getSelectedWifiBitmap(QrImageSize size) {
 		WifiModel selectedWifi = new WifiModel(networkSpinner_qr
 				.getSelectedItem().toString(), passwordField_qr.getText()
-				.toString(), protocolSpinner_qr.getSelectedItem().toString());
+				.toString(), protocolSpinner_qr.getSelectedItemPosition());
 
-		return WifiUtil.generateQrCode(selectedWifi.getSSID(),
-				selectedWifi.getProtocol(), selectedWifi.getPassword(), size);
+		return WifiUtil.generateQrCode(selectedWifi, size);
 	}
 
 	private OnCheckedChangeListener mCheckBoxListener = new CompoundButton.OnCheckedChangeListener() {
@@ -198,15 +197,13 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 			}
 
 			if (selectedNetwork != null) {
-				protocolSpinner_qr.setSelection(WifiUtil.protocols
-						.indexOf(selectedNetwork.getProtocol()));
+				protocolSpinner_qr.setSelection(selectedNetwork.getProtocol());
 				passwordField_qr.setText(Util.stripQuotes(selectedNetwork
 						.getPassword()));
 			}
 			break;
 		case R.id.protocol_spinner_qr:
-			if (protocolSpinner_qr.getSelectedItem().toString()
-					.equals(WifiUtil.OPEN)) {
+			if (protocolSpinner_qr.getSelectedItemPosition() == WifiUtil.OPEN) {
 				passwordText_qr.setVisibility(View.GONE);
 				passwordField_qr.setVisibility(View.GONE);
 				revealPassword_qr.setVisibility(View.GONE);

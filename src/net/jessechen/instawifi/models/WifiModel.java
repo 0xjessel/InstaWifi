@@ -12,7 +12,7 @@ import android.util.Log;
  * ssid. The constructor will take care of adding quotes if it doesn't have it.
  * 
  * protocol is the type of security/encryption used for the network. WifiUtil
- * has 3 constants that should be consistently used across the app. 
+ * has 3 integer constants that should be consistently used across the app.
  * 
  * password should just be text not enclosed in quotes
  * 
@@ -22,19 +22,19 @@ import android.util.Log;
 public class WifiModel {
 	private String SSID; // must be in quotes
 	private String password; // when network has no pw, password should be ""
-	private String protocol; // use WifiUtil constants
+	private int protocol; // WifiUtil constants represented w/ int
 
 	private static final String TAG = WifiModel.class.getName();
 
 	// ssid needs quotes
-	public WifiModel(String ssid, String pw, String pt) {
-		protocol = pt;
+	public WifiModel(String ssid, String pw, int protocol) {
+		this.protocol = protocol;
 		if (Util.hasQuotes(ssid)) {
 			SSID = ssid;
 		} else {
 			SSID = Util.concatQuotes(ssid);
 		}
-		if (!protocol.equals(WifiUtil.OPEN)) {
+		if (!(protocol == WifiUtil.OPEN)) {
 			password = pw;
 		} else {
 			password = "";
@@ -51,10 +51,10 @@ public class WifiModel {
 
 		this.SSID = wifiUri.getHost();
 		this.password = wifiUri.getLastPathSegment();
-		this.protocol = wifiUri.getFragment();
+		this.protocol = Integer.parseInt(wifiUri.getFragment());
 	}
 
-	public String getProtocol() {
+	public int getProtocol() {
 		return protocol;
 	}
 
@@ -75,7 +75,7 @@ public class WifiModel {
 	}
 
 	public String toWifiUri() {
-		return String
-				.format(WifiUtil.WIFI_URI_SCHEME, SSID, password, protocol);
+		return String.format(WifiUtil.WIFI_URI_SCHEME, SSID, password,
+				protocol);
 	}
 }

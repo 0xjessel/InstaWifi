@@ -1,6 +1,5 @@
 package net.jessechen.instawifi.util;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.jessechen.instawifi.models.WifiModel;
@@ -22,20 +21,13 @@ import com.google.zxing.qrcode.QRCodeWriter;
 public class WifiUtil {
 	public static String WIFI_URI_SCHEME = "wifi://%s/%s#%s";
 	public static String QR_WIFI_URI_SCHEME = "WIFI:T:%s;S:%s;P:%s;;";
-	public static String WEP = "WEP";
-	public static String WPA = "WPA";
-	public static String OPEN = "OPEN";
+	public static final int OPEN = 0;
+	public static final int WEP = 1;
+	public static final int WPA = 2;
 	public static String NOPASS = "nopass";
 
-	@SuppressWarnings("serial")
-	public static ArrayList<String> protocols = new ArrayList<String>() {
-		{
-			add(WEP);
-			add(WPA);
-			add(OPEN);
-		}
-	};
-	
+	public static final String[] protocolStrings = { "OPEN", "WEP", "WPA" };
+
 	public enum ConnectToWifiResult {
 		ALREADY_CONNECTED, INVALID_NET_ID, NETWORK_ENABLED, NETWORK_ENABLED_FAILED
 	}
@@ -43,30 +35,32 @@ public class WifiUtil {
 	public enum QrImageSize {
 		SMALL, LARGE
 	}
-	
+
 	private static final String TAG = WifiUtil.class.getSimpleName();
 
-	public static Bitmap generateQrCode(String ssid, String protocol,
-			String password, QrImageSize size) {
+	public static Bitmap generateQrCode(WifiModel wm, QrImageSize size) {
 		// padding around the edges
 		final int MAGIC_NUMBER = (size.equals(QrImageSize.SMALL)) ? 30 : 60;
-        // height and width of qr code
+		// height and width of qr code
 		final int DIMENSION = (size.equals(QrImageSize.SMALL)) ? 350 : 700;
-		
+
 		QRCodeWriter writer = new QRCodeWriter();
 		BitMatrix bm = null;
 		try {
 			// a little hack for open network configurations s.t. barcode
 			// scanner is happy
-			if (protocol.equals(OPEN)) {
-				protocol = NOPASS;
+			String textProtocol = "";
+			if (wm.getProtocol() == OPEN) {
+				textProtocol = NOPASS;
+			} else {
+				textProtocol = WifiUtil.protocolStrings[wm.getProtocol()];
 			}
 
-			bm = writer
-					.encode(String.format(QR_WIFI_URI_SCHEME, protocol, ssid,
-							password), BarcodeFormat.QR_CODE, DIMENSION, DIMENSION);
+			bm = writer.encode(
+					String.format(QR_WIFI_URI_SCHEME, textProtocol,
+							wm.getSSID(), wm.getPassword()),
+					BarcodeFormat.QR_CODE, DIMENSION, DIMENSION);
 		} catch (WriterException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -76,7 +70,8 @@ public class WifiUtil {
 		for (int y = MAGIC_NUMBER; y < bm.getHeight() - MAGIC_NUMBER; y++) {
 			int offset = (y - MAGIC_NUMBER) * width;
 			for (int x = MAGIC_NUMBER; x < bm.getWidth() - MAGIC_NUMBER; x++) {
-				pixels[offset + (x - MAGIC_NUMBER)] = bm.get(x, y) ? Color.BLACK : Color.WHITE;
+				pixels[offset + (x - MAGIC_NUMBER)] = bm.get(x, y) ? Color.BLACK
+						: Color.WHITE;
 			}
 		}
 
@@ -91,7 +86,7 @@ public class WifiUtil {
 		WifiConfiguration wc = getCurrentWifiConfig(c);
 		if (wc != null) {
 			String ssid = wc.SSID;
-			String protocol = getWifiProtocol(wc);
+			int protocol = getWifiProtocol(wc);
 			String password = null;
 			try {
 				password = RootUtil.getWifiPassword(c, ssid);
@@ -109,7 +104,7 @@ public class WifiUtil {
 	public static WifiModel getWifiModelFromUri(Context c, Uri wifiUri) {
 		String ssid = wifiUri.getHost();
 		String pw = wifiUri.getLastPathSegment();
-		String protocol = wifiUri.getFragment();
+		int protocol = Integer.parseInt(wifiUri.getFragment());
 		if (ssid == null) {
 			Log.e(TAG, "SSID is null when getting wifi model");
 			Util.shortToast(c, "ERROR: SSID is null");
@@ -122,7 +117,7 @@ public class WifiUtil {
 			throws PasswordNotFoundException {
 		SSID = Util.concatQuotes(SSID);
 		WifiConfiguration wc = getWifiConfig(c, SSID);
-		String protocol = getWifiProtocol(wc);
+		int protocol = getWifiProtocol(wc);
 		String pw = RootUtil.getWifiPassword(c, SSID);
 		if (SSID == null) {
 			Log.e(TAG, "SSID is null when getting wifi model");
@@ -174,7 +169,7 @@ public class WifiUtil {
 		return null;
 	}
 
-	public static String getWifiProtocol(WifiConfiguration wc) {
+	public static int getWifiProtocol(WifiConfiguration wc) {
 		if (wc.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WPA_PSK)) {
 			// WPA/WPA2 network, key is in wfc.preSharedKey
 			return WPA;
@@ -187,7 +182,7 @@ public class WifiUtil {
 		} else {
 			// not one of the above..
 			Log.e(TAG, "Did not find wifi protocol");
-			return null;
+			return -1;
 		}
 	}
 
@@ -219,12 +214,28 @@ public class WifiUtil {
 	public static boolean isValidWifiModel(WifiModel wm) {
 		if (wm == null) {
 			return false;
-		} else if (wm.getPassword() == null && wm.getProtocol() == null
+		} else if (wm.getPassword() == null && wm.getProtocol() != -1
 				&& wm.getSSID() == null) {
 			return false;
 		} else {
 			return true;
 		}
+	}
+
+	public static boolean isValidSsid(String ssid) {
+		return ssid.length() > 0;
+	}
+
+	public static boolean isValidPassword(int protocol, String password) {
+		switch (protocol) {
+		case OPEN:
+			return true;
+		case WEP:
+			return password.length() > 0;
+		case WPA:
+			return password.length() >= 8;
+		}
+		return false;
 	}
 
 	public static ConnectToWifiResult connectToWifi(Context c,
@@ -285,7 +296,7 @@ public class WifiUtil {
 			return -1;
 		}
 
-		String protocol = mWifiModel.getProtocol();
+		int protocol = mWifiModel.getProtocol();
 		String pw = mWifiModel.getPassword();
 
 		WifiConfiguration mWc = new WifiConfiguration();
@@ -293,9 +304,7 @@ public class WifiUtil {
 		mWc.status = WifiConfiguration.Status.DISABLED;
 
 		// http://kmansoft.com/2010/04/08/adding-wifi-networks-to-known-list/
-		if (protocol.equals(OPEN)) {
-			// TODO: something like this, need to check open network configs
-
+		if (protocol == OPEN) {
 			mWc.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
 			mWc.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
 			mWc.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
@@ -308,7 +317,7 @@ public class WifiUtil {
 			mWc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
 			mWc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
 			mWc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
-		} else if (protocol.equals(WEP)) {
+		} else if (protocol == WEP) {
 			// WEP network configs
 
 			mWc.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
@@ -330,7 +339,7 @@ public class WifiUtil {
 				mWc.wepKeys[0] = Util.concatQuotes(pw);
 			}
 			mWc.wepTxKeyIndex = 0;
-		} else if (protocol.equals(WPA)) {
+		} else if (protocol == WPA) {
 			// WPA network configs
 
 			mWc.allowedProtocols.set(WifiConfiguration.Protocol.RSN);

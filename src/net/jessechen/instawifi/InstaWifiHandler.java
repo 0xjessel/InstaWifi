@@ -146,8 +146,7 @@ public class InstaWifiHandler extends Activity implements
 		WifiModel currentWifi = WifiUtil.getCurrentWifiModel(this);
 
 		if (WifiUtil.isValidWifiModel(currentWifi)) {
-			return NfcUtil.getWifiAsNdef(currentWifi.getSSID(),
-					currentWifi.getPassword(), currentWifi.getProtocol());
+			return NfcUtil.getWifiAsNdef(currentWifi);
 		} else {
 			Util.longToast(this,
 					"Error: could not get current wifi configurations");

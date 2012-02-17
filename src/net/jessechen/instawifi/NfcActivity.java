@@ -9,7 +9,6 @@ import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
 import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,6 +25,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,7 +67,7 @@ public class NfcActivity extends FragmentActivity implements
 	TextView passwordText;
 	EditText passwordField;
 	CheckBox revealPassword;
-	
+
 	Intent picIntent;
 
 	private static final String TAG = NfcActivity.class.getSimpleName();
@@ -112,7 +113,7 @@ public class NfcActivity extends FragmentActivity implements
 		}
 
 		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, WifiUtil.protocols);
+				android.R.layout.simple_spinner_item, WifiUtil.protocolStrings);
 		protocolAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		protocolSpinner.setAdapter(protocolAdapter);
@@ -129,7 +130,7 @@ public class NfcActivity extends FragmentActivity implements
 
 		picIntent = new Intent(android.content.Intent.ACTION_SEND);
 		picIntent.setType("image/*");
-		
+
 		if (Util.hasNfc(mNfcAdapter)) {
 			boolean nfcTabSelected = true;
 			// restore QR tab if it was previously selected
@@ -197,11 +198,10 @@ public class NfcActivity extends FragmentActivity implements
 
 			WifiModel selectedWifi = new WifiModel(networkSpinner
 					.getSelectedItem().toString(), passwordField.getText()
-					.toString(), protocolSpinner.getSelectedItem().toString());
+					.toString(), protocolSpinner.getSelectedItemPosition());
 			if (WifiUtil.isValidWifiModel(selectedWifi)) {
-				NdefMessage wifiNdefMessage = NfcUtil.getWifiAsNdef(
-						selectedWifi.getSSID(), selectedWifi.getPassword(),
-						selectedWifi.getProtocol());
+				NdefMessage wifiNdefMessage = NfcUtil
+						.getWifiAsNdef(selectedWifi);
 				if (NfcUtil.writeTag(wifiNdefMessage, detectedTag, this)) {
 					Log.i(TAG, String.format("successfully wrote %s to tag",
 							selectedWifi.getTrimmedSSID()));
@@ -223,9 +223,10 @@ public class NfcActivity extends FragmentActivity implements
 		inflater.inflate(R.menu.nfc, menu);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-//			ShareActionProvider mShareActionProvider = (ShareActionProvider) menu
-//					.findItem(R.id.share).getActionProvider();
-//			mShareActionProvider.setShareIntent(picIntent);
+			// ShareActionProvider mShareActionProvider = (ShareActionProvider)
+			// menu
+			// .findItem(R.id.share).getActionProvider();
+			// mShareActionProvider.setShareIntent(picIntent);
 		}
 		return true;
 	}
@@ -238,7 +239,7 @@ public class NfcActivity extends FragmentActivity implements
 			}
 			break;
 		case R.id.add:
-			buildDialog().show();
+			showDialog();
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -309,15 +310,14 @@ public class NfcActivity extends FragmentActivity implements
 			}
 
 			if (selectedNetwork != null) {
-				protocolSpinner.setSelection(WifiUtil.protocols
-						.indexOf(selectedNetwork.getProtocol()));
+				protocolSpinner.setSelection(selectedNetwork.getProtocol());
+
 				passwordField.setText(Util.stripQuotes(selectedNetwork
 						.getPassword()));
 			}
 			break;
 		case R.id.protocol_spinner:
-			if (protocolSpinner.getSelectedItem().toString()
-					.equals(WifiUtil.OPEN)) {
+			if (protocolSpinner.getSelectedItemPosition() == WifiUtil.OPEN) {
 				passwordText.setVisibility(View.GONE);
 				passwordField.setVisibility(View.GONE);
 				revealPassword.setVisibility(View.GONE);
@@ -334,7 +334,7 @@ public class NfcActivity extends FragmentActivity implements
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
 
-	private Dialog buildDialog() {
+	private void showDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 		LayoutInflater inflator = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -342,44 +342,37 @@ public class NfcActivity extends FragmentActivity implements
 				(ViewGroup) findViewById(R.id.dialog_root));
 		builder.setView(layout);
 
-		final EditText newSsidField = (EditText) layout
-				.findViewById(R.id.add_network_ssid);
 		final Spinner newProtocolSpinner = (Spinner) layout
 				.findViewById(R.id.add_protocol_spinner);
 		final TextView newPasswordText = (TextView) layout
 				.findViewById(R.id.add_password_text);
+		final EditText newSsidField = (EditText) layout
+				.findViewById(R.id.add_network_ssid);
 		final EditText newPasswordField = (EditText) layout
 				.findViewById(R.id.add_network_password);
+		final CheckBox newRevealPassword = (CheckBox) layout
+				.findViewById(R.id.add_password_checkbox);
+
+		newRevealPassword
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						if (isChecked) {
+							newPasswordField.setTransformationMethod(null);
+						} else {
+							newPasswordField
+									.setTransformationMethod(new PasswordTransformationMethod());
+						}
+					}
+				});
 
 		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, WifiUtil.protocols);
+				android.R.layout.simple_spinner_item, WifiUtil.protocolStrings);
 		protocolAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		newProtocolSpinner.setAdapter(protocolAdapter);
-		newProtocolSpinner
-				.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-					@Override
-					public void onItemSelected(AdapterView<?> parent,
-							View view, int pos, long id) {
-						switch (parent.getId()) {
-						case R.id.add_protocol_spinner:
-							if (newProtocolSpinner.getSelectedItem().toString()
-									.equals(WifiUtil.OPEN)) {
-								newPasswordField.setVisibility(View.GONE);
-								newPasswordText.setVisibility(View.GONE);
-							} else {
-								newPasswordField.setVisibility(View.VISIBLE);
-								newPasswordText.setVisibility(View.VISIBLE);
-							}
-							break;
-						}
-					}
-
-					@Override
-					public void onNothingSelected(AdapterView<?> arg0) {
-					}
-				});
 
 		builder.setTitle(getString(R.string.add_new_network));
 
@@ -391,7 +384,7 @@ public class NfcActivity extends FragmentActivity implements
 						WifiModel newWifiModel = new WifiModel(newSsidField
 								.getText().toString(), newPasswordField
 								.getText().toString(), newProtocolSpinner
-								.getSelectedItem().toString());
+								.getSelectedItemPosition());
 
 						WifiManager mWm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
@@ -433,6 +426,92 @@ public class NfcActivity extends FragmentActivity implements
 
 		builder.setNegativeButton(getString(R.string.cancel), null);
 
-		return builder.create();
+		final AlertDialog alertDialog = builder.create();
+		alertDialog.show();
+
+		final Button addButton = alertDialog
+				.getButton(DialogInterface.BUTTON_POSITIVE);
+		addButton.setEnabled(false);
+
+		final EditTextWatcher mWatcher = new EditTextWatcher(alertDialog,
+				newSsidField, newPasswordField, newProtocolSpinner);
+		newSsidField.removeTextChangedListener(mWatcher);
+		newPasswordField.removeTextChangedListener(mWatcher);
+		newSsidField.addTextChangedListener(mWatcher);
+		newPasswordField.addTextChangedListener(mWatcher);
+
+		newProtocolSpinner
+				.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+					@Override
+					public void onItemSelected(AdapterView<?> parent,
+							View view, int pos, long id) {
+						switch (parent.getId()) {
+						case R.id.add_protocol_spinner:
+							// update positive button state when changing
+							// protocol
+							onEditTextChanged(newSsidField, newPasswordField,
+									newProtocolSpinner, addButton);
+
+							if (newProtocolSpinner.getSelectedItemPosition() == WifiUtil.OPEN) {
+								newPasswordField.setVisibility(View.GONE);
+								newPasswordText.setVisibility(View.GONE);
+								newRevealPassword.setVisibility(View.GONE);
+							} else {
+								newPasswordField.setVisibility(View.VISIBLE);
+								newPasswordText.setVisibility(View.VISIBLE);
+								newRevealPassword.setVisibility(View.VISIBLE);
+							}
+							break;
+						}
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> arg0) {
+					}
+				});
+	}
+
+	private void onEditTextChanged(EditText mSsidField, EditText mPwField,
+			Spinner mProtocolSpinner, Button mAddButton) {
+		String ssid = mSsidField.getText().toString();
+		String password = mPwField.getText().toString();
+		if (WifiUtil.isValidSsid(ssid)
+				&& WifiUtil.isValidPassword(
+						mProtocolSpinner.getSelectedItemPosition(), password)) {
+			mAddButton.setEnabled(true);
+		} else {
+			mAddButton.setEnabled(false);
+		}
+	}
+
+	private class EditTextWatcher implements TextWatcher {
+		Button mAddButton;
+		EditText mSsidField, mPwField;
+		Spinner mProtocolSpinner;
+
+		public EditTextWatcher(AlertDialog dialog, EditText field1,
+				EditText field2, Spinner protocolSpinner) {
+			mAddButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+			mSsidField = field1;
+			mPwField = field2;
+			mProtocolSpinner = protocolSpinner;
+		}
+
+		@Override
+		public void afterTextChanged(Editable s) {
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			onEditTextChanged(mSsidField, mPwField, mProtocolSpinner,
+					mAddButton);
+		}
 	}
 }

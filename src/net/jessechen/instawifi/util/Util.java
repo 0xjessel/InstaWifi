@@ -81,7 +81,7 @@ public class Util {
 
 	public static void initProtocolSpinner(Context c, Spinner spinner) {
 		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(c,
-				android.R.layout.simple_spinner_item, WifiUtil.protocols);
+				android.R.layout.simple_spinner_item, WifiUtil.protocolStrings);
 		protocolAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(protocolAdapter);
