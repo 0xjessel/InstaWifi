@@ -117,7 +117,7 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 				.getSelectedItem().toString(), passwordField_qr.getText()
 				.toString(), protocolSpinner_qr.getSelectedItem().toString());
 
-		return WifiUtil.generateQrImage(selectedWifi.getSSID(),
+		return WifiUtil.generateQrCode(selectedWifi.getSSID(),
 				selectedWifi.getProtocol(), selectedWifi.getPassword(), size);
 	}
 
@@ -149,26 +149,28 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 	}
 
 	private void shareQrImage() {
+		String selectedSsid = networkSpinner_qr.getSelectedItem().toString();
 		Bitmap bitmap = getSelectedWifiBitmap(QrImageSize.LARGE);
 		File file = null;
 		String filename = "";
 		try {
-			filename = getQrFilename(networkSpinner_qr.getSelectedItem()
-					.toString());
+			filename = getQrFilename(selectedSsid);
 			file = new File(Environment.getExternalStorageDirectory()
 					.toString(), filename);
-			
+
 			FileOutputStream fos = new FileOutputStream(file);
 			bitmap.compress(CompressFormat.JPEG, 100, fos);
-			
+
 			fos.flush();
 			fos.close();
 
-			Intent picIntent = Util.buildQrShareIntent(file);
-			startActivity(Intent.createChooser(picIntent, "Share QR Image via"));
+			Intent picIntent = Util.buildQrShareIntent(getActivity(), file,
+					selectedSsid);
+			startActivity(Intent.createChooser(picIntent, String.format(
+					getString(R.string.qr_share_dialog_title), selectedSsid)));
 		} catch (Exception e) {
 			e.printStackTrace();
-			Log.e(TAG, "failed to generate qr image file");
+			Log.e(TAG, getString(R.string.qr_share_fail));
 			Util.shortToast(getActivity(), getString(R.string.qr_share_fail));
 		}
 	}

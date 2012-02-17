@@ -30,5 +30,8 @@
     <string name="success">success</string>
     <string name="add_new_network_fail">failed to add network</string>
     <string name="qr_share_fail">Failed to generate QR image :(</string>
+    <string name="qr_share_subject">WiFi QR code for %1$s</string>
+    <string name="qr_share_text">Scan this QR code to connect to the WiFi network \&quot;%1$s\&quot;.  For Android devices, use the \&quot;Barcode Scanner\&quot; app.\n\nThis QR image was shared by InstaWifi.</string>
+    <string name="qr_share_dialog_title">Share QR Code for \&quot;%1$s\&quot; via</string>
 
 </resources>

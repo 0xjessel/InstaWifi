@@ -2,6 +2,8 @@ package net.jessechen.instawifi.util;
 
 import java.io.File;
 
+import net.jessechen.instawifi.R;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -22,7 +24,7 @@ public class Util {
 	public static void longToast(Context c, String msg) {
 		Toast.makeText(c, msg, Toast.LENGTH_LONG).show();
 	}
-	
+
 	public static boolean hasNfc(NfcAdapter adapter) {
 		if (adapter != null && adapter.isEnabled()) {
 			return true;
@@ -30,7 +32,7 @@ public class Util {
 			return false;
 		}
 	}
-	
+
 	public static boolean hasQuotes(String s) {
 		if (s.startsWith("\"") && s.endsWith("\"")) {
 			return true;
@@ -38,7 +40,7 @@ public class Util {
 			return false;
 		}
 	}
-	
+
 	public static String concatQuotes(String s) {
 		return "\"".concat(s).concat("\"");
 	}
@@ -65,8 +67,9 @@ public class Util {
 		}
 		return true;
 	}
-	
-	public static void initNetworkSpinner(Context c, Spinner spinner, OnItemSelectedListener listener) {
+
+	public static void initNetworkSpinner(Context c, Spinner spinner,
+			OnItemSelectedListener listener) {
 		String[] networks = WifiUtil.getConfiguredNetworks(c);
 		ArrayAdapter<String> networkAdapter = new ArrayAdapter<String>(c,
 				android.R.layout.simple_spinner_item, networks);
@@ -75,7 +78,7 @@ public class Util {
 		spinner.setAdapter(networkAdapter);
 		spinner.setOnItemSelectedListener(listener);
 	}
-	
+
 	public static void initProtocolSpinner(Context c, Spinner spinner) {
 		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(c,
 				android.R.layout.simple_spinner_item, WifiUtil.protocols);
@@ -84,12 +87,17 @@ public class Util {
 		spinner.setAdapter(protocolAdapter);
 	}
 
-	public static Intent buildQrShareIntent(File file) {
+	public static Intent buildQrShareIntent(Context c, File file, String ssid) {
 		Intent picIntent = new Intent(Intent.ACTION_SEND);
 		picIntent.setType("image/*");
 		Uri uri = Uri.fromFile(file);
 		picIntent.putExtra(Intent.EXTRA_STREAM, uri);
-		
+
+		picIntent.putExtra(Intent.EXTRA_SUBJECT,
+				String.format(c.getString(R.string.qr_share_subject), ssid));
+		picIntent.putExtra(Intent.EXTRA_TEXT,
+				String.format(c.getString(R.string.qr_share_text), ssid));
+
 		return picIntent;
 	}
 }

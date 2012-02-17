@@ -46,10 +46,12 @@ public class WifiUtil {
 	
 	private static final String TAG = WifiUtil.class.getSimpleName();
 
-	public static Bitmap generateQrImage(String ssid, String protocol,
+	public static Bitmap generateQrCode(String ssid, String protocol,
 			String password, QrImageSize size) {
+		// padding around the edges
 		final int MAGIC_NUMBER = (size.equals(QrImageSize.SMALL)) ? 30 : 60;
-        final int DIMENSION = (size.equals(QrImageSize.SMALL)) ? 350 : 700;
+        // height and width of qr code
+		final int DIMENSION = (size.equals(QrImageSize.SMALL)) ? 350 : 700;
 		
 		QRCodeWriter writer = new QRCodeWriter();
 		BitMatrix bm = null;
