@@ -237,11 +237,13 @@ public class NfcActivity extends FragmentActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.share:
-			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			}
 			break;
 		case R.id.add:
-			showDialog();
+			if (WifiUtil.isWifiEnabled(this)) {
+				showDialog();
+			} else {
+				showWifiDialog();
+			}
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -336,6 +338,24 @@ public class NfcActivity extends FragmentActivity implements
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
 
+	private void showWifiDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		builder.setTitle(R.string.enable_wifi_for_add_title);
+		builder.setMessage(R.string.enable_wifi_for_add);
+		builder.setPositiveButton(R.string.enable, new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO: need a progress indicator or something
+				WifiUtil.enableWifiAndWait(getApplicationContext());
+				showDialog();
+			}
+		});
+		builder.setNegativeButton(R.string.cancel, null);
+		builder.create().show();
+	}
+
 	private void showDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -378,55 +398,52 @@ public class NfcActivity extends FragmentActivity implements
 
 		builder.setTitle(getString(R.string.add_new_network));
 
-		builder.setPositiveButton(getString(R.string.add_button),
-				new OnClickListener() {
+		builder.setPositiveButton(R.string.add_button, new OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						WifiModel newWifiModel = new WifiModel(newSsidField
-								.getText().toString(), newPasswordField
-								.getText().toString(), newProtocolSpinner
-								.getSelectedItemPosition());
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				WifiModel newWifiModel = new WifiModel(newSsidField.getText()
+						.toString(), newPasswordField.getText().toString(),
+						newProtocolSpinner.getSelectedItemPosition());
 
-						WifiManager mWm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+				WifiManager mWm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
-						int netId = WifiUtil.addWifiNetwork(
-								getApplicationContext(), newWifiModel, mWm);
-						if (netId != -1) {
-							String[] updatedNetworks = WifiUtil
-									.getConfiguredNetworks(getApplicationContext());
-							networkAdapter = new SpinnerArrayAdapter<String>(
-									getApplication(), updatedNetworks);
-							networkAdapter
-									.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-							networkSpinner.setAdapter(networkAdapter);
+				int netId = WifiUtil.addWifiNetwork(getApplicationContext(),
+						newWifiModel, mWm);
+				if (netId != -1) {
+					String[] updatedNetworks = WifiUtil
+							.getConfiguredNetworks(getApplicationContext());
+					networkAdapter = new SpinnerArrayAdapter<String>(
+							getApplication(), updatedNetworks);
+					networkAdapter
+							.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+					networkSpinner.setAdapter(networkAdapter);
 
-							// set spinner to the network just added
-							networkSpinner.setSelection(networkAdapter
-									.getCount() - 1);
+					// set spinner to the network just added
+					networkSpinner.setSelection(networkAdapter.getCount() - 1);
 
-							QrFragment qrFrag = (QrFragment) getSupportFragmentManager()
-									.findFragmentById(R.id.fragment);
-							if (qrFrag != null) {
-								qrFrag.updateNetworkSpinner(networkAdapter);
-							}
-
-							Util.shortToast(getApplicationContext(),
-									getString(R.string.success));
-						} else {
-							Util.shortToast(getApplicationContext(),
-									getString(R.string.add_new_network_fail));
-						}
-
-						// hide keyboard after closing dialog
-						InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-						inputManager.hideSoftInputFromWindow(
-								newSsidField.getWindowToken(),
-								InputMethodManager.HIDE_NOT_ALWAYS);
+					QrFragment qrFrag = (QrFragment) getSupportFragmentManager()
+							.findFragmentById(R.id.fragment);
+					if (qrFrag != null) {
+						qrFrag.updateNetworkSpinner(networkAdapter);
 					}
-				});
 
-		builder.setNegativeButton(getString(R.string.cancel), null);
+					Util.shortToast(getApplicationContext(),
+							getString(R.string.success));
+				} else {
+					Util.shortToast(getApplicationContext(),
+							getString(R.string.add_new_network_fail));
+				}
+
+				// hide keyboard after closing dialog
+				InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				inputManager.hideSoftInputFromWindow(
+						newSsidField.getWindowToken(),
+						InputMethodManager.HIDE_NOT_ALWAYS);
+			}
+		});
+
+		builder.setNegativeButton(R.string.cancel, null);
 
 		final AlertDialog alertDialog = builder.create();
 		alertDialog.show();

@@ -186,6 +186,16 @@ public class WifiUtil {
 		}
 	}
 
+	public static boolean isWifiEnabled(Context c) {
+		WifiManager mWm = (WifiManager) c
+				.getSystemService(Context.WIFI_SERVICE);
+
+		if (mWm != null && mWm.isWifiEnabled()) {
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * validate incoming URI to ensure that it matches this app's URI schema
 	 * 
@@ -242,16 +252,9 @@ public class WifiUtil {
 			WifiModel mWifiModel) {
 		WifiManager mWm = (WifiManager) c
 				.getSystemService(Context.WIFI_SERVICE);
-		if (!mWm.isWifiEnabled()) {
-			mWm.setWifiEnabled(true);
-			Log.i(TAG, "wifi was disabled, enabling wifi");
-		}
 
-		// waiting until wifi is enabled
-		while (!mWm.isWifiEnabled()) {
-			// do nothing, this can be bad
-			Log.v(TAG, "waiting for wifi to be enabled..");
-		}
+		// enable wifi if disabled, wait until finished
+		enableWifiAndWait(c);
 
 		int netId = getNetworkId(c, mWifiModel, mWm);
 		if (netId == -1) {
@@ -262,24 +265,19 @@ public class WifiUtil {
 							mWifiModel.getSSID()));
 			return ConnectToWifiResult.ALREADY_CONNECTED;
 		}
-		return connectToNetwork(netId, mWm);
+		return connectToNetwork(c, netId);
 	}
 
-	public static ConnectToWifiResult connectToNetwork(int netId,
-			WifiManager mWm) {
+	public static ConnectToWifiResult connectToNetwork(Context c, int netId) {
+		WifiManager mWm = (WifiManager) c
+				.getSystemService(Context.WIFI_SERVICE);
+
 		if (netId == -1) {
 			return ConnectToWifiResult.INVALID_NET_ID;
 		}
 
-		if (!mWm.isWifiEnabled()) {
-			mWm.setWifiEnabled(true);
-
-			// waiting until wifi is enabled
-			while (!mWm.isWifiEnabled()) {
-				// do nothing, this can be bad
-				Log.v(TAG, "waiting for wifi to be enabled..");
-			}
-		}
+		// connect to wifi if disabled, wait until finished
+		enableWifiAndWait(c);
 
 		if (mWm.enableNetwork(netId, true)) {
 			Log.i(TAG, "attemping to connect to network..");
@@ -371,6 +369,34 @@ public class WifiUtil {
 			return -1;
 		}
 		return getNetworkId(c, mWifiModel, mWm);
+	}
+
+	public static boolean enableWifi(Context c) {
+		WifiManager mWm = (WifiManager) c
+				.getSystemService(Context.WIFI_SERVICE);
+
+		if (!mWm.isWifiEnabled()) {
+			Log.i(TAG, "wifi was disabled, enabling wifi");
+			return mWm.setWifiEnabled(true);
+		} else {
+			return true;
+		}
+	}
+
+	public static boolean enableWifiAndWait(Context c) {
+		WifiManager mWm = (WifiManager) c
+				.getSystemService(Context.WIFI_SERVICE);
+
+		if (enableWifi(c)) {
+			// TODO: maybe poll every second instead and timeout after 3
+			// seconds?
+			while (!mWm.isWifiEnabled()) {
+				// waiting
+				Log.v(TAG, "waiting for wifi to be enabled..");
+			}
+			return true;
+		}
+		return false;
 	}
 
 	public static int getNetworkId(Context c, WifiModel mWifiModel,

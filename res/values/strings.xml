@@ -33,5 +33,8 @@
     <string name="qr_share_subject">WiFi QR code for %1$s</string>
     <string name="qr_share_text">Scan this QR code to connect to the WiFi network \&quot;%1$s\&quot;.  For Android devices, use the \&quot;Barcode Scanner\&quot; app.\n\nThis QR image was shared by InstaWifi.</string>
     <string name="qr_share_dialog_title">Share QR Code for \&quot;%1$s\&quot; via</string>
+    <string name="enable_wifi_for_add">To add a new network, WiFi needs to be on.</string>
+    <string name="enable">Enable</string>
+    <string name="enable_wifi_for_add_title">Enable WiFi</string>
 
 </resources>
