@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
@@ -254,7 +256,7 @@ public class WifiUtil {
 				.getSystemService(Context.WIFI_SERVICE);
 
 		// enable wifi if disabled, wait until finished
-		enableWifiAndWait(c);
+		enableWifiAndWait(mWm);
 
 		int netId = getNetworkId(c, mWifiModel, mWm);
 		if (netId == -1) {
@@ -277,7 +279,7 @@ public class WifiUtil {
 		}
 
 		// connect to wifi if disabled, wait until finished
-		enableWifiAndWait(c);
+		enableWifiAndWait(mWm);
 
 		if (mWm.enableNetwork(netId, true)) {
 			Log.i(TAG, "attemping to connect to network..");
@@ -371,10 +373,7 @@ public class WifiUtil {
 		return getNetworkId(c, mWifiModel, mWm);
 	}
 
-	public static boolean enableWifi(Context c) {
-		WifiManager mWm = (WifiManager) c
-				.getSystemService(Context.WIFI_SERVICE);
-
+	public static boolean enableWifi(WifiManager mWm) {
 		if (!mWm.isWifiEnabled()) {
 			Log.i(TAG, "wifi was disabled, enabling wifi");
 			return mWm.setWifiEnabled(true);
@@ -383,11 +382,9 @@ public class WifiUtil {
 		}
 	}
 
-	public static boolean enableWifiAndWait(Context c) {
-		WifiManager mWm = (WifiManager) c
-				.getSystemService(Context.WIFI_SERVICE);
-
-		if (enableWifi(c)) {
+	// use this for non-ui operations instead of EnableWifiTask
+	public static boolean enableWifiAndWait(WifiManager mWm) {
+		if (enableWifi(mWm)) {
 			// TODO: maybe poll every second instead and timeout after 3
 			// seconds?
 			while (!mWm.isWifiEnabled()) {
@@ -397,6 +394,55 @@ public class WifiUtil {
 			return true;
 		}
 		return false;
+	}
+
+	// use this for front-facing enabling wifi tasks
+	public static class EnableWifiTask extends AsyncTask<Void, Void, Void> {
+		Context c;
+		ProgressDialog pd;
+		EnableWifiTaskListener listener;
+
+		public EnableWifiTask(Context c, EnableWifiTaskListener listener) {
+			this.c = c;
+			this.listener = listener;
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			WifiManager mWm = (WifiManager) c
+					.getSystemService(Context.WIFI_SERVICE);
+
+			enableWifiAndWait(mWm);
+
+			return null;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			pd = ProgressDialog.show(c, "WiFi", "Turning on..", true);
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			pd.dismiss();
+			if (listener != null) {
+				listener.OnWifiEnabled();
+			}
+		}
+	}
+
+	public static class EnableWifiTaskBundle {
+		Context c;
+		EnableWifiTaskListener listener;
+
+		public EnableWifiTaskBundle(Context c, EnableWifiTaskListener listener) {
+			this.c = c;
+			this.listener = listener;
+		}
+	}
+
+	public static interface EnableWifiTaskListener {
+		void OnWifiEnabled();
 	}
 
 	public static int getNetworkId(Context c, WifiModel mWifiModel,

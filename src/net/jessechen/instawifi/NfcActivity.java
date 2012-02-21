@@ -49,7 +49,7 @@ import android.widget.TextView;
  * TODO: droid x edittext is see through
  * TODO: droid x text is white
  * TODO: share app
- * TODO: seems to not be able to add network if not connected to wifi (look at the android source code)
+ * TODO: parse wifipw.txt for networks instead of using the wifi api
  * TODO: ridiculously long ssid breaks gridlayout, maybe when getting configured networks, automatically clip long ssids and append '...'
  * TODO: write to tag button
  */
@@ -83,57 +83,59 @@ public class NfcActivity extends FragmentActivity implements
 		mNfcAdapter = manager.getDefaultAdapter();
 
 		setContentView(R.layout.nfc_activity);
+		if (Util.hasNfc(mNfcAdapter)) {
 
-		writeTag = (Button) findViewById(R.id.b_write_tag);
-		networkSpinner = (Spinner) findViewById(R.id.network_spinner);
-		protocolSpinner = (Spinner) findViewById(R.id.protocol_spinner);
-		passwordText = (TextView) findViewById(R.id.password_text);
-		passwordField = (EditText) findViewById(R.id.password_field);
-		revealPassword = (CheckBox) findViewById(R.id.password_checkbox);
+			writeTag = (Button) findViewById(R.id.b_write_tag);
+			networkSpinner = (Spinner) findViewById(R.id.network_spinner);
+			protocolSpinner = (Spinner) findViewById(R.id.protocol_spinner);
+			passwordText = (TextView) findViewById(R.id.password_text);
+			passwordField = (EditText) findViewById(R.id.password_field);
+			revealPassword = (CheckBox) findViewById(R.id.password_checkbox);
 
-		writeTag.setOnClickListener(mTagWriter);
+			writeTag.setOnClickListener(mTagWriter);
 
-		revealPassword.setOnCheckedChangeListener(mCheckBoxListener);
+			revealPassword.setOnCheckedChangeListener(mCheckBoxListener);
 
-		// TODO: stupid getconfigurednetworks sometimes returns empty..
-		String[] networks = WifiUtil.getConfiguredNetworks(this);
-		networkAdapter = new SpinnerArrayAdapter<String>(getApplication(),
-				networks);
-		networkAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		networkSpinner.setAdapter(networkAdapter);
-		networkSpinner.setOnItemSelectedListener(this);
+			// TODO: stupid getconfigurednetworks sometimes returns empty..
+			String[] networks = WifiUtil.getConfiguredNetworks(this);
+			networkAdapter = new SpinnerArrayAdapter<String>(getApplication(),
+					networks);
+			networkAdapter
+					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			networkSpinner.setAdapter(networkAdapter);
+			networkSpinner.setOnItemSelectedListener(this);
 
-		// set spinner to current wifi config if connected to wifi
-		WifiModel curWifi = WifiUtil.getCurrentWifiModel(this);
-		if (curWifi != null) {
-			for (int i = 0; i < networks.length; i++) {
-				if (curWifi.getTrimmedSSID().equals(networks[i])) {
-					networkSpinner.setSelection(i);
+			// set spinner to current wifi config if connected to wifi
+			WifiModel curWifi = WifiUtil.getCurrentWifiModel(this);
+			if (curWifi != null) {
+				for (int i = 0; i < networks.length; i++) {
+					if (curWifi.getTrimmedSSID().equals(networks[i])) {
+						networkSpinner.setSelection(i);
+					}
 				}
 			}
-		}
 
-		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, WifiUtil.protocolStrings);
-		protocolAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		protocolSpinner.setAdapter(protocolAdapter);
-		protocolSpinner.setOnItemSelectedListener(this);
+			ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(
+					this, android.R.layout.simple_spinner_item,
+					WifiUtil.protocolStrings);
+			protocolAdapter
+					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			protocolSpinner.setAdapter(protocolAdapter);
+			protocolSpinner.setOnItemSelectedListener(this);
 
-		// Handle all of our received NFC intents in this activity.
-		mNfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
-				getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+			// Handle all of our received NFC intents in this activity.
+			mNfcPendingIntent = PendingIntent.getActivity(this, 0,
+					new Intent(this, getClass())
+							.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
-		// Intent filters for writing to a tag
-		IntentFilter tagDetected = new IntentFilter(
-				NfcAdapter.ACTION_TAG_DISCOVERED);
-		mWriteTagFilters = new IntentFilter[] { tagDetected };
+			// Intent filters for writing to a tag
+			IntentFilter tagDetected = new IntentFilter(
+					NfcAdapter.ACTION_TAG_DISCOVERED);
+			mWriteTagFilters = new IntentFilter[] { tagDetected };
 
-		picIntent = new Intent(android.content.Intent.ACTION_SEND);
-		picIntent.setType("image/*");
+			picIntent = new Intent(android.content.Intent.ACTION_SEND);
+			picIntent.setType("image/*");
 
-		if (Util.hasNfc(mNfcAdapter)) {
 			boolean nfcTabSelected = true;
 			// restore QR tab if it was previously selected
 			if (savedInstanceState != null
@@ -339,19 +341,27 @@ public class NfcActivity extends FragmentActivity implements
 	}
 
 	private void showWifiDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		
+		final Context c = this;
+		AlertDialog.Builder builder = new AlertDialog.Builder(c);
+
 		builder.setTitle(R.string.enable_wifi_for_add_title);
 		builder.setMessage(R.string.enable_wifi_for_add);
 		builder.setPositiveButton(R.string.enable, new OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO: need a progress indicator or something
-				WifiUtil.enableWifiAndWait(getApplicationContext());
-				showDialog();
+				new WifiUtil.EnableWifiTask(c,
+						new WifiUtil.EnableWifiTaskListener() {
+
+							@Override
+							public void OnWifiEnabled() {
+								showDialog();
+							}
+						}).execute();
 			}
 		});
+
 		builder.setNegativeButton(R.string.cancel, null);
 		builder.create().show();
 	}
@@ -417,10 +427,14 @@ public class NfcActivity extends FragmentActivity implements
 							getApplication(), updatedNetworks);
 					networkAdapter
 							.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					networkSpinner.setAdapter(networkAdapter);
 
-					// set spinner to the network just added
-					networkSpinner.setSelection(networkAdapter.getCount() - 1);
+					// update NfcActivity's spinner iff device does not have NFC
+					if (Util.hasNfc(mNfcAdapter)) {
+						networkSpinner.setAdapter(networkAdapter);
+
+						// set spinner to the network just added
+						networkSpinner.setSelection(networkAdapter.getCount() - 1);
+					}
 
 					QrFragment qrFrag = (QrFragment) getSupportFragmentManager()
 							.findFragmentById(R.id.fragment);
@@ -443,7 +457,17 @@ public class NfcActivity extends FragmentActivity implements
 			}
 		});
 
-		builder.setNegativeButton(R.string.cancel, null);
+		builder.setNegativeButton(R.string.cancel, new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// hide keyboard after closing dialog
+				InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				inputManager.hideSoftInputFromWindow(
+						newSsidField.getWindowToken(),
+						InputMethodManager.HIDE_NOT_ALWAYS);
+			}
+		});
 
 		final AlertDialog alertDialog = builder.create();
 		alertDialog.show();
