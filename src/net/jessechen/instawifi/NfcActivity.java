@@ -18,10 +18,16 @@ import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
+import android.nfc.NfcEvent;
 import android.nfc.NfcManager;
 import android.nfc.Tag;
+import android.nfc.NfcAdapter.CreateNdefMessageCallback;
+import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
@@ -60,6 +66,7 @@ public class NfcActivity extends FragmentActivity implements
 	NfcAdapter mNfcAdapter;
 	PendingIntent mNfcPendingIntent;
 	IntentFilter[] mWriteTagFilters;
+	final int MESSAGE_SENT = 1;
 
 	AlertDialog alert;
 	Button writeTag;
@@ -79,11 +86,19 @@ public class NfcActivity extends FragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		NfcManager manager = (NfcManager) getSystemService(Context.NFC_SERVICE);
-		mNfcAdapter = manager.getDefaultAdapter();
+		mNfcAdapter = ((NfcManager) getSystemService(Context.NFC_SERVICE))
+				.getDefaultAdapter();
 
 		setContentView(R.layout.nfc_activity);
+
 		if (Util.hasNfc(mNfcAdapter)) {
+			// Android Beam setup
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+				mNfcAdapter.setNdefPushMessageCallback(
+						beamPushSetup(), this);
+				mNfcAdapter.setOnNdefPushCompleteCallback(
+						beamPushCompleteSetup(), this);
+			}
 
 			writeTag = (Button) findViewById(R.id.b_write_tag);
 			networkSpinner = (Spinner) findViewById(R.id.network_spinner);
@@ -176,10 +191,20 @@ public class NfcActivity extends FragmentActivity implements
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		// Check to see that the Activity started due to an Android Beam
+		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
+			processIntent(getIntent());
+		}
+	}
+
+	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
 		android.support.v4.app.ActionBar.Tab curTab = getSupportActionBar()
 				.getSelectedTab();
 
+		// save tab state to restore
 		if (curTab != null) {
 			outState.putString("tab", curTab.getText().toString());
 		}
@@ -196,6 +221,9 @@ public class NfcActivity extends FragmentActivity implements
 
 	@Override
 	protected void onNewIntent(Intent intent) {
+		// onResume gets called after this to handle the intent
+		setIntent(intent);
+
 		if (mWriteMode
 				&& NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
 			Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -221,6 +249,63 @@ public class NfcActivity extends FragmentActivity implements
 		}
 	}
 
+	protected void processIntent(Intent intent) {
+		Parcelable[] rawMsgs = intent
+				.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+		// only one message sent during the beam
+		NdefMessage msg = (NdefMessage) rawMsgs[0];
+		// record 0 contains the MIME type, record 1 is the AAR, if present
+		String wifiString = new String(msg.getRecords()[0].getPayload());
+		WifiUtil.processWifiUri(this, wifiString);
+	}
+
+	private CreateNdefMessageCallback beamPushSetup() {
+		return new NfcAdapter.CreateNdefMessageCallback() {
+
+			@Override
+			public NdefMessage createNdefMessage(NfcEvent event) {
+				WifiModel selectedWifi = new WifiModel(networkSpinner
+						.getSelectedItem().toString(), passwordField.getText()
+						.toString(), protocolSpinner.getSelectedItemPosition());
+
+				if (WifiUtil.isValidWifiModel(selectedWifi)) {
+					return NfcUtil.getWifiAsNdef(selectedWifi);
+				} else {
+					Util.longToast(getApplicationContext(),
+							"Error: could not get current wifi configurations");
+					return null;
+				}
+			}
+		};
+	}
+
+	private OnNdefPushCompleteCallback beamPushCompleteSetup() {
+		return new NfcAdapter.OnNdefPushCompleteCallback() {
+
+			@Override
+			public void onNdefPushComplete(NfcEvent event) {
+				// A handler is needed to send messages to the activity when
+				// this
+				// callback occurs, because it happens from a binder thread
+				mHandler.obtainMessage(MESSAGE_SENT).sendToTarget();
+			}
+		};
+	}
+
+	/** This handler receives a message from onNdefPushComplete */
+	private final Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case MESSAGE_SENT:
+				Util.longToast(getApplicationContext(),
+						getString(R.string.beam_success));
+				// TODO: add finish();?
+				break;
+			}
+		}
+	};
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -242,7 +327,7 @@ public class NfcActivity extends FragmentActivity implements
 			break;
 		case R.id.add:
 			if (WifiUtil.isWifiEnabled(this)) {
-				showDialog();
+				showAddNetworkDialog();
 			} else {
 				showWifiDialog();
 			}
@@ -340,6 +425,7 @@ public class NfcActivity extends FragmentActivity implements
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
 
+	// dialog to prompt user to enable wifi
 	private void showWifiDialog() {
 		final Context c = this;
 		AlertDialog.Builder builder = new AlertDialog.Builder(c);
@@ -350,13 +436,12 @@ public class NfcActivity extends FragmentActivity implements
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO: need a progress indicator or something
 				new WifiUtil.EnableWifiTask(c,
 						new WifiUtil.EnableWifiTaskListener() {
 
 							@Override
 							public void OnWifiEnabled() {
-								showDialog();
+								showAddNetworkDialog();
 							}
 						}).execute();
 			}
@@ -366,7 +451,8 @@ public class NfcActivity extends FragmentActivity implements
 		builder.create().show();
 	}
 
-	private void showDialog() {
+	// add network dialog
+	private void showAddNetworkDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 		LayoutInflater inflator = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);

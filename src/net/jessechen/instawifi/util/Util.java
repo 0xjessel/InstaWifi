@@ -42,11 +42,11 @@ public class Util {
 	}
 
 	public static String concatQuotes(String s) {
-		return "\"".concat(s).concat("\"");
+		return (s != null) ? "\"".concat(s).concat("\"") : "";
 	}
 
 	public static String stripQuotes(String s) {
-		return s.replaceAll("^\"|\"$", "");
+		return (s != null) ? s.replaceAll("^\"|\"$", "") : "";
 	}
 
 	public static boolean isHexString(String s) {

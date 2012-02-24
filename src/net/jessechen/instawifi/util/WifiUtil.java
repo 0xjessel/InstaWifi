@@ -2,8 +2,10 @@ package net.jessechen.instawifi.util;
 
 import java.util.List;
 
+import net.jessechen.instawifi.R;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -474,5 +476,35 @@ public class WifiUtil {
 		}
 
 		return toReturn;
+	}
+
+	public static void processWifiUri(Activity a, String wifiString) {
+		WifiModel receivedWifiModel = new WifiModel(wifiString);
+		if (WifiUtil.isValidWifiModel(receivedWifiModel)) {
+			switch (connectToWifi(a, receivedWifiModel)) {
+			case ALREADY_CONNECTED:
+
+				Log.i(TAG, "tried to connect to current network");
+				Util.shortToast(a, String.format(
+						a.getString(R.string.wifi_connect_already),
+						receivedWifiModel.getTrimmedSSID()));
+
+				a.finish();
+				break;
+			case INVALID_NET_ID:
+
+				Log.e(TAG,
+						"failed to connect to wifi, invalid wifi configs probably");
+				Util.shortToast(a, a.getString(R.string.invalid_wifi_sticker));
+
+				a.finish();
+				break;
+			default:
+				break;
+			}
+		} else {
+			Log.e(TAG, "invalid wifi model when processing wifi URI");
+			Util.shortToast(a, a.getString(R.string.invalid_wifi_sticker));
+		}
 	}
 }
