@@ -94,8 +94,7 @@ public class NfcActivity extends FragmentActivity implements
 		if (Util.hasNfc(mNfcAdapter)) {
 			// Android Beam setup
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-				mNfcAdapter.setNdefPushMessageCallback(
-						beamPushSetup(), this);
+				mNfcAdapter.setNdefPushMessageCallback(beamPushSetup(), this);
 				mNfcAdapter.setOnNdefPushCompleteCallback(
 						beamPushCompleteSetup(), this);
 			}
@@ -329,7 +328,15 @@ public class NfcActivity extends FragmentActivity implements
 			if (WifiUtil.isWifiEnabled(this)) {
 				showAddNetworkDialog();
 			} else {
-				showWifiDialog();
+				WifiUtil.showWifiDialog(this,
+						getString(R.string.show_wifi_msg_add),
+						new WifiUtil.EnableWifiTaskListener() {
+
+							@Override
+							public void OnWifiEnabled() {
+								showAddNetworkDialog();
+							}
+						}, null);
 			}
 			break;
 		}
@@ -423,32 +430,6 @@ public class NfcActivity extends FragmentActivity implements
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
-	}
-
-	// dialog to prompt user to enable wifi
-	private void showWifiDialog() {
-		final Context c = this;
-		AlertDialog.Builder builder = new AlertDialog.Builder(c);
-
-		builder.setTitle(R.string.enable_wifi_for_add_title);
-		builder.setMessage(R.string.enable_wifi_for_add);
-		builder.setPositiveButton(R.string.enable, new OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				new WifiUtil.EnableWifiTask(c,
-						new WifiUtil.EnableWifiTaskListener() {
-
-							@Override
-							public void OnWifiEnabled() {
-								showAddNetworkDialog();
-							}
-						}).execute();
-			}
-		});
-
-		builder.setNegativeButton(R.string.cancel, null);
-		builder.create().show();
 	}
 
 	// add network dialog

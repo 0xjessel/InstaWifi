@@ -34,11 +34,7 @@ public class Util {
 	}
 
 	public static boolean hasQuotes(String s) {
-		if (s.startsWith("\"") && s.endsWith("\"")) {
-			return true;
-		} else {
-			return false;
-		}
+		return (s != null) ? (s.startsWith("\"") && s.endsWith("\"")) : false;
 	}
 
 	public static String concatQuotes(String s) {

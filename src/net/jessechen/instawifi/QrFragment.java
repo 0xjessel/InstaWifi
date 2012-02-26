@@ -3,11 +3,15 @@ package net.jessechen.instawifi;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import com.gridlayout.GridLayout;
+
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
 import net.jessechen.instawifi.util.WifiUtil.QrImageSize;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -34,10 +38,12 @@ import android.widget.TextView;
 
 /*
  * TODO: update qrImage when changing password field
+ * TODO: re-enable widgets when wifi is enabled
  */
 public class QrFragment extends Fragment implements OnItemSelectedListener {
 	private static final String TAG = QrFragment.class.getSimpleName();
 
+	GridLayout gridlayout_qr;
 	Button qwriteTag_qr;
 	Spinner networkSpinner_qr;
 	Spinner protocolSpinner_qr;
@@ -68,6 +74,7 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 		picIntent = new Intent(android.content.Intent.ACTION_SEND);
 		picIntent.setType("image/*");
 
+		gridlayout_qr = (GridLayout) view.findViewById(R.id.gridlayout_qr);
 		networkSpinner_qr = (Spinner) view
 				.findViewById(R.id.network_spinner_qr);
 		protocolSpinner_qr = (Spinner) view
@@ -76,9 +83,40 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 		passwordField_qr = (EditText) view.findViewById(R.id.password_field_qr);
 		revealPassword_qr = (CheckBox) view
 				.findViewById(R.id.password_checkbox_qr);
+		qrImage = (ImageView) view.findViewById(R.id.qr_code_image);
 
 		revealPassword_qr.setOnCheckedChangeListener(mCheckBoxListener);
 
+		// test point to see if device can get configured networks w/o wifi
+		final String[] test = WifiUtil.getConfiguredNetworks(getActivity());
+		if (test.length == 0) {
+			WifiUtil.showWifiDialog(getActivity(),
+					getString(R.string.show_wifi_msg_default),
+					new WifiUtil.EnableWifiTaskListener() {
+
+						@Override
+						public void OnWifiEnabled() {
+							setupView();
+						}
+					}, new OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// don't want to enable wifi? DISABLE EVERYTHING.
+							networkSpinner_qr.setEnabled(false);
+							protocolSpinner_qr.setEnabled(false);
+							passwordField_qr.setEnabled(false);
+							revealPassword_qr.setEnabled(false);
+						}
+					});
+		} else {
+			setupView();
+		}
+
+		return view;
+	}
+
+	private void setupView() {
 		String[] networks = WifiUtil.getConfiguredNetworks(getActivity());
 		ArrayAdapter<String> networkAdapter = new ArrayAdapter<String>(
 				getActivity(), android.R.layout.simple_spinner_item, networks);
@@ -106,18 +144,30 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 		protocolSpinner_qr.setAdapter(protocolAdapter);
 		protocolSpinner_qr.setOnItemSelectedListener(this);
 
-		qrImage = (ImageView) view.findViewById(R.id.qr_code_image);
-		qrImage.setImageBitmap(getSelectedWifiBitmap(QrImageSize.SMALL));
-
-		return view;
+		Bitmap bmp = getSelectedWifiBitmap(QrImageSize.SMALL);
+		if (bmp != null) {
+			// remove default placeholder
+			qrImage.setBackgroundDrawable(null);
+			// set qr code
+			qrImage.setImageBitmap(bmp);
+		}
 	}
 
 	private Bitmap getSelectedWifiBitmap(QrImageSize size) {
-		WifiModel selectedWifi = new WifiModel(networkSpinner_qr
-				.getSelectedItem().toString(), passwordField_qr.getText()
-				.toString(), protocolSpinner_qr.getSelectedItemPosition());
+		// spinner adapters might be null, which throws a npe
+		try {
+			String ssid = networkSpinner_qr.getSelectedItem().toString();
+			String pw = passwordField_qr.getText().toString();
+			int protocol = protocolSpinner_qr.getSelectedItemPosition();
 
-		return WifiUtil.generateQrCode(selectedWifi, size);
+			WifiModel selectedWifi = new WifiModel(ssid, pw, protocol);
+
+			return WifiUtil.generateQrCode(selectedWifi, size);
+		} catch (Exception e) {
+			Log.e(TAG,
+					"spinner adapters are null, wifi is probably not enabled");
+		}
+		return null;
 	}
 
 	private OnCheckedChangeListener mCheckBoxListener = new CompoundButton.OnCheckedChangeListener() {
@@ -148,8 +198,16 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 	}
 
 	private void shareQrImage() {
-		String selectedSsid = networkSpinner_qr.getSelectedItem().toString();
-		Bitmap bitmap = getSelectedWifiBitmap(QrImageSize.LARGE);
+		String selectedSsid = "";
+		Bitmap bitmap = null;
+		try {
+			// spinner might be empty
+			selectedSsid = networkSpinner_qr.getSelectedItem().toString();
+			bitmap = getSelectedWifiBitmap(QrImageSize.LARGE);
+		} catch (Exception e) {
+			// do nothing
+		}
+
 		File file = null;
 		String filename = "";
 		try {

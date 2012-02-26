@@ -6,8 +6,11 @@ import net.jessechen.instawifi.R;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -47,6 +50,10 @@ public class WifiUtil {
 		final int MAGIC_NUMBER = (size.equals(QrImageSize.SMALL)) ? 30 : 60;
 		// height and width of qr code
 		final int DIMENSION = (size.equals(QrImageSize.SMALL)) ? 350 : 700;
+
+		if (!WifiUtil.isValidWifiModel(wm)) {
+			return null;
+		}
 
 		QRCodeWriter writer = new QRCodeWriter();
 		BitMatrix bm = null;
@@ -476,6 +483,26 @@ public class WifiUtil {
 		}
 
 		return toReturn;
+	}
+
+	// dialog to prompt user to enable wifi
+	public static void showWifiDialog(final Context c, String msg,
+			final EnableWifiTaskListener listener,
+			OnClickListener onCancelListener) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(c);
+
+		builder.setTitle(R.string.show_wifi_add_title);
+		builder.setMessage(msg);
+		builder.setPositiveButton(R.string.enable, new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				new WifiUtil.EnableWifiTask(c, listener).execute();
+			}
+		});
+
+		builder.setNegativeButton(R.string.cancel, onCancelListener);
+		builder.create().show();
 	}
 
 	public static void processWifiUri(Activity a, String wifiString) {
