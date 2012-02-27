@@ -1,5 +1,6 @@
 package net.jessechen.instawifi;
 
+import net.jessechen.instawifi.misc.AddNetworkDialog;
 import net.jessechen.instawifi.misc.MyTabListener;
 import net.jessechen.instawifi.misc.SpinnerArrayAdapter;
 import net.jessechen.instawifi.models.WifiModel;
@@ -12,17 +13,15 @@ import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.wifi.WifiManager;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
+import android.nfc.NfcAdapter.CreateNdefMessageCallback;
+import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
 import android.nfc.NfcEvent;
 import android.nfc.NfcManager;
 import android.nfc.Tag;
-import android.nfc.NfcAdapter.CreateNdefMessageCallback;
-import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,15 +30,10 @@ import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -326,7 +320,7 @@ public class NfcActivity extends FragmentActivity implements
 			break;
 		case R.id.add:
 			if (WifiUtil.isWifiEnabled(this)) {
-				showAddNetworkDialog();
+				AddNetworkDialog.show(this, mNfcAdapter, networkSpinner);
 			} else {
 				WifiUtil.showWifiDialog(this,
 						getString(R.string.show_wifi_msg_add),
@@ -334,7 +328,8 @@ public class NfcActivity extends FragmentActivity implements
 
 							@Override
 							public void OnWifiEnabled() {
-								showAddNetworkDialog();
+								AddNetworkDialog.show(NfcActivity.this,
+										mNfcAdapter, networkSpinner);
 							}
 						}, null);
 			}
@@ -430,198 +425,5 @@ public class NfcActivity extends FragmentActivity implements
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
-	}
-
-	// add network dialog
-	private void showAddNetworkDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-		LayoutInflater inflator = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-		View layout = inflator.inflate(R.layout.add_dialog,
-				(ViewGroup) findViewById(R.id.dialog_root));
-		builder.setView(layout);
-
-		final Spinner newProtocolSpinner = (Spinner) layout
-				.findViewById(R.id.add_protocol_spinner);
-		final TextView newPasswordText = (TextView) layout
-				.findViewById(R.id.add_password_text);
-		final EditText newSsidField = (EditText) layout
-				.findViewById(R.id.add_network_ssid);
-		final EditText newPasswordField = (EditText) layout
-				.findViewById(R.id.add_network_password);
-		final CheckBox newRevealPassword = (CheckBox) layout
-				.findViewById(R.id.add_password_checkbox);
-
-		newRevealPassword
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
-						if (isChecked) {
-							newPasswordField.setTransformationMethod(null);
-						} else {
-							newPasswordField
-									.setTransformationMethod(new PasswordTransformationMethod());
-						}
-					}
-				});
-
-		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, WifiUtil.protocolStrings);
-		protocolAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		newProtocolSpinner.setAdapter(protocolAdapter);
-
-		builder.setTitle(getString(R.string.add_new_network));
-
-		builder.setPositiveButton(R.string.add_button, new OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				WifiModel newWifiModel = new WifiModel(newSsidField.getText()
-						.toString(), newPasswordField.getText().toString(),
-						newProtocolSpinner.getSelectedItemPosition());
-
-				WifiManager mWm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-
-				int netId = WifiUtil.addWifiNetwork(getApplicationContext(),
-						newWifiModel, mWm);
-				if (netId != -1) {
-					String[] updatedNetworks = WifiUtil
-							.getConfiguredNetworks(getApplicationContext());
-					networkAdapter = new SpinnerArrayAdapter<String>(
-							getApplication(), updatedNetworks);
-					networkAdapter
-							.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-					// update NfcActivity's spinner iff device does not have NFC
-					if (Util.hasNfc(mNfcAdapter)) {
-						networkSpinner.setAdapter(networkAdapter);
-
-						// set spinner to the network just added
-						networkSpinner.setSelection(networkAdapter.getCount() - 1);
-					}
-
-					QrFragment qrFrag = (QrFragment) getSupportFragmentManager()
-							.findFragmentById(R.id.fragment);
-					if (qrFrag != null) {
-						qrFrag.updateNetworkSpinner(networkAdapter);
-					}
-
-					Util.shortToast(getApplicationContext(),
-							getString(R.string.success));
-				} else {
-					Util.shortToast(getApplicationContext(),
-							getString(R.string.add_new_network_fail));
-				}
-
-				// hide keyboard after closing dialog
-				InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				inputManager.hideSoftInputFromWindow(
-						newSsidField.getWindowToken(),
-						InputMethodManager.HIDE_NOT_ALWAYS);
-			}
-		});
-
-		builder.setNegativeButton(R.string.cancel, new OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// hide keyboard after closing dialog
-				InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				inputManager.hideSoftInputFromWindow(
-						newSsidField.getWindowToken(),
-						InputMethodManager.HIDE_NOT_ALWAYS);
-			}
-		});
-
-		final AlertDialog alertDialog = builder.create();
-		alertDialog.show();
-
-		final Button addButton = alertDialog
-				.getButton(DialogInterface.BUTTON_POSITIVE);
-		addButton.setEnabled(false);
-
-		final EditTextWatcher mWatcher = new EditTextWatcher(alertDialog,
-				newSsidField, newPasswordField, newProtocolSpinner);
-		newSsidField.removeTextChangedListener(mWatcher);
-		newPasswordField.removeTextChangedListener(mWatcher);
-		newSsidField.addTextChangedListener(mWatcher);
-		newPasswordField.addTextChangedListener(mWatcher);
-
-		newProtocolSpinner
-				.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-					@Override
-					public void onItemSelected(AdapterView<?> parent,
-							View view, int pos, long id) {
-						switch (parent.getId()) {
-						case R.id.add_protocol_spinner:
-							// update positive button state when changing
-							// protocol
-							onEditTextChanged(newSsidField, newPasswordField,
-									newProtocolSpinner, addButton);
-
-							if (newProtocolSpinner.getSelectedItemPosition() == WifiUtil.OPEN) {
-								newPasswordField.setVisibility(View.GONE);
-								newPasswordText.setVisibility(View.GONE);
-								newRevealPassword.setVisibility(View.GONE);
-							} else {
-								newPasswordField.setVisibility(View.VISIBLE);
-								newPasswordText.setVisibility(View.VISIBLE);
-								newRevealPassword.setVisibility(View.VISIBLE);
-							}
-							break;
-						}
-					}
-
-					@Override
-					public void onNothingSelected(AdapterView<?> arg0) {
-					}
-				});
-	}
-
-	private void onEditTextChanged(EditText mSsidField, EditText mPwField,
-			Spinner mProtocolSpinner, Button mAddButton) {
-		String ssid = mSsidField.getText().toString();
-		String password = mPwField.getText().toString();
-		if (WifiUtil.isValidSsid(ssid)
-				&& WifiUtil.isValidPassword(
-						mProtocolSpinner.getSelectedItemPosition(), password)) {
-			mAddButton.setEnabled(true);
-		} else {
-			mAddButton.setEnabled(false);
-		}
-	}
-
-	private class EditTextWatcher implements TextWatcher {
-		Button mAddButton;
-		EditText mSsidField, mPwField;
-		Spinner mProtocolSpinner;
-
-		public EditTextWatcher(AlertDialog dialog, EditText field1,
-				EditText field2, Spinner protocolSpinner) {
-			mAddButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-			mSsidField = field1;
-			mPwField = field2;
-			mProtocolSpinner = protocolSpinner;
-		}
-
-		@Override
-		public void afterTextChanged(Editable s) {
-		}
-
-		@Override
-		public void beforeTextChanged(CharSequence s, int start, int count,
-				int after) {
-		}
-
-		@Override
-		public void onTextChanged(CharSequence s, int start, int before,
-				int count) {
-			onEditTextChanged(mSsidField, mPwField, mProtocolSpinner,
-					mAddButton);
-		}
 	}
 }

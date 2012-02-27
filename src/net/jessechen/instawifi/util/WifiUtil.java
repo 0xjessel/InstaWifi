@@ -11,8 +11,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
@@ -20,18 +18,12 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
-
 public class WifiUtil {
 	public static String WIFI_URI_SCHEME = "wifi://%s/%s#%s";
 	public static String QR_WIFI_URI_SCHEME = "WIFI:T:%s;S:%s;P:%s;;";
 	public static final int OPEN = 0;
 	public static final int WEP = 1;
 	public static final int WPA = 2;
-	public static String NOPASS = "nopass";
 
 	public static final String[] protocolStrings = { "OPEN", "WEP", "WPA" };
 
@@ -39,59 +31,7 @@ public class WifiUtil {
 		ALREADY_CONNECTED, INVALID_NET_ID, NETWORK_ENABLED, NETWORK_ENABLED_FAILED
 	}
 
-	public enum QrImageSize {
-		SMALL, LARGE
-	}
-
 	private static final String TAG = WifiUtil.class.getSimpleName();
-
-	public static Bitmap generateQrCode(WifiModel wm, QrImageSize size) {
-		// padding around the edges
-		final int MAGIC_NUMBER = (size.equals(QrImageSize.SMALL)) ? 30 : 60;
-		// height and width of qr code
-		final int DIMENSION = (size.equals(QrImageSize.SMALL)) ? 350 : 700;
-
-		if (!WifiUtil.isValidWifiModel(wm)) {
-			return null;
-		}
-
-		QRCodeWriter writer = new QRCodeWriter();
-		BitMatrix bm = null;
-		try {
-			// a little hack for open network configurations s.t. barcode
-			// scanner is happy
-			String textProtocol = "";
-			if (wm.getProtocol() == OPEN) {
-				textProtocol = NOPASS;
-			} else {
-				textProtocol = WifiUtil.protocolStrings[wm.getProtocol()];
-			}
-
-			bm = writer.encode(
-					String.format(QR_WIFI_URI_SCHEME, textProtocol,
-							wm.getSSID(), wm.getPassword()),
-					BarcodeFormat.QR_CODE, DIMENSION, DIMENSION);
-		} catch (WriterException e) {
-			e.printStackTrace();
-		}
-
-		int width = bm.getWidth() - (MAGIC_NUMBER * 2);
-		int height = bm.getHeight() - (MAGIC_NUMBER * 2);
-		int[] pixels = new int[width * height];
-		for (int y = MAGIC_NUMBER; y < bm.getHeight() - MAGIC_NUMBER; y++) {
-			int offset = (y - MAGIC_NUMBER) * width;
-			for (int x = MAGIC_NUMBER; x < bm.getWidth() - MAGIC_NUMBER; x++) {
-				pixels[offset + (x - MAGIC_NUMBER)] = bm.get(x, y) ? Color.BLACK
-						: Color.WHITE;
-			}
-		}
-
-		Bitmap bitmap = Bitmap.createBitmap(width, height,
-				Bitmap.Config.ARGB_8888);
-		bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-
-		return bitmap;
-	}
 
 	public static WifiModel getCurrentWifiModel(Context c) {
 		WifiConfiguration wc = getCurrentWifiConfig(c);

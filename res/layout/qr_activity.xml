@@ -71,7 +71,7 @@
                 android:text="@string/password_text"
                 android:textSize="16dp" />
 
-            <EditText
+            <net.jessechen.instawifi.misc.PasswordEditText
                 android:id="@+id/password_field_qr"
                 android:layout_margin="4dp"
                 android:ems="7"

@@ -3,7 +3,6 @@ package net.jessechen.instawifi.util;
 import java.io.File;
 
 import net.jessechen.instawifi.R;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
