@@ -1,6 +1,8 @@
 package net.jessechen.instawifi.misc;
 
 import net.jessechen.instawifi.QrFragment;
+import net.jessechen.instawifi.R;
+import net.jessechen.instawifi.util.Util;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -52,6 +54,7 @@ public class PasswordEditText extends EditText {
 				InputMethodManager.HIDE_NOT_ALWAYS);
 		
 		Log.i(TAG, "done with pw changes, redrawing qr image");
+		Util.shortToast(c, c.getString(R.string.updated_qr_code));
 		
 		QrFragment.setQrImage();
 	}

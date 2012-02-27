@@ -38,5 +38,6 @@
     
     
     <string name="show_wifi_msg_default">This app requires WiFi to work.</string>
+    <string name="updated_qr_code">QR code updated!</string>
 
 </resources>
