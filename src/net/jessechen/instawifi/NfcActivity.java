@@ -1,5 +1,7 @@
 package net.jessechen.instawifi;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import net.jessechen.instawifi.misc.AddNetworkDialog;
 import net.jessechen.instawifi.misc.MyTabListener;
 import net.jessechen.instawifi.misc.SpinnerArrayAdapter;
@@ -52,6 +54,7 @@ import com.actionbarsherlock.view.MenuItem;
  * TODO: share app
  * TODO: parse wifipw.txt for networks instead of using the wifi api
  * TODO: ridiculously long ssid breaks gridlayout, maybe when getting configured networks, automatically clip long ssids and append '...'
+ * TODO: generate qr image in bg thread, add some loading indicator
  * TODO: write to tag button
  */
 public class NfcActivity extends SherlockFragmentActivity implements
@@ -85,6 +88,8 @@ public class NfcActivity extends SherlockFragmentActivity implements
 				.getDefaultAdapter();
 
 		setContentView(R.layout.nfc_activity);
+
+		BugSenseHandler.setup(this, "5dfdfe33");
 
 		if (Util.hasNfc(mNfcAdapter)) {
 			// Android Beam setup
