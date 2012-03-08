@@ -17,8 +17,6 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItem;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -37,13 +35,16 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.MenuItem;
 import com.gridlayout.GridLayout;
 
 /*
  * TODO: update qrImage when changing password field
  * TODO: re-enable widgets when wifi is enabled
  */
-public class QrFragment extends Fragment implements OnItemSelectedListener {
+public class QrFragment extends SherlockFragment implements
+		OnItemSelectedListener {
 	private static final String TAG = QrFragment.class.getSimpleName();
 
 	GridLayout gridlayout_qr;
@@ -149,7 +150,7 @@ public class QrFragment extends Fragment implements OnItemSelectedListener {
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		protocolSpinner_qr.setAdapter(protocolAdapter);
 		protocolSpinner_qr.setOnItemSelectedListener(this);
-		
+
 		setQrImage();
 	}
 

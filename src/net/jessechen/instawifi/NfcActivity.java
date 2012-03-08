@@ -27,12 +27,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.Menu;
-import android.support.v4.view.MenuItem;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -45,6 +41,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
 /* 
  * TODO: droid x edittext is see through
  * TODO: droid x text is white
@@ -53,7 +54,7 @@ import android.widget.TextView;
  * TODO: ridiculously long ssid breaks gridlayout, maybe when getting configured networks, automatically clip long ssids and append '...'
  * TODO: write to tag button
  */
-public class NfcActivity extends FragmentActivity implements
+public class NfcActivity extends SherlockFragmentActivity implements
 		OnItemSelectedListener {
 	boolean mWriteMode = false;
 
@@ -152,7 +153,7 @@ public class NfcActivity extends FragmentActivity implements
 				nfcTabSelected = false;
 			}
 
-			android.support.v4.app.ActionBar bar = getSupportActionBar();
+			com.actionbarsherlock.app.ActionBar bar = getSupportActionBar();
 			bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 			bar.addTab(
@@ -194,7 +195,7 @@ public class NfcActivity extends FragmentActivity implements
 
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
-		android.support.v4.app.ActionBar.Tab curTab = getSupportActionBar()
+		Tab curTab = getSupportActionBar()
 				.getSelectedTab();
 
 		// save tab state to restore
@@ -301,8 +302,7 @@ public class NfcActivity extends FragmentActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.nfc, menu);
+		getSupportMenuInflater().inflate(R.menu.nfc, menu);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			// ShareActionProvider mShareActionProvider = (ShareActionProvider)

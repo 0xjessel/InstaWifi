@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.InstaWifi" parent="Theme.Sherlock"></style>
+    <style name="Theme.InstaWifi" parent="Theme.Sherlock.Light.DarkActionBar"></style>
 
     <style name="white_inset_shadow" parent="@android:style/TextAppearance">
         <item name="android:shadowColor">#FFF</item>
