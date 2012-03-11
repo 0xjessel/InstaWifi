@@ -17,6 +17,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 
 public class WifiUtil {
 	public static String WIFI_URI_SCHEME = "wifi://%s/%s#%s";
@@ -441,7 +442,6 @@ public class WifiUtil {
 			}
 		});
 
-		builder.setNegativeButton(R.string.cancel, onCancelListener);
 		builder.create().show();
 	}
 

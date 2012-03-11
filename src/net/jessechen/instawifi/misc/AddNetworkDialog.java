@@ -36,7 +36,8 @@ public class AddNetworkDialog {
 	public static void show(final FragmentActivity a,
 			final NfcAdapter mNfcAdapter, final Spinner networkSpinner) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(a);
-
+		builder.setInverseBackgroundForced(true);
+		
 		LayoutInflater inflator = (LayoutInflater) a
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View layout = inflator.inflate(R.layout.add_dialog,

@@ -62,7 +62,7 @@ public class RootUtil {
 
 		String password = getPasswordFromFile(c, SSID);
 		
-		if (password == null && ExecuteAsRootBase.canRunRootCommands()) {
+		if (password == null) {
 			// get wifi_supplicant.conf file if rooted
 			ExecuteAsRootBase su = new ExecuteAsRootBase() {
 
