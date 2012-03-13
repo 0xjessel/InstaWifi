@@ -38,8 +38,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.gridlayout.GridLayout;
 
 /*
- * TODO: update qrImage when changing password field
- * TODO: re-enable widgets when wifi is enabled
+ * TODO: handle case when wifi is disabled and user changes spinner
  */
 public class QrFragment extends SherlockFragment implements
 		OnItemSelectedListener {

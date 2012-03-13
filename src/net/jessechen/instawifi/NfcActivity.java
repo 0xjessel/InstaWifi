@@ -47,8 +47,6 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 /* 
- * TODO: droid x edittext is see through
- * TODO: droid x text is white
  * TODO: share app
  * TODO: parse wifipw.txt for networks instead of using the wifi api
  * TODO: ridiculously long ssid breaks gridlayout, maybe when getting configured networks, automatically clip long ssids and append '...'

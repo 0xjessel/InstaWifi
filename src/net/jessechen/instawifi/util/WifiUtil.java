@@ -38,6 +38,7 @@ public class WifiUtil {
 		if (wc != null) {
 			String ssid = wc.SSID;
 			int protocol = getWifiProtocol(wc);
+			protocol = (protocol == -1) ? 1 : protocol;
 			String password = null;
 			try {
 				password = RootUtil.getWifiPassword(c, ssid);
@@ -69,6 +70,7 @@ public class WifiUtil {
 		SSID = Util.concatQuotes(SSID);
 		WifiConfiguration wc = getWifiConfig(c, SSID);
 		int protocol = getWifiProtocol(wc);
+		protocol = (protocol == -1) ? 1 : protocol;
 		String pw = RootUtil.getWifiPassword(c, SSID);
 		if (SSID == null) {
 			Log.e(TAG, "SSID is null when getting wifi model");
@@ -121,6 +123,11 @@ public class WifiUtil {
 	}
 
 	public static int getWifiProtocol(WifiConfiguration wc) {
+		if (wc == null) {
+			Log.e(TAG, "wc was null");
+			return -1;
+		}
+		
 		if (wc.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WPA_PSK)) {
 			// WPA/WPA2 network, key is in wfc.preSharedKey
 			return WPA;
