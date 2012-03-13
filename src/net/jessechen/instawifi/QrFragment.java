@@ -19,11 +19,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -88,7 +86,6 @@ public class QrFragment extends SherlockFragment implements
 		passwordField_qr = (PasswordEditText) view
 				.findViewById(R.id.password_field_qr);
 		passwordField_qr.init(getActivity().getApplicationContext(), qrImage);
-		passwordField_qr.setOnEditorActionListener(mOnEditorActionListener);
 		revealPassword_qr = (CheckBox) view
 				.findViewById(R.id.password_checkbox_qr);
 
@@ -153,19 +150,6 @@ public class QrFragment extends SherlockFragment implements
 
 		setQrImage();
 	}
-
-	private TextView.OnEditorActionListener mOnEditorActionListener = new TextView.OnEditorActionListener() {
-
-		@Override
-		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-			if (actionId == EditorInfo.IME_ACTION_DONE) {
-				PasswordEditText.PasswordEditTextFinishedCallback(
-						getActivity(), passwordField_qr, qrImage);
-				return true;
-			}
-			return false;
-		}
-	};
 
 	private OnCheckedChangeListener mCheckBoxListener = new CompoundButton.OnCheckedChangeListener() {
 

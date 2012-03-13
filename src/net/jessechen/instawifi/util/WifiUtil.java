@@ -17,7 +17,6 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 
 public class WifiUtil {
 	public static String WIFI_URI_SCHEME = "wifi://%s/%s#%s";
@@ -52,7 +51,7 @@ public class WifiUtil {
 			return null;
 		}
 	}
-
+	
 	public static WifiModel getWifiModelFromUri(Context c, Uri wifiUri) {
 		String ssid = wifiUri.getHost();
 		String pw = wifiUri.getLastPathSegment();
