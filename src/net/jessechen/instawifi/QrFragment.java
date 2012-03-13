@@ -37,9 +37,6 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.MenuItem;
 import com.gridlayout.GridLayout;
 
-/*
- * TODO: handle case when wifi is disabled and user changes spinner
- */
 public class QrFragment extends SherlockFragment implements
 		OnItemSelectedListener {
 	private static final String TAG = QrFragment.class.getSimpleName();
