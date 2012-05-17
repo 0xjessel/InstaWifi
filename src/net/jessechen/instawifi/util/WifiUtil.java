@@ -341,10 +341,8 @@ public class WifiUtil {
 	// use this for non-ui operations instead of EnableWifiTask
 	public static boolean enableWifiAndWait(WifiManager mWm) {
 		if (enableWifi(mWm)) {
-			// TODO: maybe poll every second instead and timeout after 3
-			// seconds?
 			while (!mWm.isWifiEnabled()) {
-				// waiting
+				// waiting on wifi
 				Log.v(TAG, "waiting for wifi to be enabled..");
 			}
 			return true;
