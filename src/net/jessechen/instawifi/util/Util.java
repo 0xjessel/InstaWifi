@@ -13,6 +13,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 public class Util {
+	public static final String bugsenseKey = "5dfdfe33";
+	
 	@SuppressWarnings("unused")
 	private static final String TAG = Util.class.getSimpleName();
 

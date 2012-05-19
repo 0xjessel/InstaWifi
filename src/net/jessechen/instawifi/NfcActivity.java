@@ -87,7 +87,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 
 		setContentView(R.layout.nfc_activity);
 
-		BugSenseHandler.setup(this, "5dfdfe33");
+		BugSenseHandler.setup(this, Util.bugsenseKey);
 
 		if (Util.hasNfc(mNfcAdapter)) {
 			// Android Beam setup
