@@ -66,7 +66,7 @@ public class QrUtil {
 	
 	public static String getQrFilename(String ssid) {
 		if (ssid != null) {
-			return "instawifi_" + ssid + "_qr.jpg";
+			return "InstaWifi" + ssid + " QR" + ".jpg";
 		} else {
 			throw new NullPointerException("null ssid");
 		}
