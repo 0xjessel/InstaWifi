@@ -16,7 +16,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -216,8 +215,7 @@ public class QrFragment extends SherlockFragment implements
 		String filename = "";
 		try {
 			filename = QrUtil.getQrFilename(selectedSsid);
-			file = new File(Environment.getExternalStorageDirectory()
-					.toString(), filename);
+			file = new File(getActivity().getExternalFilesDir(null), filename);
 
 			FileOutputStream fos = new FileOutputStream(file);
 			bitmap.compress(CompressFormat.JPEG, 100, fos);
