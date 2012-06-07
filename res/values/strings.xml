@@ -11,12 +11,12 @@
     <string name="tag_ndef_not_supported">Tag does not support NDEF</string>
     <string name="dialog_write_tag">Touch tag to write</string>
     <string name="nfc_not_available">NFC is not available</string>
-    <string name="beam_success">Wifi configuration successfully sent!</string>
+    <string name="beam_success">WiFi configuration successfully sent!</string>
     <string name="wifi_connect_success">Successfully connected to %1$s!</string>
-    <string name="wifi_connect_fail">Failed to connect to Wifi</string>
-    <string name="invalid_wifi_sticker">Wifi sticker data is invalid.  Please rewrite wifi sticker.</string>
+    <string name="wifi_connect_fail">Failed to connect to WiFi</string>
+    <string name="invalid_wifi_sticker">WiFi sticker data is invalid.  Please rewrite WiFi sticker.</string>
     <string name="write_tag_fail">Failed to write to tag</string>
-    <string name="write_tag_success">Wifi configuration saved to tag!</string>
+    <string name="write_tag_success">WiFi configuration saved to tag!</string>
     <string name="wifi_connect_already">Already connected to %1$s</string>
     <string name="password_text">Password</string>
     <string name="protocol_text">Security</string>
@@ -29,7 +29,8 @@
     <string name="cancel">Cancel</string>
     <string name="success">success</string>
     <string name="add_new_network_fail">failed to add network</string>
-    <string name="qr_code_image_description">qr code for selected wifi</string><string name="qr_share_fail">Failed to generate QR image :(</string>
+    <string name="qr_code_image_description">qr code for selected WiFi</string>
+    <string name="qr_share_fail">Failed to generate QR image :(</string>
     <string name="qr_share_subject">WiFi QR code for %1$s</string>
     <string name="qr_share_text">Scan this QR code to connect to the WiFi network \&quot;%1$s\&quot;.  For Android devices, use the \&quot;Barcode Scanner\&quot; app, download link (https://play.google.com/store/apps/details?id=com.google.zxing.client.android).\n\nThis QR code was generated via InstaWifi.</string>
     <string name="qr_share_dialog_title">Share QR Code for \&quot;%1$s\&quot; via</string>
