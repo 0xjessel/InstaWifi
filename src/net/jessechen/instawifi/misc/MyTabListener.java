@@ -58,7 +58,5 @@ public class MyTabListener implements com.actionbarsherlock.app.ActionBar.TabLis
 	@Override
 	public void onTabReselected(com.actionbarsherlock.app.ActionBar.Tab tab,
 			FragmentTransaction ft) {
-		// TODO Auto-generated method stub
-		
 	}
 }

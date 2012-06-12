@@ -50,8 +50,6 @@ public class WifiReceiver extends BroadcastReceiver {
 			parent.finish();
 		} else if (SupplicantState.SCANNING.equals(state)) {
 			Log.i(TAG, "scanning for a network");
-			// TODO: probably needs a timer to check if wifi state is still
-			// scanning/disconnected to determine if it failed
 		} else if (SupplicantState.ASSOCIATING.equals(state)) {
 			Log.i(TAG, "associating to network");
 			triedAssociating = true;

@@ -46,7 +46,7 @@ public class WifiUtil {
 				Log.e(TAG,
 						"password not found when trying to get it using root access");
 				e.printStackTrace();
-			} // TODO: FIX password can be null
+			} 
 			return new WifiModel(ssid, password, protocol);
 		} else {
 			return null;

@@ -48,13 +48,6 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-/* 
- * TODO: share app
- * TODO: parse wifipw.txt for networks instead of using the wifi api
- * TODO: ridiculously long ssid breaks gridlayout, maybe when getting configured networks, automatically clip long ssids and append '...'
- * TODO: generate qr image in bg thread, add some loading indicator
- * TODO: write to tag button
- */
 public class NfcActivity extends SherlockFragmentActivity implements
 		OnItemSelectedListener {
 	boolean mWriteMode = false;
@@ -108,7 +101,6 @@ public class NfcActivity extends SherlockFragmentActivity implements
 
 			revealPassword.setOnCheckedChangeListener(mCheckBoxListener);
 
-			// TODO: stupid getconfigurednetworks sometimes returns empty..
 			String[] networks = WifiUtil.getConfiguredNetworks(this);
 			networkAdapter = new SpinnerArrayAdapter<String>(getApplication(),
 					networks);
@@ -297,7 +289,6 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			case MESSAGE_SENT:
 				Util.longToast(getApplicationContext(),
 						getString(R.string.beam_success));
-				// TODO: add finish();?
 				break;
 			}
 		}

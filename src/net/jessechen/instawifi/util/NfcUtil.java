@@ -19,8 +19,6 @@ public class NfcUtil {
 	private static final String TAG = NfcUtil.class.getSimpleName();
 	
 	public static NdefMessage getWifiAsNdef(WifiModel wm) {
-		// TODO: check behavior when protocol is open and ssid has spaces (might
-		// have to encode the ssid)
 		byte[] url = wm.toWifiUri()
 				.getBytes(Charset.forName("US-ASCII"));
 

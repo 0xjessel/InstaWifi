@@ -272,8 +272,6 @@ public class QrFragment extends SherlockFragment implements
 
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
-		// TODO Auto-generated method stub
-
 	}
 
 	// update network spinner after add network dialog
