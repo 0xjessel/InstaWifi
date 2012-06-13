@@ -2,7 +2,7 @@
 <resources>
 
     <string name="hello">Hello World, InstaWifiActivity!</string>
-    <string name="app_name">InstaWifi</string>
+    <string name="app_name">InstaWifi Beta</string>
     <string name="write_tag">Write to Tag</string>
     <string name="tag_read_only">Tag is read-only</string>
     <string name="tag_too_small">Tag does not have enough memory for message</string>
