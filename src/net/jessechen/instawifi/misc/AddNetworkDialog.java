@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.net.wifi.WifiManager;
-import android.nfc.NfcAdapter;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -34,7 +33,7 @@ public class AddNetworkDialog {
 
 	// add network dialog
 	public static void show(final FragmentActivity a,
-			final NfcAdapter mNfcAdapter, final Spinner networkSpinner) {
+			final Context c, final Spinner networkSpinner) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(a);
 		builder.setInverseBackgroundForced(true);
 		
@@ -99,7 +98,7 @@ public class AddNetworkDialog {
 							.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 					// update NfcActivity's spinner iff device does not have NFC
-					if (Util.hasNfc(mNfcAdapter)) {
+					if (Util.hasNfc(c)) {
 						networkSpinner.setAdapter(networkAdapter);
 
 						// set spinner to the network just added

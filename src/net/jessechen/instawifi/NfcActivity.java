@@ -74,15 +74,15 @@ public class NfcActivity extends SherlockFragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		mNfcAdapter = ((NfcManager) getSystemService(Context.NFC_SERVICE))
-				.getDefaultAdapter();
-
 		setContentView(R.layout.nfc_activity);
 		
 		// crash reporting and analytics
 		BugSenseHandler.setup(this, Util.bugsenseKey);
 		
-		if (Util.hasNfc(mNfcAdapter)) {
+		if (Util.hasNfc(getApplicationContext())) {
+			mNfcAdapter = ((NfcManager) getSystemService(Context.NFC_SERVICE))
+					.getDefaultAdapter();
+			
 			// Android Beam setup
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 				mNfcAdapter.setNdefPushMessageCallback(beamPushSetup(), this);
@@ -319,7 +319,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			break;
 		case R.id.add:
 			if (WifiUtil.isWifiEnabled(this)) {
-				AddNetworkDialog.show(this, mNfcAdapter, networkSpinner);
+				AddNetworkDialog.show(this, getApplicationContext(), networkSpinner);
 			} else {
 				WifiUtil.showWifiDialog(this,
 						getString(R.string.show_wifi_msg_add),
@@ -328,7 +328,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 							@Override
 							public void OnWifiEnabled() {
 								AddNetworkDialog.show(NfcActivity.this,
-										mNfcAdapter, networkSpinner);
+										getApplicationContext(), networkSpinner);
 							}
 						}, null);
 			}
@@ -340,7 +340,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 	private View.OnClickListener mTagWriter = new View.OnClickListener() {
 		@Override
 		public void onClick(View arg0) {
-			if (Util.hasNfc(mNfcAdapter)) {
+			if (Util.hasNfc(getApplicationContext())) {
 				// adapter exists and is enabled.
 				// Write to a tag for as long as the dialog is shown.
 				enableTagWriteMode();

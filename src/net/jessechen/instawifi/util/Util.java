@@ -5,8 +5,8 @@ import java.io.File;
 import net.jessechen.instawifi.R;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.nfc.NfcAdapter;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -26,12 +26,9 @@ public class Util {
 		Toast.makeText(c, msg, Toast.LENGTH_LONG).show();
 	}
 
-	public static boolean hasNfc(NfcAdapter adapter) {
-		if (adapter != null && adapter.isEnabled()) {
-			return true;
-		} else {
-			return false;
-		}
+	public static boolean hasNfc(Context c) {
+		PackageManager pm = c.getPackageManager();
+		return pm.hasSystemFeature(PackageManager.FEATURE_NFC);
 	}
 
 	public static boolean hasQuotes(String s) {
