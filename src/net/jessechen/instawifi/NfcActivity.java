@@ -1,7 +1,5 @@
 package net.jessechen.instawifi;
 
-import com.bugsense.trace.BugSenseHandler;
-
 import net.jessechen.instawifi.misc.AddNetworkDialog;
 import net.jessechen.instawifi.misc.MyTabListener;
 import net.jessechen.instawifi.misc.SpinnerArrayAdapter;
@@ -47,6 +45,7 @@ import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.bugsense.trace.BugSenseHandler;
 
 public class NfcActivity extends SherlockFragmentActivity implements
 		OnItemSelectedListener {
@@ -67,7 +66,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 	CheckBox revealPassword;
 
 	Intent picIntent;
-
+	
 	private static final String TAG = NfcActivity.class.getSimpleName();
 
 	/** Called when the activity is first created. */
@@ -79,9 +78,10 @@ public class NfcActivity extends SherlockFragmentActivity implements
 				.getDefaultAdapter();
 
 		setContentView(R.layout.nfc_activity);
-
+		
+		// crash reporting and analytics
 		BugSenseHandler.setup(this, Util.bugsenseKey);
-
+		
 		if (Util.hasNfc(mNfcAdapter)) {
 			// Android Beam setup
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -206,6 +206,11 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		if (alert != null) {
 			alert.dismiss();
 		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
 	}
 
 	@Override
