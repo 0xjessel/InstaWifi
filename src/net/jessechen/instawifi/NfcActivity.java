@@ -75,7 +75,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.nfc_activity);
-		
+
 		// crash reporting and analytics
 		BugSenseHandler.setup(this, Util.bugsenseKey);
 		
