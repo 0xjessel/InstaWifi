@@ -189,7 +189,9 @@ public class NfcActivity extends SherlockFragmentActivity implements
 	}
 
 	@Override
-	protected void onSaveInstanceState(final Bundle outState) {
+	public void onSaveInstanceState(final Bundle outState) {
+		super.onSaveInstanceState(outState);
+
 		Tab curTab = getSupportActionBar()
 				.getSelectedTab();
 
