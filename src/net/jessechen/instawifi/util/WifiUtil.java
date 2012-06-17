@@ -46,13 +46,13 @@ public class WifiUtil {
 				Log.e(TAG,
 						"password not found when trying to get it using root access");
 				e.printStackTrace();
-			} 
+			}
 			return new WifiModel(ssid, password, protocol);
 		} else {
 			return null;
 		}
 	}
-	
+
 	public static WifiModel getWifiModelFromUri(Context c, Uri wifiUri) {
 		String ssid = wifiUri.getHost();
 		String pw = wifiUri.getLastPathSegment();
@@ -127,7 +127,7 @@ public class WifiUtil {
 			Log.e(TAG, "wc was null");
 			return -1;
 		}
-		
+
 		if (wc.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WPA_PSK)) {
 			// WPA/WPA2 network, key is in wfc.preSharedKey
 			return WPA;
@@ -329,6 +329,14 @@ public class WifiUtil {
 		return getNetworkId(c, mWifiModel, mWm);
 	}
 
+	public static boolean disableWifi(WifiManager mWm) {
+		if (mWm.isWifiEnabled()) {
+			Log.i(TAG, "wifi was enabled, disabling wifi");
+			return mWm.setWifiEnabled(false);
+		}
+		return true;
+	}
+
 	public static boolean enableWifi(WifiManager mWm) {
 		if (!mWm.isWifiEnabled()) {
 			Log.i(TAG, "wifi was disabled, enabling wifi");
@@ -456,6 +464,12 @@ public class WifiUtil {
 			case ALREADY_CONNECTED:
 
 				Log.i(TAG, "tried to connect to current network");
+
+				// turn wifi off
+				WifiManager mWm = (WifiManager) a.getApplicationContext()
+						.getSystemService(Context.WIFI_SERVICE);
+				disableWifi(mWm);
+
 				Util.shortToast(a, String.format(
 						a.getString(R.string.wifi_connect_already),
 						receivedWifiModel.getTrimmedSSID()));
