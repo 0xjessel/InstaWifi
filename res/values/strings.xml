@@ -28,6 +28,8 @@
     <string name="add_button">Add</string>
     <string name="cancel">Cancel</string>
     <string name="success">success</string>
+    <string name="general_fail">Something bad happened</string>
+    <string name="enable_wifi_fail">Failed to enable WiFi</string>
     <string name="add_new_network_fail">failed to add network</string>
     <string name="qr_code_image_description">qr code for selected WiFi</string>
     <string name="qr_share_fail">Failed to generate QR image :(</string>

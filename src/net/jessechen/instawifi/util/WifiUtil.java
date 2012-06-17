@@ -18,6 +18,8 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.bugsense.trace.BugSenseHandler;
+
 public class WifiUtil {
 	public static String WIFI_URI_SCHEME = "wifi://%s/%s#%s";
 	public static String QR_WIFI_URI_SCHEME = "WIFI:T:%s;S:%s;P:%s;;";
@@ -212,7 +214,9 @@ public class WifiUtil {
 				.getSystemService(Context.WIFI_SERVICE);
 
 		// enable wifi if disabled, wait until finished
-		enableWifiAndWait(mWm);
+		if (!enableWifiAndWait(mWm)) {
+			return ConnectToWifiResult.NETWORK_ENABLED_FAILED;
+		}
 
 		int netId = getNetworkId(c, mWifiModel, mWm);
 		if (netId == -1) {
@@ -235,7 +239,9 @@ public class WifiUtil {
 		}
 
 		// connect to wifi if disabled, wait until finished
-		enableWifiAndWait(mWm);
+		if (!enableWifiAndWait(mWm)) {
+			return ConnectToWifiResult.NETWORK_ENABLED_FAILED;
+		}
 
 		if (mWm.enableNetwork(netId, true)) {
 			Log.i(TAG, "attemping to connect to network..");
@@ -349,9 +355,27 @@ public class WifiUtil {
 	// use this for non-ui operations instead of EnableWifiTask
 	public static boolean enableWifiAndWait(WifiManager mWm) {
 		if (enableWifi(mWm)) {
-			while (!mWm.isWifiEnabled()) {
+			int wait = 0;
+			// time it so that if waited longer than 5 seconds, bail out
+			while (!mWm.isWifiEnabled() && wait < 25) {
 				// waiting on wifi
 				Log.v(TAG, "waiting for wifi to be enabled..");
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					Log.e(TAG,
+							"thread was interrupted while sleeping.  was waiting for wifi to be enabled");
+					e.printStackTrace();
+				}
+				Log.i(TAG, "wait is " + wait);
+				wait++;
+			}
+			if (wait >= 20) {
+				Log.e(TAG,
+						"waited for wifi to enable for longer than 3 seconds, bailing out");
+				BugSenseHandler
+						.log("ENABLEWIFI", new Exception("enabling wifi timed out, user does not have wifi?"));
+				return false;
 			}
 			return true;
 		}
@@ -374,7 +398,9 @@ public class WifiUtil {
 			WifiManager mWm = (WifiManager) c
 					.getSystemService(Context.WIFI_SERVICE);
 
-			enableWifiAndWait(mWm);
+			if (!enableWifiAndWait(mWm)) {
+				Log.e(TAG, "enabling wifi timed out in WifiUtil.EnableWifiTask.doInBackground");
+			}
 
 			return null;
 		}
@@ -462,7 +488,6 @@ public class WifiUtil {
 		if (WifiUtil.isValidWifiModel(receivedWifiModel)) {
 			switch (connectToWifi(a, receivedWifiModel)) {
 			case ALREADY_CONNECTED:
-
 				Log.i(TAG, "tried to connect to current network");
 
 				// turn wifi off
@@ -477,14 +502,18 @@ public class WifiUtil {
 				a.finish();
 				break;
 			case INVALID_NET_ID:
-
 				Log.e(TAG,
 						"failed to connect to wifi, invalid wifi configs probably");
 				Util.shortToast(a, a.getString(R.string.invalid_wifi_sticker));
 
 				a.finish();
 				break;
+			case NETWORK_ENABLED_FAILED:
+				Log.e(TAG, "failed to enable wifi, does this device have wifi?");
+				Util.shortToast(a, a.getString(R.string.enable_wifi_fail));
 			default:
+				Log.e(TAG, "very bad failure");
+				Util.shortToast(a, a.getString(R.string.general_fail));
 				break;
 			}
 		} else {
