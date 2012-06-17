@@ -233,6 +233,7 @@ public class RootUtil {
 					os.writeBytes("id\n");
 					os.flush();
 
+					@SuppressWarnings("deprecation")
 					String currUid = osRes.readLine();
 					boolean exitSu = false;
 					if (null == currUid) {
