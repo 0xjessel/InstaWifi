@@ -25,7 +25,7 @@ public class WifiUtil {
 	public static final int WEP = 1;
 	public static final int WPA = 2;
 
-	public static final String[] protocolStrings = { "OPEN", "WEP", "WPA" };
+	public static final String[] protocolStrings = { "OPEN", "WEP", "WPA/WPA2" };
 
 	public enum ConnectToWifiResult {
 		ALREADY_CONNECTED, INVALID_NET_ID, NETWORK_ENABLED, NETWORK_ENABLED_FAILED
