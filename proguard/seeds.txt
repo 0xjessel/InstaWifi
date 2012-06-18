@@ -1197,6 +1197,8 @@ com.actionbarsherlock.R$string: int beam_success
 com.actionbarsherlock.R$string: int cancel
 com.actionbarsherlock.R$string: int dialog_write_tag
 com.actionbarsherlock.R$string: int enable
+com.actionbarsherlock.R$string: int enable_wifi_fail
+com.actionbarsherlock.R$string: int general_fail
 com.actionbarsherlock.R$string: int hello
 com.actionbarsherlock.R$string: int invalid_wifi_sticker
 com.actionbarsherlock.R$string: int nfc_not_available

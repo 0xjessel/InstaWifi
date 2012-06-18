@@ -239,8 +239,6 @@ com.bugsense.trace.BugSenseHandler:
     public BugSenseHandler()
     public static void notifyContextGone()
     public static boolean submit()
-    public static void log(java.lang.String,java.util.Map,java.lang.Exception)
-    public static void log(java.lang.String,java.lang.Exception)
     public static void setUrl(java.lang.String)
     public static void setTag(java.lang.String)
     public static void setVerbose(boolean)
@@ -715,7 +713,7 @@ com.gridlayout.R$styleable:
     public static final int ViewGroup_MarginLayout_android_layout_marginLeft
     public static final int ViewGroup_MarginLayout_android_layout_marginRight
     public static final int ViewGroup_MarginLayout_android_layout_marginTop
-    1097:1097:public R$styleable()
+    1099:1099:public R$styleable()
 com.gridlayout.Space:
     51:52:public Space(android.content.Context)
 net.jessechen.instawifi.BuildConfig
@@ -743,7 +741,7 @@ net.jessechen.instawifi.util.QrUtil:
 net.jessechen.instawifi.util.RootUtil:
     210:215:public static java.lang.String getFileThenDelete(android.content.Context)
 net.jessechen.instawifi.util.RootUtil$ExecuteAsRootBase:
-    220:267:public static boolean canRunRootCommands()
+    220:268:public static boolean canRunRootCommands()
 net.jessechen.instawifi.util.Util:
     public static final java.lang.String bugsenseKey
     67:74:public static void initNetworkSpinner(android.content.Context,android.widget.Spinner,android.widget.AdapterView$OnItemSelectedListener)
@@ -752,5 +750,5 @@ net.jessechen.instawifi.util.WifiUtil:
     public static final int OPEN
     public static final int WEP
     public static final int WPA
-    57:65:public static net.jessechen.instawifi.models.WifiModel getWifiModelFromUri(android.content.Context,android.net.Uri)
+    59:67:public static net.jessechen.instawifi.models.WifiModel getWifiModelFromUri(android.content.Context,android.net.Uri)
 net.jessechen.instawifi.util.WifiUtil$EnableWifiTaskBundle
