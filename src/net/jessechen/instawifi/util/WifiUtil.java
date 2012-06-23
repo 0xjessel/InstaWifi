@@ -370,7 +370,7 @@ public class WifiUtil {
 				Log.i(TAG, "wait is " + wait);
 				wait++;
 			}
-			if (wait >= 20) {
+			if (wait >= 25) {
 				Log.e(TAG,
 						"waited for wifi to enable for longer than 3 seconds, bailing out");
 				BugSenseHandler
