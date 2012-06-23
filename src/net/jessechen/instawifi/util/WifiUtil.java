@@ -487,6 +487,9 @@ public class WifiUtil {
 		WifiModel receivedWifiModel = new WifiModel(wifiString);
 		if (WifiUtil.isValidWifiModel(receivedWifiModel)) {
 			switch (connectToWifi(a, receivedWifiModel)) {
+			case NETWORK_ENABLED:
+				Log.i(TAG, "successfully connected to network, successfully processed");
+				break;
 			case ALREADY_CONNECTED:
 				Log.i(TAG, "tried to connect to current network");
 
