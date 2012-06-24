@@ -94,4 +94,12 @@ public class Util {
 
 		return picIntent;
 	}
+	
+	public static Intent buildAppShareIntent(Context c) {
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_SUBJECT, c.getString(R.string.app_share_subject));
+		intent.putExtra(Intent.EXTRA_TEXT, c.getString(R.string.app_share_text));
+		return intent;
+	}
 }
