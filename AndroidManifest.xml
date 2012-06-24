@@ -30,7 +30,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".InstaWifiHandler" >
+        <activity
+            android:name=".InstaWifiHandler"
+            android:theme="@android:style/Theme.Dialog"
+            android:excludeFromRecents="true" >
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 
