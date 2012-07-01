@@ -10,8 +10,6 @@ import net.jessechen.instawifi.util.QrUtil.QrImageSize;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -96,16 +94,6 @@ public class QrFragment extends SherlockFragment implements
 						@Override
 						public void OnWifiEnabled() {
 							setupQrView();
-						}
-					}, new OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// don't want to enable wifi? DISABLE EVERYTHING.
-							networkSpinner_qr.setEnabled(false);
-							protocolSpinner_qr.setEnabled(false);
-							passwordField_qr.setEnabled(false);
-							revealPassword_qr.setEnabled(false);
 						}
 					});
 		} else {

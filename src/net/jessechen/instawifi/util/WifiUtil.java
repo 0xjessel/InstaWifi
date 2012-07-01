@@ -469,8 +469,7 @@ public class WifiUtil {
 
 	// dialog to prompt user to enable wifi
 	public static void showWifiDialog(final Context c, String msg,
-			final EnableWifiTaskListener listener,
-			OnClickListener onCancelListener) {
+			final EnableWifiTaskListener listener) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(c);
 
 		builder.setTitle(R.string.show_wifi_add_title);
@@ -482,6 +481,7 @@ public class WifiUtil {
 				new WifiUtil.EnableWifiTask(c, listener).execute();
 			}
 		});
+		builder.setCancelable(false);
 
 		builder.create().show();
 	}

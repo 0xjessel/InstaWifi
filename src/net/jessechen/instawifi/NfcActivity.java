@@ -16,7 +16,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.DialogInterface.OnClickListener;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcAdapter.CreateNdefMessageCallback;
@@ -112,19 +111,8 @@ public class NfcActivity extends SherlockFragmentActivity implements
 
 							@Override
 							public void OnWifiEnabled() {
-								setupNfcView(WifiUtil.getConfiguredNetworks(getApplicationContext()));
-							}
-						}, new OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								// don't want to enable wifi? DISABLE
-								// EVERYTHING.
-								networkSpinner.setEnabled(false);
-								protocolSpinner.setEnabled(false);
-								passwordField.setEnabled(false);
-								revealPassword.setEnabled(false);
+								setupNfcView(WifiUtil
+										.getConfiguredNetworks(getApplicationContext()));
 							}
 						});
 			} else {
@@ -363,7 +351,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 												getApplicationContext(),
 												networkSpinner);
 							}
-						}, null);
+						});
 			}
 			break;
 		}
