@@ -13,14 +13,14 @@ public class QrUtil {
 	public static String NOPASS = "nopass";
 
 	public enum QrImageSize {
-		SMALL, LARGE
+		SMALL, LARGE, EMAIL
 	}
 
 	public static Bitmap generateQrCode(WifiModel wm, QrImageSize size) {
 		// padding around the edges
 		final int MAGIC_NUMBER = (size.equals(QrImageSize.SMALL)) ? 30 : 60;
 		// height and width of qr code
-		final int DIMENSION = (size.equals(QrImageSize.SMALL)) ? 350 : 700;
+		final int DIMENSION = (size.equals(QrImageSize.SMALL)) ? 350 : 600;
 
 		if (!WifiUtil.isValidWifiModel(wm)) {
 			return null;

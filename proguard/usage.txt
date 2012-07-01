@@ -516,7 +516,6 @@ com.gridlayout.GridLayout:
     private static final int COLUMN_ORDER_PRESERVED
     private static final int INFLEXIBLE
     private static final int CAN_STRETCH
-    200:201:public GridLayout(android.content.Context)
     215:215:public int getOrientation()
     251:251:public int getRowCount()
     284:284:public int getColumnCount()
@@ -713,10 +712,12 @@ com.gridlayout.R$styleable:
     public static final int ViewGroup_MarginLayout_android_layout_marginLeft
     public static final int ViewGroup_MarginLayout_android_layout_marginRight
     public static final int ViewGroup_MarginLayout_android_layout_marginTop
-    1099:1099:public R$styleable()
+    1107:1107:public R$styleable()
 com.gridlayout.Space:
     51:52:public Space(android.content.Context)
 net.jessechen.instawifi.BuildConfig
+net.jessechen.instawifi.NfcActivity:
+    static final int MESSAGE_SENT
 net.jessechen.instawifi.QrFragment:
     android.widget.Button qwriteTag_qr
 net.jessechen.instawifi.R
@@ -734,8 +735,6 @@ net.jessechen.instawifi.R$style
 net.jessechen.instawifi.R$styleable
 net.jessechen.instawifi.misc.AddNetworkDialog:
     32:32:public AddNetworkDialog()
-net.jessechen.instawifi.misc.PasswordEditText:
-    24:25:public PasswordEditText(android.content.Context)
 net.jessechen.instawifi.util.QrUtil:
     12:12:public QrUtil()
 net.jessechen.instawifi.util.RootUtil:
@@ -746,9 +745,11 @@ net.jessechen.instawifi.util.Util:
     public static final java.lang.String bugsenseKey
     67:74:public static void initNetworkSpinner(android.content.Context,android.widget.Spinner,android.widget.AdapterView$OnItemSelectedListener)
     77:82:public static void initProtocolSpinner(android.content.Context,android.widget.Spinner)
+    99:103:public static android.content.Intent buildAppShareIntent(android.content.Context)
 net.jessechen.instawifi.util.WifiUtil:
-    public static final int OPEN
+    public static final int NONE
     public static final int WEP
     public static final int WPA
-    59:67:public static net.jessechen.instawifi.models.WifiModel getWifiModelFromUri(android.content.Context,android.net.Uri)
+    public static final int DEFAULT_PROTOCOL
+    60:68:public static net.jessechen.instawifi.models.WifiModel getWifiModelFromUri(android.content.Context,android.net.Uri)
 net.jessechen.instawifi.util.WifiUtil$EnableWifiTaskBundle

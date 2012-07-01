@@ -10,11 +10,13 @@ import net.jessechen.instawifi.util.QrUtil.QrImageSize;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,7 +80,7 @@ public class QrFragment extends SherlockFragment implements
 		passwordText_qr = (TextView) view.findViewById(R.id.password_text_qr);
 		passwordField_qr = (PasswordEditText) view
 				.findViewById(R.id.password_field_qr);
-		passwordField_qr.init(getActivity().getApplicationContext(), qrImage);
+		passwordField_qr.init(getActivity(), qrImage);
 		revealPassword_qr = (CheckBox) view
 				.findViewById(R.id.password_checkbox_qr);
 
@@ -132,7 +134,7 @@ public class QrFragment extends SherlockFragment implements
 		protocolSpinner_qr.setOnItemSelectedListener(this);
 		protocolSpinner_qr.setSelection(WifiUtil.DEFAULT_PROTOCOL);
 
-		setQrImage();
+		setQrImage(getActivity());
 	}
 
 	private OnCheckedChangeListener mCheckBoxListener = new CompoundButton.OnCheckedChangeListener() {
@@ -162,8 +164,30 @@ public class QrFragment extends SherlockFragment implements
 		return super.onOptionsItemSelected(item);
 	}
 
-	public static void setQrImage() {
-		Bitmap bmp = getSelectedWifiBitmap(QrImageSize.SMALL);
+	public static void setQrImage(Activity a) {
+		QrImageSize size;
+
+		DisplayMetrics metrics = new DisplayMetrics();
+		a.getWindowManager().getDefaultDisplay()
+				.getMetrics(metrics);
+		switch (metrics.densityDpi) {
+		case DisplayMetrics.DENSITY_LOW:
+			size = QrImageSize.SMALL;
+			break;
+		case DisplayMetrics.DENSITY_MEDIUM:
+			size = QrImageSize.SMALL;
+			break;
+		case DisplayMetrics.DENSITY_HIGH:
+			size = QrImageSize.SMALL;
+			break;
+		case DisplayMetrics.DENSITY_XHIGH:
+			size = QrImageSize.LARGE;
+			break;
+		default:
+			size = QrImageSize.SMALL;
+		}
+
+		Bitmap bmp = getSelectedWifiBitmap(size);
 		if (bmp != null) {
 			// remove default placeholder
 			qrImage.setBackgroundDrawable(null);
@@ -195,7 +219,7 @@ public class QrFragment extends SherlockFragment implements
 		try {
 			// spinner might be empty
 			selectedSsid = networkSpinner_qr.getSelectedItem().toString();
-			bitmap = getSelectedWifiBitmap(QrImageSize.LARGE);
+			bitmap = getSelectedWifiBitmap(QrImageSize.EMAIL);
 		} catch (Exception e) {
 			// do nothing
 		}
@@ -256,7 +280,7 @@ public class QrFragment extends SherlockFragment implements
 			break;
 		}
 
-		qrImage.setImageBitmap(getSelectedWifiBitmap(QrImageSize.SMALL));
+		setQrImage(getActivity());
 	}
 
 	@Override

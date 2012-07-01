@@ -1293,6 +1293,7 @@ com.actionbarsherlock.R$id -> com.actionbarsherlock.R$id:
     int gridlayout_qr -> gridlayout_qr
     int homeAsUp -> homeAsUp
     int listMode -> listMode
+    int loading -> loading
     int network_spinner -> network_spinner
     int network_spinner_qr -> network_spinner_qr
     int nfc_layout -> nfc_layout
@@ -1314,6 +1315,7 @@ com.actionbarsherlock.R$id -> com.actionbarsherlock.R$id:
     int showTitle -> showTitle
     int ssid_text -> ssid_text
     int ssid_text_qr -> ssid_text_qr
+    int status_text -> status_text
     int tabMode -> tabMode
     int useLogo -> useLogo
     int wrap_content -> wrap_content
@@ -1355,6 +1357,8 @@ com.actionbarsherlock.R$string -> com.actionbarsherlock.R$string:
     int add_new_network -> add_new_network
     int add_new_network_fail -> add_new_network_fail
     int app_name -> app_name
+    int app_share_subject -> app_share_subject
+    int app_share_text -> app_share_text
     int beam_success -> beam_success
     int cancel -> cancel
     int dialog_write_tag -> dialog_write_tag
@@ -1378,6 +1382,10 @@ com.actionbarsherlock.R$string -> com.actionbarsherlock.R$string:
     int show_wifi_msg_add -> show_wifi_msg_add
     int show_wifi_msg_default -> show_wifi_msg_default
     int ssid_text -> ssid_text
+    int status_associating -> status_associating
+    int status_connected -> status_connected
+    int status_disconnected -> status_disconnected
+    int status_scanning -> status_scanning
     int success -> success
     int tag_format_connect_fail -> tag_format_connect_fail
     int tag_format_fail -> tag_format_fail
@@ -5189,68 +5197,77 @@ com.gridlayout.Space -> com.gridlayout.Space:
     69:84:int getDefaultSize2(int,int) -> a
     89:92:void onMeasure(int,int) -> onMeasure
 net.jessechen.instawifi.InstaWifiHandler -> net.jessechen.instawifi.InstaWifiHandler:
-    android.nfc.NfcAdapter mNfcAdapter -> a
-    net.jessechen.instawifi.misc.WifiReceiver mReceiver -> b
-    boolean receiverRemoved -> c
-    java.lang.String TAG -> d
-    26:40:void onCreate(android.os.Bundle) -> onCreate
-    57:67:void onResume() -> onResume
-    71:76:void onPause() -> onPause
+    android.widget.TextView status -> a
+    android.nfc.NfcAdapter mNfcAdapter -> b
+    net.jessechen.instawifi.misc.WifiReceiver mReceiver -> c
+    boolean receiverRemoved -> d
+    boolean triedAssociating -> e
+    android.net.wifi.WifiManager mWifiManager -> f
+    android.app.Activity a -> g
+    java.lang.String TAG -> h
+    33:49:void onCreate(android.os.Bundle) -> onCreate
+    66:76:void onResume() -> onResume
+    80:85:void onPause() -> onPause
+    88:118:void handleConnectionChanged(android.net.wifi.SupplicantState) -> a
 net.jessechen.instawifi.NfcActivity -> net.jessechen.instawifi.NfcActivity:
     boolean mWriteMode -> a
     android.nfc.NfcAdapter mNfcAdapter -> b
     android.app.PendingIntent mNfcPendingIntent -> c
     android.content.IntentFilter[] mWriteTagFilters -> d
-    int MESSAGE_SENT -> e
-    android.app.AlertDialog alert -> f
-    android.widget.Button writeTag -> g
-    android.widget.Spinner networkSpinner -> h
-    android.widget.ArrayAdapter networkAdapter -> i
-    android.widget.Spinner protocolSpinner -> j
-    android.widget.TextView passwordText -> k
-    android.widget.EditText passwordField -> l
-    android.widget.CheckBox revealPassword -> m
+    android.app.AlertDialog alert -> e
+    android.widget.Button writeTag -> f
+    android.widget.Spinner networkSpinner -> g
+    android.widget.ArrayAdapter networkAdapter -> h
+    android.widget.Spinner protocolSpinner -> i
+    android.widget.TextView passwordText -> j
+    android.widget.EditText passwordField -> k
+    android.widget.CheckBox revealPassword -> l
+    android.content.Context c -> m
     android.content.Intent picIntent -> n
     java.lang.String TAG -> o
     android.os.Handler mHandler -> p
     android.view.View$OnClickListener mTagWriter -> q
     android.widget.CompoundButton$OnCheckedChangeListener mCheckBoxListener -> r
-    75:180:void onCreate(android.os.Bundle) -> onCreate
-    184:189:void onResume() -> onResume
-    193:202:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
-    206:211:void onPause() -> onPause
-    215:216:void onDestroy() -> onDestroy
-    221:246:void onNewIntent(android.content.Intent) -> onNewIntent
-    306:314:boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu) -> onCreateOptionsMenu
-    319:339:boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem) -> onOptionsItemSelected
-    395:425:void onItemSelected(android.widget.AdapterView,android.view.View,int,long) -> onItemSelected
-    429:429:void onNothingSelected(android.widget.AdapterView) -> onNothingSelected
-    378:378:void access$0(net.jessechen.instawifi.NfcActivity) -> a
-    387:387:void access$1(net.jessechen.instawifi.NfcActivity) -> b
-    292:292:android.os.Handler access$2(net.jessechen.instawifi.NfcActivity) -> c
+    78:160:void onCreate(android.os.Bundle) -> onCreate
+    163:199:void setupNfcView(java.lang.String[]) -> a
+    203:208:void onResume() -> onResume
+    212:220:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
+    224:229:void onPause() -> onPause
+    233:234:void onDestroy() -> onDestroy
+    239:264:void onNewIntent(android.content.Intent) -> onNewIntent
+    323:331:boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu) -> onCreateOptionsMenu
+    336:359:boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem) -> onOptionsItemSelected
+    415:445:void onItemSelected(android.widget.AdapterView,android.view.View,int,long) -> onItemSelected
+    449:449:void onNothingSelected(android.widget.AdapterView) -> onNothingSelected
+    398:398:void access$0(net.jessechen.instawifi.NfcActivity) -> a
+    407:407:void access$1(net.jessechen.instawifi.NfcActivity) -> b
+    162:162:void access$2(net.jessechen.instawifi.NfcActivity,java.lang.String[]) -> a
+    310:310:android.os.Handler access$3() -> a
 net.jessechen.instawifi.NfcActivity$1 -> net.jessechen.instawifi.a:
-    net.jessechen.instawifi.NfcActivity this$0 -> a
-    295:301:void handleMessage(android.os.Message) -> handleMessage
+    313:318:void handleMessage(android.os.Message) -> handleMessage
 net.jessechen.instawifi.NfcActivity$2 -> net.jessechen.instawifi.b:
     net.jessechen.instawifi.NfcActivity this$0 -> a
-    345:361:void onClick(android.view.View) -> onClick
-    342:342:net.jessechen.instawifi.NfcActivity access$0(net.jessechen.instawifi.NfcActivity$2) -> a
+    365:381:void onClick(android.view.View) -> onClick
+    362:362:net.jessechen.instawifi.NfcActivity access$0(net.jessechen.instawifi.NfcActivity$2) -> a
 net.jessechen.instawifi.NfcActivity$2$1 -> net.jessechen.instawifi.c:
     net.jessechen.instawifi.NfcActivity$2 this$1 -> a
-    356:357:void onCancel(android.content.DialogInterface) -> onCancel
+    376:377:void onCancel(android.content.DialogInterface) -> onCancel
 net.jessechen.instawifi.NfcActivity$3 -> net.jessechen.instawifi.d:
     net.jessechen.instawifi.NfcActivity this$0 -> a
-    369:375:void onCheckedChanged(android.widget.CompoundButton,boolean) -> onCheckedChanged
+    389:395:void onCheckedChanged(android.widget.CompoundButton,boolean) -> onCheckedChanged
 net.jessechen.instawifi.NfcActivity$4 -> net.jessechen.instawifi.e:
     net.jessechen.instawifi.NfcActivity this$0 -> a
-    263:272:android.nfc.NdefMessage createNdefMessage(android.nfc.NfcEvent) -> createNdefMessage
+    117:119:void OnWifiEnabled() -> a
 net.jessechen.instawifi.NfcActivity$5 -> net.jessechen.instawifi.f:
     net.jessechen.instawifi.NfcActivity this$0 -> a
-    286:287:void onNdefPushComplete(android.nfc.NfcEvent) -> onNdefPushComplete
+    281:290:android.nfc.NdefMessage createNdefMessage(android.nfc.NfcEvent) -> createNdefMessage
 net.jessechen.instawifi.NfcActivity$6 -> net.jessechen.instawifi.g:
     net.jessechen.instawifi.NfcActivity this$0 -> a
-    332:334:void OnWifiEnabled() -> a
-net.jessechen.instawifi.QrFragment -> net.jessechen.instawifi.h:
+    304:305:void onNdefPushComplete(android.nfc.NfcEvent) -> onNdefPushComplete
+net.jessechen.instawifi.NfcActivity$7 -> net.jessechen.instawifi.h:
+    net.jessechen.instawifi.NfcActivity this$0 -> a
+    351:354:void OnWifiEnabled() -> a
+net.jessechen.instawifi.QrFragment -> net.jessechen.instawifi.i:
     java.lang.String TAG -> i
     com.gridlayout.GridLayout gridlayout_qr -> a
     android.widget.Spinner networkSpinner_qr -> b
@@ -5263,24 +5280,21 @@ net.jessechen.instawifi.QrFragment -> net.jessechen.instawifi.h:
     android.widget.CompoundButton$OnCheckedChangeListener mCheckBoxListener -> j
     55:57:net.jessechen.instawifi.QrFragment getInstance() -> a
     62:64:void onCreate(android.os.Bundle) -> onCreate
-    69:115:android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
-    119:147:void setupView() -> c
-    165:168:boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem) -> onOptionsItemSelected
-    177:184:void setQrImage() -> b
-    189:200:android.graphics.Bitmap getSelectedWifiBitmap(net.jessechen.instawifi.util.QrUtil$QrImageSize) -> a
-    240:271:void onItemSelected(android.widget.AdapterView,android.view.View,int,long) -> onItemSelected
-    275:275:void onNothingSelected(android.widget.AdapterView) -> onNothingSelected
-    279:283:void updateNetworkSpinner(android.widget.ArrayAdapter) -> a
-    118:118:void access$0(net.jessechen.instawifi.QrFragment) -> a
-net.jessechen.instawifi.QrFragment$1 -> net.jessechen.instawifi.i:
+    69:105:android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
+    109:138:void setupQrView() -> b
+    156:159:boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem) -> onOptionsItemSelected
+    170:197:void setQrImage(android.app.Activity) -> a
+    202:213:android.graphics.Bitmap getSelectedWifiBitmap(net.jessechen.instawifi.util.QrUtil$QrImageSize) -> a
+    253:284:void onItemSelected(android.widget.AdapterView,android.view.View,int,long) -> onItemSelected
+    288:288:void onNothingSelected(android.widget.AdapterView) -> onNothingSelected
+    292:296:void updateNetworkSpinner(android.widget.ArrayAdapter) -> a
+    108:108:void access$0(net.jessechen.instawifi.QrFragment) -> a
+net.jessechen.instawifi.QrFragment$1 -> net.jessechen.instawifi.j:
     net.jessechen.instawifi.QrFragment this$0 -> a
-    154:160:void onCheckedChanged(android.widget.CompoundButton,boolean) -> onCheckedChanged
-net.jessechen.instawifi.QrFragment$2 -> net.jessechen.instawifi.j:
+    145:151:void onCheckedChanged(android.widget.CompoundButton,boolean) -> onCheckedChanged
+net.jessechen.instawifi.QrFragment$2 -> net.jessechen.instawifi.k:
     net.jessechen.instawifi.QrFragment this$0 -> a
     98:99:void OnWifiEnabled() -> a
-net.jessechen.instawifi.QrFragment$3 -> net.jessechen.instawifi.k:
-    net.jessechen.instawifi.QrFragment this$0 -> a
-    105:109:void onClick(android.content.DialogInterface,int) -> onClick
 net.jessechen.instawifi.misc.AddNetworkDialog -> net.jessechen.instawifi.misc.a:
     37:187:void show(android.support.v4.app.FragmentActivity,android.content.Context,android.widget.Spinner) -> a
     189:189:void access$0(android.widget.EditText,android.widget.EditText,android.widget.Spinner,android.widget.Button) -> a
@@ -5327,32 +5341,28 @@ net.jessechen.instawifi.misc.MyTabListener -> net.jessechen.instawifi.misc.g:
     51:56:void onTabUnselected(com.actionbarsherlock.app.ActionBar$Tab,android.support.v4.app.FragmentTransaction) -> onTabUnselected
     61:61:void onTabReselected(com.actionbarsherlock.app.ActionBar$Tab,android.support.v4.app.FragmentTransaction) -> onTabReselected
 net.jessechen.instawifi.misc.PasswordEditText -> net.jessechen.instawifi.misc.PasswordEditText:
-    android.content.Context c -> a
+    android.app.Activity a -> a
     android.widget.ImageView qrImage -> b
     java.lang.String pw -> c
     java.lang.String TAG -> d
     android.widget.TextView$OnEditorActionListener mOnEditorActionListener -> e
-    36:39:void init(android.content.Context,android.widget.ImageView) -> a
-    43:51:boolean onKeyPreIme(int,android.view.KeyEvent) -> onKeyPreIme
-    57:66:void PasswordEditTextFinishedCallback$7b9d7fed(android.content.Context) -> a
-    20:20:void access$0(net.jessechen.instawifi.misc.PasswordEditText,java.lang.String) -> a
-    18:18:android.content.Context access$1(net.jessechen.instawifi.misc.PasswordEditText) -> a
-    19:19:android.widget.ImageView access$2(net.jessechen.instawifi.misc.PasswordEditText) -> b
+    37:40:void init(android.app.Activity,android.widget.ImageView) -> a
+    44:52:boolean onKeyPreIme(int,android.view.KeyEvent) -> onKeyPreIme
+    58:67:void PasswordEditTextFinishedCallback$5bbe9e01(android.app.Activity) -> a
+    21:21:void access$0(net.jessechen.instawifi.misc.PasswordEditText,java.lang.String) -> a
+    19:19:android.app.Activity access$1(net.jessechen.instawifi.misc.PasswordEditText) -> a
+    20:20:android.widget.ImageView access$2(net.jessechen.instawifi.misc.PasswordEditText) -> b
 net.jessechen.instawifi.misc.PasswordEditText$1 -> net.jessechen.instawifi.misc.h:
     net.jessechen.instawifi.misc.PasswordEditText this$0 -> a
-    72:77:boolean onEditorAction(android.widget.TextView,int,android.view.KeyEvent) -> onEditorAction
+    73:78:boolean onEditorAction(android.widget.TextView,int,android.view.KeyEvent) -> onEditorAction
 net.jessechen.instawifi.misc.SpinnerArrayAdapter -> net.jessechen.instawifi.misc.i:
     android.content.Context c -> a
     21:21:android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
     26:26:android.view.View getDropDownView(int,android.view.View,android.view.ViewGroup) -> getDropDownView
     34:52:android.view.View createViewFromResource(int,android.view.View,android.view.ViewGroup,int) -> a
 net.jessechen.instawifi.misc.WifiReceiver -> net.jessechen.instawifi.misc.WifiReceiver:
-    android.content.Context ctx -> a
-    android.app.Activity parent -> b
-    android.net.wifi.WifiManager mWifiManager -> c
-    boolean triedAssociating -> d
-    java.lang.String TAG -> e
-    30:38:void onReceive(android.content.Context,android.content.Intent) -> onReceive
+    java.lang.String TAG -> a
+    21:29:void onReceive(android.content.Context,android.content.Intent) -> onReceive
 net.jessechen.instawifi.models.WifiModel -> net.jessechen.instawifi.a.a:
     java.lang.String SSID -> a
     java.lang.String password -> b
@@ -5375,7 +5385,8 @@ net.jessechen.instawifi.util.QrUtil -> net.jessechen.instawifi.b.b:
 net.jessechen.instawifi.util.QrUtil$QrImageSize -> net.jessechen.instawifi.b.c:
     net.jessechen.instawifi.util.QrUtil$QrImageSize SMALL -> a
     net.jessechen.instawifi.util.QrUtil$QrImageSize LARGE -> b
-    net.jessechen.instawifi.util.QrUtil$QrImageSize[] ENUM$VALUES -> c
+    net.jessechen.instawifi.util.QrUtil$QrImageSize EMAIL -> c
+    net.jessechen.instawifi.util.QrUtil$QrImageSize[] ENUM$VALUES -> d
     1:1:net.jessechen.instawifi.util.QrUtil$QrImageSize[] values() -> values
     1:1:net.jessechen.instawifi.util.QrUtil$QrImageSize valueOf(java.lang.String) -> valueOf
 net.jessechen.instawifi.util.RootUtil -> net.jessechen.instawifi.b.d:
@@ -5412,26 +5423,26 @@ net.jessechen.instawifi.util.WifiUtil -> net.jessechen.instawifi.b.i:
     java.lang.String[] protocolStrings -> c
     java.lang.String TAG -> d
     int[] $SWITCH_TABLE$net$jessechen$instawifi$util$WifiUtil$ConnectToWifiResult -> e
-    39:54:net.jessechen.instawifi.models.WifiModel getCurrentWifiModel(android.content.Context) -> a
-    72:82:net.jessechen.instawifi.models.WifiModel getWifiModelFromSsid(android.content.Context,java.lang.String) -> a
-    128:145:int getWifiProtocol(android.net.wifi.WifiConfiguration) -> a
-    150:156:boolean isWifiEnabled(android.content.Context) -> b
-    166:175:boolean isValidWifiUri(android.net.Uri) -> a
+    40:55:net.jessechen.instawifi.models.WifiModel getCurrentWifiModel(android.content.Context) -> a
+    73:83:net.jessechen.instawifi.models.WifiModel getWifiModelFromSsid(android.content.Context,java.lang.String) -> a
+    129:146:int getWifiProtocol(android.net.wifi.WifiConfiguration) -> a
+    151:157:boolean isWifiEnabled(android.content.Context) -> b
+    167:175:boolean isValidWifiUri(android.net.Uri) -> a
     185:191:boolean isValidWifiModel(net.jessechen.instawifi.models.WifiModel) -> a
     196:196:boolean isValidSsid(java.lang.String) -> a
     200:208:boolean isValidPassword(int,java.lang.String) -> a
     257:335:int addWifiNetwork$7fac1e3(net.jessechen.instawifi.models.WifiModel,android.net.wifi.WifiManager) -> a
-    357:382:boolean enableWifiAndWait(android.net.wifi.WifiManager) -> a
+    357:381:boolean enableWifiAndWait(android.net.wifi.WifiManager) -> a
     438:448:int getNetworkId$7fac1e3(net.jessechen.instawifi.models.WifiModel,android.net.wifi.WifiManager) -> b
-    452:464:java.lang.String[] getConfiguredNetworks(android.content.Context) -> c
-    471:484:void showWifiDialog$3bdd6cfa(android.content.Context,java.lang.String,net.jessechen.instawifi.util.WifiUtil$EnableWifiTaskListener) -> a
-    487:523:void processWifiUri(android.app.Activity,java.lang.String) -> a
-    36:36:java.lang.String access$0() -> a
+    452:468:java.lang.String[] getConfiguredNetworks(android.content.Context) -> c
+    474:488:void showWifiDialog(android.content.Context,java.lang.String,net.jessechen.instawifi.util.WifiUtil$EnableWifiTaskListener) -> a
+    491:531:void processWifiUri(android.app.Activity,java.lang.String) -> a
+    37:37:java.lang.String access$0() -> a
     23:23:int[] $SWITCH_TABLE$net$jessechen$instawifi$util$WifiUtil$ConnectToWifiResult() -> b
 net.jessechen.instawifi.util.WifiUtil$1 -> net.jessechen.instawifi.b.j:
     android.content.Context val$c -> a
     net.jessechen.instawifi.util.WifiUtil$EnableWifiTaskListener val$listener -> b
-    479:480:void onClick(android.content.DialogInterface,int) -> onClick
+    482:483:void onClick(android.content.DialogInterface,int) -> onClick
 net.jessechen.instawifi.util.WifiUtil$ConnectToWifiResult -> net.jessechen.instawifi.b.k:
     net.jessechen.instawifi.util.WifiUtil$ConnectToWifiResult ALREADY_CONNECTED -> a
     net.jessechen.instawifi.util.WifiUtil$ConnectToWifiResult INVALID_NET_ID -> b

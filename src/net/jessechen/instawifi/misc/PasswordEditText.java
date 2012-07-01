@@ -3,6 +3,7 @@ package net.jessechen.instawifi.misc;
 import net.jessechen.instawifi.QrFragment;
 import net.jessechen.instawifi.R;
 import net.jessechen.instawifi.util.Util;
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -15,7 +16,7 @@ import android.widget.TextView;
 
 // TODO: edittextwatcher for invalid passwords (wep/wpa pw restrictions)
 public class PasswordEditText extends EditText {
-	private Context c;
+	private Activity a;
 	private ImageView qrImage;
 	private String pw = "";
 	private static String TAG = PasswordEditText.class.getSimpleName();
@@ -32,8 +33,8 @@ public class PasswordEditText extends EditText {
 		super(context, attrs, defStyle);
 	}
 
-	public void init(Context c, ImageView qrImage) {
-		this.c = c;
+	public void init(Activity a, ImageView qrImage) {
+		this.a = a;
 		this.qrImage = qrImage;
 		this.setOnEditorActionListener(mOnEditorActionListener);
 	}
@@ -45,24 +46,24 @@ public class PasswordEditText extends EditText {
 		if (keyCode == KeyEvent.KEYCODE_BACK
 				&& event.getAction() == KeyEvent.ACTION_UP && !curPw.equals(pw)) {
 			pw = curPw;
-			PasswordEditTextFinishedCallback(c, qrImage);
+			PasswordEditTextFinishedCallback(a, qrImage);
 			return true;
 		}
 		return false;
 	}
 
 	// redraw qr code and hide keyboard
-	public void PasswordEditTextFinishedCallback(Context c, ImageView qrImage) {
+	public void PasswordEditTextFinishedCallback(Activity a, ImageView qrImage) {
 		// hide keyboard
-		InputMethodManager inputManager = (InputMethodManager) c
+		InputMethodManager inputManager = (InputMethodManager) a
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
 		inputManager.hideSoftInputFromWindow(this.getWindowToken(),
 				InputMethodManager.HIDE_NOT_ALWAYS);
 
 		Log.i(TAG, "done with pw changes, redrawing qr image");
-		Util.shortToast(c, c.getString(R.string.updated_qr_code));
+		Util.shortToast(a, a.getString(R.string.updated_qr_code));
 
-		QrFragment.setQrImage();
+		QrFragment.setQrImage(a);
 	}
 
 	private TextView.OnEditorActionListener mOnEditorActionListener = new TextView.OnEditorActionListener() {
@@ -71,7 +72,7 @@ public class PasswordEditText extends EditText {
 		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 			if (actionId == EditorInfo.IME_ACTION_DONE) {
 				pw = v.getText().toString();
-				PasswordEditTextFinishedCallback(c, qrImage);
+				PasswordEditTextFinishedCallback(a, qrImage);
 				return true;
 			}
 			return false;
