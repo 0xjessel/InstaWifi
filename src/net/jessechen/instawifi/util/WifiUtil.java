@@ -454,6 +454,10 @@ public class WifiUtil {
 		List<WifiConfiguration> configuredNetworks = mWm
 				.getConfiguredNetworks();
 
+		if (configuredNetworks == null) {
+			return new String[0];
+		}
+		
 		String[] toReturn = new String[configuredNetworks.size()];
 
 		for (int i = 0; i < configuredNetworks.size(); i++) {

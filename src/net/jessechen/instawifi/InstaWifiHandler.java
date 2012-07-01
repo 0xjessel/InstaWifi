@@ -86,6 +86,8 @@ public class InstaWifiHandler extends Activity {
 
 	public static void handleConnectionChanged(SupplicantState state) {
 		if (SupplicantState.COMPLETED.equals(state) && triedAssociating) {
+			triedAssociating = false;
+
 			// wifi success
 			status.setText(R.string.status_connected);
 			
@@ -107,6 +109,7 @@ public class InstaWifiHandler extends Activity {
 		} else if (SupplicantState.DISCONNECTED.equals(state)
 				&& triedAssociating) {
 			triedAssociating = false;
+
 			status.setText(R.string.status_disconnected);
 			
 			Log.e(TAG, "wifi connection failed");

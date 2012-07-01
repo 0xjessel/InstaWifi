@@ -95,7 +95,7 @@ public class QrFragment extends SherlockFragment implements
 
 						@Override
 						public void OnWifiEnabled() {
-							setupView();
+							setupQrView();
 						}
 					}, new OnClickListener() {
 
@@ -109,13 +109,13 @@ public class QrFragment extends SherlockFragment implements
 						}
 					});
 		} else {
-			setupView();
+			setupQrView();
 		}
 
 		return view;
 	}
 
-	private void setupView() {
+	private void setupQrView() {
 		String[] networks = WifiUtil.getConfiguredNetworks(getActivity());
 		ArrayAdapter<String> networkAdapter = new ArrayAdapter<String>(
 				getActivity(), android.R.layout.simple_spinner_item, networks);
