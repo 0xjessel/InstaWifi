@@ -56,7 +56,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 	NfcAdapter mNfcAdapter;
 	PendingIntent mNfcPendingIntent;
 	IntentFilter[] mWriteTagFilters;
-	final int MESSAGE_SENT = 1;
+	final static int MESSAGE_SENT = 1;
 
 	AlertDialog alert;
 	Button writeTag;
@@ -67,6 +67,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 	EditText passwordField;
 	CheckBox revealPassword;
 
+	static Context c;
 	Intent picIntent;
 
 	private static final String TAG = NfcActivity.class.getSimpleName();
@@ -78,6 +79,8 @@ public class NfcActivity extends SherlockFragmentActivity implements
 
 		setContentView(R.layout.nfc_activity);
 
+		c = getApplicationContext();
+		
 		// crash reporting and analytics
 		BugSenseHandler.setup(this, Util.bugsenseKey);
 
@@ -129,7 +132,6 @@ public class NfcActivity extends SherlockFragmentActivity implements
 
 			com.actionbarsherlock.app.ActionBar bar = getSupportActionBar();
 			bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
 			bar.addTab(
 					bar.newTab()
 							.setText(getString(R.string.nfc_tab))
@@ -138,7 +140,6 @@ public class NfcActivity extends SherlockFragmentActivity implements
 											getSupportFragmentManager(),
 											getString(R.string.nfc_tab))),
 					nfcTabSelected);
-
 			bar.addTab(
 					bar.newTab()
 							.setText(getString(R.string.qr_tab))
@@ -305,13 +306,13 @@ public class NfcActivity extends SherlockFragmentActivity implements
 	}
 
 	/** This handler receives a message from onNdefPushComplete */
-	private final Handler mHandler = new Handler() {
+	private static final Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MESSAGE_SENT:
-				Util.longToast(getApplicationContext(),
-						getString(R.string.beam_success));
+				Util.longToast(c,
+						c.getString(R.string.beam_success));
 				break;
 			}
 		}
