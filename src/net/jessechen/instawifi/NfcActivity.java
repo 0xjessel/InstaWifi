@@ -80,7 +80,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		setContentView(R.layout.nfc_activity);
 
 		c = getApplicationContext();
-		
+
 		// crash reporting and analytics
 		BugSenseHandler.setup(this, Util.bugsenseKey);
 
@@ -183,6 +183,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		protocolSpinner.setAdapter(protocolAdapter);
 		protocolSpinner.setOnItemSelectedListener(this);
+		protocolSpinner.setSelection(WifiUtil.DEFAULT_PROTOCOL);
 
 		// Handle all of our received NFC intents in this activity.
 		mNfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
@@ -311,8 +312,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MESSAGE_SENT:
-				Util.longToast(c,
-						c.getString(R.string.beam_success));
+				Util.longToast(c, c.getString(R.string.beam_success));
 				break;
 			}
 		}

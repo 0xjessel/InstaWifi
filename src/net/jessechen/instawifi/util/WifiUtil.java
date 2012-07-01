@@ -26,6 +26,7 @@ public class WifiUtil {
 	public static final int OPEN = 0;
 	public static final int WEP = 1;
 	public static final int WPA = 2;
+	public static final int DEFAULT_PROTOCOL = WEP;
 
 	public static final String[] protocolStrings = { "OPEN", "WEP", "WPA/WPA2" };
 
@@ -167,8 +168,7 @@ public class WifiUtil {
 				&& wifiUri.getLastPathSegment() != null
 				&& wifiUri.getFragment() != null
 				&& wifiUri.getPathSegments().size() == 1
-				&& wifiUri.getPort() == -1
-				&& wifiUri.getQuery() == null
+				&& wifiUri.getPort() == -1 && wifiUri.getQuery() == null
 				&& wifiUri.getUserInfo() == null) {
 			return true;
 		}
@@ -372,8 +372,8 @@ public class WifiUtil {
 			if (wait >= 25) {
 				Log.e(TAG,
 						"waited for wifi to enable for longer than 3 seconds, bailing out");
-				BugSenseHandler
-						.log("ENABLEWIFI", new Exception("enabling wifi timed out, user does not have wifi?"));
+				BugSenseHandler.log("ENABLEWIFI", new Exception(
+						"enabling wifi timed out, user does not have wifi?"));
 				return false;
 			}
 			return true;
@@ -398,7 +398,8 @@ public class WifiUtil {
 					.getSystemService(Context.WIFI_SERVICE);
 
 			if (!enableWifiAndWait(mWm)) {
-				Log.e(TAG, "enabling wifi timed out in WifiUtil.EnableWifiTask.doInBackground");
+				Log.e(TAG,
+						"enabling wifi timed out in WifiUtil.EnableWifiTask.doInBackground");
 			}
 
 			return null;
@@ -457,7 +458,7 @@ public class WifiUtil {
 		if (configuredNetworks == null) {
 			return new String[0];
 		}
-		
+
 		String[] toReturn = new String[configuredNetworks.size()];
 
 		for (int i = 0; i < configuredNetworks.size(); i++) {
@@ -491,7 +492,8 @@ public class WifiUtil {
 		if (WifiUtil.isValidWifiModel(receivedWifiModel)) {
 			switch (connectToWifi(a, receivedWifiModel)) {
 			case NETWORK_ENABLED:
-				Log.i(TAG, "successfully connected to network, successfully processed");
+				Log.i(TAG,
+						"successfully connected to network, successfully processed");
 				break;
 			case ALREADY_CONNECTED:
 				Log.i(TAG, "tried to connect to current network");

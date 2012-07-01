@@ -130,6 +130,7 @@ public class QrFragment extends SherlockFragment implements
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		protocolSpinner_qr.setAdapter(protocolAdapter);
 		protocolSpinner_qr.setOnItemSelectedListener(this);
+		protocolSpinner_qr.setSelection(WifiUtil.DEFAULT_PROTOCOL);
 
 		setQrImage();
 	}
