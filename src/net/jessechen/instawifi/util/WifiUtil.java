@@ -367,7 +367,6 @@ public class WifiUtil {
 							"thread was interrupted while sleeping.  was waiting for wifi to be enabled");
 					e.printStackTrace();
 				}
-				Log.i(TAG, "wait is " + wait);
 				wait++;
 			}
 			if (wait >= 25) {
