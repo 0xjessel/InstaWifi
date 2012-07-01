@@ -76,7 +76,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+			
 		setContentView(R.layout.nfc_activity);
 
 		c = getApplicationContext();
