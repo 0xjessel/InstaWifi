@@ -32,7 +32,7 @@ public class QrUtil {
 			// a little hack for open network configurations s.t. barcode
 			// scanner is happy
 			String textProtocol = "";
-			if (wm.getProtocol() == WifiUtil.OPEN) {
+			if (wm.getProtocol() == WifiUtil.NONE) {
 				textProtocol = NOPASS;
 			} else {
 				textProtocol = WifiUtil.protocolStrings[wm.getProtocol()];

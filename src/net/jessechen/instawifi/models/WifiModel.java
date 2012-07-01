@@ -34,7 +34,7 @@ public class WifiModel {
 		} else {
 			SSID = Util.concatQuotes(ssid);
 		}
-		if (!(protocol == WifiUtil.OPEN)) {
+		if (!(protocol == WifiUtil.NONE)) {
 			password = pw;
 		} else {
 			password = "";

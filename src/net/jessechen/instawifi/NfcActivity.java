@@ -431,7 +431,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			}
 			break;
 		case R.id.protocol_spinner:
-			if (protocolSpinner.getSelectedItemPosition() == WifiUtil.OPEN) {
+			if (protocolSpinner.getSelectedItemPosition() == WifiUtil.NONE) {
 				passwordText.setVisibility(View.GONE);
 				passwordField.setVisibility(View.GONE);
 				revealPassword.setVisibility(View.GONE);

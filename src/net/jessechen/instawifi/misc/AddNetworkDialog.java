@@ -167,7 +167,7 @@ public class AddNetworkDialog {
 							onEditTextChanged(newSsidField, newPasswordField,
 									newProtocolSpinner, addButton);
 
-							if (newProtocolSpinner.getSelectedItemPosition() == WifiUtil.OPEN) {
+							if (newProtocolSpinner.getSelectedItemPosition() == WifiUtil.NONE) {
 								newPasswordField.setVisibility(View.GONE);
 								newPasswordText.setVisibility(View.GONE);
 								newRevealPassword.setVisibility(View.GONE);

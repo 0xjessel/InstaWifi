@@ -244,7 +244,7 @@ public class QrFragment extends SherlockFragment implements
 			}
 			break;
 		case R.id.protocol_spinner_qr:
-			if (protocolSpinner_qr.getSelectedItemPosition() == WifiUtil.OPEN) {
+			if (protocolSpinner_qr.getSelectedItemPosition() == WifiUtil.NONE) {
 				passwordText_qr.setVisibility(View.GONE);
 				passwordField_qr.setVisibility(View.GONE);
 				revealPassword_qr.setVisibility(View.GONE);

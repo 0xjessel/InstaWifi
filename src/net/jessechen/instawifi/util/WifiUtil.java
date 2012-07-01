@@ -23,12 +23,12 @@ import com.bugsense.trace.BugSenseHandler;
 public class WifiUtil {
 	public static String WIFI_URI_SCHEME = "wifi://%s/%s#%s";
 	public static String QR_WIFI_URI_SCHEME = "WIFI:T:%s;S:%s;P:%s;;";
-	public static final int OPEN = 0;
+	public static final int NONE = 0;
 	public static final int WEP = 1;
 	public static final int WPA = 2;
-	public static final int DEFAULT_PROTOCOL = WEP;
+	public static final int DEFAULT_PROTOCOL = NONE;
 
-	public static final String[] protocolStrings = { "OPEN", "WEP", "WPA/WPA2" };
+	public static final String[] protocolStrings = { "None", "WEP", "WPA/WPA2" };
 
 	public enum ConnectToWifiResult {
 		ALREADY_CONNECTED, INVALID_NET_ID, NETWORK_ENABLED, NETWORK_ENABLED_FAILED
@@ -136,7 +136,7 @@ public class WifiUtil {
 			return WPA;
 		} else if (wc.allowedAuthAlgorithms.isEmpty()) {
 			// this is an open network
-			return OPEN;
+			return NONE;
 		} else if (wc.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.NONE)) {
 			// WEP network, the key is in wfc.wepKeys[wfc.wepTxKeyIndex]
 			return WEP;
@@ -198,7 +198,7 @@ public class WifiUtil {
 
 	public static boolean isValidPassword(int protocol, String password) {
 		switch (protocol) {
-		case OPEN:
+		case NONE:
 			return true;
 		case WEP:
 			return password.length() > 0;
@@ -266,7 +266,7 @@ public class WifiUtil {
 		mWc.status = WifiConfiguration.Status.DISABLED;
 
 		// http://kmansoft.com/2010/04/08/adding-wifi-networks-to-known-list/
-		if (protocol == OPEN) {
+		if (protocol == NONE) {
 			mWc.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
 			mWc.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
 			mWc.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
