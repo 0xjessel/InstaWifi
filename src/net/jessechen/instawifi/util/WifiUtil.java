@@ -168,7 +168,7 @@ public class WifiUtil {
 				&& wifiUri.getFragment() != null
 				&& wifiUri.getPathSegments().size() == 1
 				&& wifiUri.getPort() == -1
-				&& wifiUri.getQueryParameterNames().size() == 0
+				&& wifiUri.getQuery() == null
 				&& wifiUri.getUserInfo() == null) {
 			return true;
 		}
