@@ -1,5 +1,7 @@
 package net.jessechen.instawifi.billing;
 
+import net.jessechen.instawifi.util.BillingUtil;
+
 import com.android.vending.billing.IMarketBillingService;
 
 import android.app.Service;
@@ -19,7 +21,7 @@ public class BillingService extends Service implements ServiceConnection {
 	public void onCreate() {
 		try {
 			boolean bindResult = bindService(new Intent(
-					Consts.MARKET_BILLING_SERVICE_ACTION), this,
+					BillingUtil.MARKET_BILLING_SERVICE_ACTION), this,
 					Context.BIND_AUTO_CREATE);
 			if (bindResult) {
 				Log.i(TAG, "Service bind success");
@@ -46,12 +48,20 @@ public class BillingService extends Service implements ServiceConnection {
 	public void onServiceDisconnected(ComponentName name) {
 		mService = null;
 	}
+	
+	public BillingService() {
+		super();
+	}
+	
+	public void setContext(Context context) {
+		attachBaseContext(context);
+	}
 
 	protected Bundle makeRequestBundle(String method) {
 		Bundle request = new Bundle();
-		request.putString(Consts.BILLING_REQUEST_METHOD, method);
-		request.putInt(Consts.BILLING_REQUEST_API_VERSION, 1);
-		request.putString(Consts.BILLING_REQUEST_PACKAGE_NAME, getPackageName());
+		request.putString(BillingUtil.BILLING_REQUEST_METHOD, method);
+		request.putInt(BillingUtil.BILLING_REQUEST_API_VERSION, 1);
+		request.putString(BillingUtil.BILLING_REQUEST_PACKAGE_NAME, getPackageName());
 		return request;
 	}
 

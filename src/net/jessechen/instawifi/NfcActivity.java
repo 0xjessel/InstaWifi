@@ -1,5 +1,6 @@
 package net.jessechen.instawifi;
 
+import net.jessechen.instawifi.billing.BillingService;
 import net.jessechen.instawifi.misc.AddNetworkDialog;
 import net.jessechen.instawifi.misc.MyTabListener;
 import net.jessechen.instawifi.misc.SpinnerArrayAdapter;
@@ -69,6 +70,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 
 	static Context c;
 	Intent picIntent;
+	BillingService mBillingService;
 
 	private static final String TAG = NfcActivity.class.getSimpleName();
 
@@ -84,7 +86,10 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		// crash reporting and analytics
 		BugSenseHandler.setup(this, Util.bugsenseKey);
 
-		if (Util.hasNfc(getApplicationContext())) {
+		mBillingService = new BillingService();
+		mBillingService.setContext(c);
+
+		if (Util.hasNfc(c)) {
 			mNfcAdapter = ((NfcManager) getSystemService(Context.NFC_SERVICE))
 					.getDefaultAdapter();
 
@@ -114,8 +119,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 
 							@Override
 							public void OnWifiEnabled() {
-								setupNfcView(WifiUtil
-										.getConfiguredNetworks(getApplicationContext()));
+								setupNfcView(WifiUtil.getConfiguredNetworks(c));
 							}
 						});
 			} else {
@@ -242,8 +246,8 @@ public class NfcActivity extends SherlockFragmentActivity implements
 					.getSelectedItem().toString(), passwordField.getText()
 					.toString(), protocolSpinner.getSelectedItemPosition());
 			if (WifiUtil.isValidWifiModel(selectedWifi)) {
-				NdefMessage wifiNdefMessage = NfcUtil.getWifiAsNdef(
-						getApplicationContext(), selectedWifi);
+				NdefMessage wifiNdefMessage = NfcUtil.getWifiAsNdef(c,
+						selectedWifi);
 				if (NfcUtil.writeTag(wifiNdefMessage, detectedTag, this)) {
 					Log.i(TAG, String.format("successfully wrote %s to tag",
 							selectedWifi.getTrimmedSSID()));
@@ -279,10 +283,9 @@ public class NfcActivity extends SherlockFragmentActivity implements
 						.toString(), protocolSpinner.getSelectedItemPosition());
 
 				if (WifiUtil.isValidWifiModel(selectedWifi)) {
-					return NfcUtil.getWifiAsNdef(getApplicationContext(),
-							selectedWifi);
+					return NfcUtil.getWifiAsNdef(c, selectedWifi);
 				} else {
-					Util.longToast(getApplicationContext(),
+					Util.longToast(c,
 							"Error: could not get current wifi configurations");
 					return null;
 				}
@@ -328,7 +331,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		case R.id.share:
 			if (Util.isNfcTabSelected()) {
 				Intent intent = Util
-						.buildAppShareIntent(getApplicationContext());
+						.buildAppShareIntent(c);
 				startActivity(Intent.createChooser(intent, String
 						.format(getString(R.string.app_share_dialog_title))));
 				return true;
@@ -338,7 +341,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			}
 		case R.id.add:
 			if (WifiUtil.isWifiEnabled(this)) {
-				AddNetworkDialog.show(this, getApplicationContext(),
+				AddNetworkDialog.show(this, c,
 						networkSpinner);
 			} else {
 				WifiUtil.showWifiDialog(this,
@@ -349,7 +352,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 							public void OnWifiEnabled() {
 								AddNetworkDialog
 										.show(NfcActivity.this,
-												getApplicationContext(),
+												c,
 												networkSpinner);
 							}
 						});
@@ -363,7 +366,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 	private View.OnClickListener mTagWriter = new View.OnClickListener() {
 		@Override
 		public void onClick(View arg0) {
-			if (Util.hasNfc(getApplicationContext())) {
+			if (Util.hasNfc(c)) {
 				// adapter exists and is enabled.
 				// Write to a tag for as long as the dialog is shown.
 				enableTagWriteMode();
