@@ -247,7 +247,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 					.toString(), protocolSpinner.getSelectedItemPosition());
 			if (WifiUtil.isValidWifiModel(selectedWifi)) {
 				NdefMessage wifiNdefMessage = NfcUtil
-						.getWifiAsNdef(selectedWifi);
+						.getWifiAsNdef(getApplicationContext(), selectedWifi);
 				if (NfcUtil.writeTag(wifiNdefMessage, detectedTag, this)) {
 					Log.i(TAG, String.format("successfully wrote %s to tag",
 							selectedWifi.getTrimmedSSID()));
@@ -283,7 +283,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 						.toString(), protocolSpinner.getSelectedItemPosition());
 
 				if (WifiUtil.isValidWifiModel(selectedWifi)) {
-					return NfcUtil.getWifiAsNdef(selectedWifi);
+					return NfcUtil.getWifiAsNdef(getApplicationContext(), selectedWifi);
 				} else {
 					Util.longToast(getApplicationContext(),
 							"Error: could not get current wifi configurations");

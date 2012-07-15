@@ -18,13 +18,16 @@ import android.util.Log;
 public class NfcUtil {
 	private static final String TAG = NfcUtil.class.getSimpleName();
 	
-	public static NdefMessage getWifiAsNdef(WifiModel wm) {
+	public static NdefMessage getWifiAsNdef(Context c, WifiModel wm) {
 		byte[] url = wm.toWifiUri()
 				.getBytes(Charset.forName("US-ASCII"));
 
 		NdefRecord record = new NdefRecord(NdefRecord.TNF_ABSOLUTE_URI, url,
 				new byte[0], new byte[0]);
-		NdefMessage msg = new NdefMessage(new NdefRecord[] { record });
+		NdefMessage msg = new NdefMessage(
+				new NdefRecord[] { 
+						record,
+						NdefRecord.createApplicationRecord(c.getPackageName())});
 
 		return msg;
 	}
