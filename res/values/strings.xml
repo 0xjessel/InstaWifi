@@ -22,8 +22,6 @@
     <string name="protocol_text">Security</string>
     <string name="show_password_text">Show password</string>
     <string name="ssid_text">SSID</string>
-    <string name="nfc_tab">NFC</string>
-    <string name="qr_tab">QR</string>
     <string name="add_new_network">Add New Network</string>
     <string name="add_button">Add</string>
     <string name="cancel">Cancel</string>
@@ -31,8 +29,9 @@
     <string name="general_fail">Something bad happened</string>
     <string name="enable_wifi_fail">Failed to enable WiFi</string>
     <string name="add_new_network_fail">failed to add network</string>
+    <string name="app_share_dialog_title">Share InstaWifi</string>
     <string name="app_share_subject">Check out InstaWifi, an Android app that lets you connect to WiFi networks instantly</string>
-    <string name="app_share_text">Hi,\n\nDownload InstaWifi on the Android Market here (https://play.google.com/store/apps/details?id=net.jessechen.instawifi), it is a cool Android app that allows me to share and connect to WiFi networks with you instantly.\n\nHave you ever been in a situation where your friends/family comes over and asks for your WiFi name and password? Do you have a long password that you keep on a piece of paper for people to type? There is no need for that anymore.  InstaWifi uses NFC technology and QR Codes to connect to WiFi networks instantly. When your friends and family come over, have them tap their phone over a NFC sticker to connect to your WiFi network. If they don\'t have a NFC-enabled smartphone, scan the QR code with the Barcode Scanner app to connect instantly. There is a solution for every phone out there, and InstaWifi is here to help you save time and the hassle of \"is that O as in octopus or 0 as in the number zero?\".</string>
+    <string name="app_share_text">Download InstaWifi on the Android Market (https://play.google.com/store/apps/details?id=net.jessechen.instawifi), it is a cool Android app that allows you to share and connect to WiFi networks instantly.</string>
     <string name="qr_code_image_description">qr code for selected WiFi</string>
     <string name="qr_share_fail">Failed to generate QR image :(</string>
     <string name="qr_share_subject">WiFi QR code for %1$s</string>

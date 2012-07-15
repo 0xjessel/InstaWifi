@@ -13,7 +13,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 public class Util {
+	public static final String NFC = "NFC";
+	public static final String QR = "QR";
 	public static final String bugsenseKey = "5dfdfe33";
+	
+	public static String curTab = NFC;
 	
 	@SuppressWarnings("unused")
 	private static final String TAG = Util.class.getSimpleName();
@@ -60,6 +64,10 @@ public class Util {
 			return false;
 		}
 		return true;
+	}
+	
+	public static boolean isNfcTabSelected() {
+		return Util.NFC.equals(Util.curTab);
 	}
 
 	public static void initNetworkSpinner(Context c, Spinner spinner,

@@ -156,20 +156,20 @@ public class QrFragment extends SherlockFragment implements
 		switch (item.getItemId()) {
 		case R.id.share:
 			shareQrImage();
-			break;
+			return true;
 		case R.id.add:
-			// buildDialog().show();
-			break;
+			// NfcActivity handles R.id.add
+			return false;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	public static void setQrImage(Activity a) {
 		QrImageSize size;
 
 		DisplayMetrics metrics = new DisplayMetrics();
-		a.getWindowManager().getDefaultDisplay()
-				.getMetrics(metrics);
+		a.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		switch (metrics.densityDpi) {
 		case DisplayMetrics.DENSITY_LOW:
 			size = QrImageSize.SMALL;

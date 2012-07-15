@@ -2,6 +2,7 @@ package net.jessechen.instawifi.misc;
 
 import net.jessechen.instawifi.QrFragment;
 import net.jessechen.instawifi.R;
+import net.jessechen.instawifi.util.Util;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,16 +14,12 @@ public class MyTabListener implements com.actionbarsherlock.app.ActionBar.TabLis
 	private Activity activity;
 	private FragmentManager fm;
 	private Fragment mFragment;
-	private String nfc_tab, qr_tab;
 
 	public MyTabListener(Activity a,
 			android.support.v4.app.FragmentManager fragmentManager, String tag) {
 		this.activity = a;
 		fm = fragmentManager;
 		mTag = tag;
-
-		nfc_tab = a.getString(R.string.nfc_tab);
-		qr_tab = a.getString(R.string.qr_tab);
 	}
 
 	@Override
@@ -30,17 +27,19 @@ public class MyTabListener implements com.actionbarsherlock.app.ActionBar.TabLis
 			FragmentTransaction ft) {
 		View layout = activity.findViewById(R.id.nfc_layout);
 
-		if (mTag.equals(nfc_tab)) {
+		if (mTag.equals(Util.NFC)) {
 			layout.setVisibility(View.VISIBLE);
 			if (mFragment != null) {
 				fm.beginTransaction().detach(mFragment).commit();
 			}
-		} else if (mTag.equals(qr_tab)) {
+			Util.curTab = Util.NFC;
+		} else if (mTag.equals(Util.QR)) {
 			layout.setVisibility(View.GONE);
 
 			mFragment = QrFragment.getInstance();
 			fm.beginTransaction().replace(R.id.fragment, mFragment).commit();
 			tab.setTag(mTag);
+			Util.curTab = Util.QR;
 		}		
 	}
 
@@ -48,7 +47,7 @@ public class MyTabListener implements com.actionbarsherlock.app.ActionBar.TabLis
 	public void onTabUnselected(com.actionbarsherlock.app.ActionBar.Tab tab,
 			FragmentTransaction ft) {
 		// detach QrFragment on unselect
-		if (mTag.equals(qr_tab)) {
+		if (mTag.equals(Util.QR)) {
 			if (mFragment != null) {
 				fm.beginTransaction().detach(mFragment).commit();
 			}

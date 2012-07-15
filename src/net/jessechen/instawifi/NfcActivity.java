@@ -122,32 +122,28 @@ public class NfcActivity extends SherlockFragmentActivity implements
 				setupNfcView(networks);
 			}
 
-			boolean nfcTabSelected = true;
 			// restore QR tab if it was previously selected
 			if (savedInstanceState != null
-					&& savedInstanceState.getString("tab").equals(
-							getString(R.string.qr_tab))) {
-				nfcTabSelected = false;
+					&& savedInstanceState.getString("tab").equals(Util.QR)) {
+				Util.curTab = Util.QR;
 			}
 
 			com.actionbarsherlock.app.ActionBar bar = getSupportActionBar();
 			bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 			bar.addTab(
 					bar.newTab()
-							.setText(getString(R.string.nfc_tab))
+							.setText(Util.NFC)
 							.setTabListener(
 									new MyTabListener(this,
 											getSupportFragmentManager(),
-											getString(R.string.nfc_tab))),
-					nfcTabSelected);
+											Util.NFC)), Util.isNfcTabSelected());
 			bar.addTab(
 					bar.newTab()
-							.setText(getString(R.string.qr_tab))
+							.setText(Util.QR)
 							.setTabListener(
 									new MyTabListener(this,
 											getSupportFragmentManager(),
-											getString(R.string.qr_tab))),
-					!nfcTabSelected);
+											Util.QR)), !Util.isNfcTabSelected());
 		} else {
 			// hide NFC layout
 			View layout = findViewById(R.id.nfc_layout);
@@ -246,8 +242,8 @@ public class NfcActivity extends SherlockFragmentActivity implements
 					.getSelectedItem().toString(), passwordField.getText()
 					.toString(), protocolSpinner.getSelectedItemPosition());
 			if (WifiUtil.isValidWifiModel(selectedWifi)) {
-				NdefMessage wifiNdefMessage = NfcUtil
-						.getWifiAsNdef(getApplicationContext(), selectedWifi);
+				NdefMessage wifiNdefMessage = NfcUtil.getWifiAsNdef(
+						getApplicationContext(), selectedWifi);
 				if (NfcUtil.writeTag(wifiNdefMessage, detectedTag, this)) {
 					Log.i(TAG, String.format("successfully wrote %s to tag",
 							selectedWifi.getTrimmedSSID()));
@@ -283,7 +279,8 @@ public class NfcActivity extends SherlockFragmentActivity implements
 						.toString(), protocolSpinner.getSelectedItemPosition());
 
 				if (WifiUtil.isValidWifiModel(selectedWifi)) {
-					return NfcUtil.getWifiAsNdef(getApplicationContext(), selectedWifi);
+					return NfcUtil.getWifiAsNdef(getApplicationContext(),
+							selectedWifi);
 				} else {
 					Util.longToast(getApplicationContext(),
 							"Error: could not get current wifi configurations");
@@ -329,7 +326,16 @@ public class NfcActivity extends SherlockFragmentActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.share:
-			return true;
+			if (Util.isNfcTabSelected()) {
+				Intent intent = Util
+						.buildAppShareIntent(getApplicationContext());
+				startActivity(Intent.createChooser(intent, String
+						.format(getString(R.string.app_share_dialog_title))));
+				return true;
+			} else {
+				// let QrFragment handle R.id.share
+				return false;
+			}
 		case R.id.add:
 			if (WifiUtil.isWifiEnabled(this)) {
 				AddNetworkDialog.show(this, getApplicationContext(),
