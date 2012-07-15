@@ -13,5 +13,10 @@
         android:showAsAction="always"
         android:title="Add New Network">
     </item>
-
+	<item
+		android:id="@+id/donate"
+		android:icon="@drawable/ic_action_donate"
+		android:showAsAction="collapseActionView"
+		android:title="Donate">
+	</item>
 </menu>
