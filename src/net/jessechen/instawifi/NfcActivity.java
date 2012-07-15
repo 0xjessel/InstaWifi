@@ -76,7 +76,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-			
+
 		setContentView(R.layout.nfc_activity);
 
 		c = getApplicationContext();
@@ -335,7 +335,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.share:
-			break;
+			return true;
 		case R.id.add:
 			if (WifiUtil.isWifiEnabled(this)) {
 				AddNetworkDialog.show(this, getApplicationContext(),
@@ -354,9 +354,10 @@ public class NfcActivity extends SherlockFragmentActivity implements
 							}
 						});
 			}
-			break;
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	private View.OnClickListener mTagWriter = new View.OnClickListener() {
