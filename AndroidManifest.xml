@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
         android:icon="@drawable/ic_launcher_instawifi"
@@ -32,8 +33,8 @@
         </activity>
         <activity
             android:name=".InstaWifiHandler"
-            android:theme="@android:style/Theme.Dialog"
-            android:excludeFromRecents="true" >
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Dialog" >
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 
