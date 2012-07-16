@@ -34,7 +34,7 @@
         <activity
             android:name=".InstaWifiHandler"
             android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.Dialog" >
+            android:theme="@style/Theme.InstaWifi.Dialog" >
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 
@@ -43,6 +43,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".DonateActivity"></activity>
     </application>
 
 </manifest>

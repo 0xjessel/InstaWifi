@@ -358,6 +358,9 @@ public class NfcActivity extends SherlockFragmentActivity implements
 						});
 			}
 			return true;
+		case R.id.donate:
+			startActivity(new Intent(NfcActivity.this, DonateActivity.class));
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}

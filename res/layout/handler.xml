@@ -16,11 +16,13 @@
 
     <ProgressBar
         android:id="@+id/loading"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dip"
         android:layout_marginLeft="50dip"
         android:layout_marginRight="50dip"
-        android:layout_marginTop="20dip" />
+        android:layout_marginTop="20dip"
+        android:indeterminate="true" />
 
 </LinearLayout>

@@ -32,7 +32,7 @@ public class InstaWifiHandler extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.handler);
-		
+
 		a = this;
 		mWifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		status = (TextView) findViewById(R.id.status_text);
@@ -87,17 +87,13 @@ public class InstaWifiHandler extends Activity {
 	public static void handleConnectionChanged(SupplicantState state) {
 		if (SupplicantState.COMPLETED.equals(state) && triedAssociating) {
 			triedAssociating = false;
-
 			// wifi success
 			status.setText(R.string.status_connected);
-			
 			String ssid = mWifiManager.getConnectionInfo().getSSID();
-
 			Log.i(TAG, String.format("wifi connection completed on %s", ssid));
 			Util.shortToast(a, String.format(
 					a.getString(R.string.wifi_connect_success), ssid));
 			Log.i(TAG, "finishing activity bye");
-
 			a.finish();
 		} else if (SupplicantState.SCANNING.equals(state)) {
 			status.setText(R.string.status_scanning);
@@ -109,9 +105,7 @@ public class InstaWifiHandler extends Activity {
 		} else if (SupplicantState.DISCONNECTED.equals(state)
 				&& triedAssociating) {
 			triedAssociating = false;
-
 			status.setText(R.string.status_disconnected);
-			
 			Log.e(TAG, "wifi connection failed");
 			Util.shortToast(a, a.getString(R.string.wifi_connect_fail));
 		}
