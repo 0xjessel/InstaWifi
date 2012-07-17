@@ -16,7 +16,7 @@
 	<item
 		android:id="@+id/donate"
 		android:icon="@drawable/ic_action_donate"
-		android:showAsAction="collapseActionView"
+		android:showAsAction="ifRoom"
 		android:title="Donate">
 	</item>
 </menu>
