@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- styles for ICS+ devices -->
 <resources>
 
     <style name="Theme.InstaWifi" parent="@android:style/Theme.Holo.Light.DarkActionBar"></style>
-	<style name="Theme.InstaWifi.Dialog" parent="@android:style/Theme.Holo.Light.Dialog"></style>
+
+    <style name="Theme.InstaWifi.Dialog" parent="@android:style/Theme.Holo.Light.Dialog"></style>
+
     <style name="InstaWifiEditText" parent="@android:style/Widget.Holo.EditText">
         <item name="android:textCursorDrawable">@null</item>
     </style>
-</resources>
+
+</resources>

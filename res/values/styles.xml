@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- styles for all devices and <ICS devices -->
 <resources>
 
     <style name="Theme.InstaWifi" parent="Theme.Sherlock.Light.DarkActionBar.ForceOverflow"></style>
-	<style name="Theme.InstaWifi.Dialog" parent="Theme.Sherlock.Light.Dialog"></style>
+
+    <style name="Theme.InstaWifi.Dialog" parent="Theme.Sherlock.Light.Dialog"></style>
+
     <style name="white_inset_shadow" parent="@android:style/TextAppearance">
         <item name="android:shadowColor">#FFF</item>
         <item name="android:shadowRadius">.1</item>
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1.5</item>
     </style>
+
 </resources>
