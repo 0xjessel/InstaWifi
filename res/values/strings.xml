@@ -45,6 +45,16 @@
     <string name="status_scanning">Scanning..</string>
     <string name="status_connected">Connected!</string>
     <string name="show_wifi_msg_default">This app requires WiFi to work.</string>
-    <string name="updated_qr_code">QR code updated!</string>
+    <string name="updated_qr_code">QR code updated!</string><string name="donate_intro">Love the app? Donate to support the developer!</string>
+    <string name="donate_explain">Donate 4$ and receive one Android NFC sticker for free.  6$ gets you two, and 10$ gets you 4 stickers.  No additional shipping costs!</string><string name="donate_option_1">2$</string>
+    <string name="donate_option_2">4$</string>
+    <string name="donate_option_3">6$</string>
+    <string name="donate_option_4">10$</string>
+    <string name="donate_button">Donate %1$s$</string><string name="action_share">Share App/QR Code</string>
+    <string name="action_edit">Add New Network</string>
+    <string name="action_donate">Donate</string>
+    
+    
+    
 
 </resources>

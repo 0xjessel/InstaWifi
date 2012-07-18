@@ -5,18 +5,18 @@
         android:id="@+id/share"
         android:icon="@drawable/ic_action_share"
         android:showAsAction="always"
-        android:title="Share QR Code">
+        android:title="@string/action_share">
     </item>
     <item
         android:id="@+id/add"
         android:icon="@drawable/ic_action_edit"
         android:showAsAction="always"
-        android:title="Add New Network">
+        android:title="@string/action_edit">
     </item>
 	<item
 		android:id="@+id/donate"
 		android:icon="@drawable/ic_action_donate"
 		android:showAsAction="ifRoom"
-		android:title="Donate">
+		android:title="@string/action_donate">
 	</item>
 </menu>
