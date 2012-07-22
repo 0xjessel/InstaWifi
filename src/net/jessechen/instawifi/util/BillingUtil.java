@@ -4,6 +4,13 @@ import java.security.SecureRandom;
 import java.util.HashSet;
 
 public class BillingUtil {
+	// need mapping between itemId and donateOption
+	// need mapping between donateOption to # of NFC stickers
+	public static final int donateOption1 = 2;
+	public static final int donateOption2 = 4;
+	public static final int donateOption3 = 6;
+	public static final int donateOption4 = 10;
+
 	// The response codes for a request, defined by Android Market.
 	public enum ResponseCode {
 		RESULT_OK, RESULT_USER_CANCELED, RESULT_SERVICE_UNAVAILABLE, RESULT_BILLING_UNAVAILABLE, RESULT_ITEM_UNAVAILABLE, RESULT_DEVELOPER_ERROR, RESULT_ERROR;

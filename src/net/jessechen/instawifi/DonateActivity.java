@@ -1,13 +1,15 @@
 package net.jessechen.instawifi;
 
 import net.jessechen.instawifi.billing.BillingService;
-import net.jessechen.instawifi.billing.ResponseHandler;
 import net.jessechen.instawifi.billing.BillingService.RequestPurchase;
 import net.jessechen.instawifi.billing.BillingService.RestoreTransactions;
 import net.jessechen.instawifi.billing.PurchaseObserver;
+import net.jessechen.instawifi.billing.ResponseHandler;
 import net.jessechen.instawifi.util.BillingUtil;
 import net.jessechen.instawifi.util.BillingUtil.PurchaseState;
 import net.jessechen.instawifi.util.BillingUtil.ResponseCode;
+import net.jessechen.instawifi.util.Util;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -99,7 +101,14 @@ public class DonateActivity extends SherlockActivity implements
 				String developerPayload) {
 			Log.i(TAG, "onPurchaseStateChange() itemId: " + itemId + " "
 					+ purchaseState);
-
+			if (PurchaseState.PURCHASED.equals(purchaseState)) {
+				// dont send email if donateOption1
+				if (itemId.equals("android.test.purchased")) {
+					// map itemId to donateOption
+					Intent intent = Util.buildDonateEmailIntent(getApplicationContext(), 6);
+					startActivity(intent);
+				}
+			}
 		}
 
 		@Override

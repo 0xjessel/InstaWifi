@@ -16,9 +16,9 @@ public class Util {
 	public static final String NFC = "NFC";
 	public static final String QR = "QR";
 	public static final String bugsenseKey = "5dfdfe33";
-	
+
 	public static String curTab = NFC;
-	
+
 	@SuppressWarnings("unused")
 	private static final String TAG = Util.class.getSimpleName();
 
@@ -65,7 +65,7 @@ public class Util {
 		}
 		return true;
 	}
-	
+
 	public static boolean isNfcTabSelected() {
 		return Util.NFC.equals(Util.curTab);
 	}
@@ -102,12 +102,28 @@ public class Util {
 
 		return picIntent;
 	}
-	
+
 	public static Intent buildAppShareIntent(Context c) {
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.setType("text/plain");
-		intent.putExtra(Intent.EXTRA_SUBJECT, c.getString(R.string.app_share_subject));
+		intent.putExtra(Intent.EXTRA_SUBJECT,
+				c.getString(R.string.app_share_subject));
 		intent.putExtra(Intent.EXTRA_TEXT, c.getString(R.string.app_share_text));
+		return intent;
+	}
+
+	public static Intent buildDonateEmailIntent(Context c, int donateAmount) {
+		Intent intent = new Intent(Intent.ACTION_SENDTO);
+		String subject = donateAmount >= BillingUtil.donateOption2 ? c
+				.getString(R.string.donate_email_subject_multi) : c
+				.getString(R.string.donate_email_subject_one);
+		String message = String.format(c.getString(R.string.donate_email_body),
+				donateAmount, 2);
+		String uriText = String.format(
+				c.getString(R.string.donate_email_template), subject, message);
+		uriText.replace(" ", "%20");
+		Uri uri = Uri.parse(uriText);
+		intent.setData(uri);
 		return intent;
 	}
 }

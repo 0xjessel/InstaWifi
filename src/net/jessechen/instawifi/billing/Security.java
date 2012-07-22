@@ -16,7 +16,6 @@ import java.util.HashSet;
 
 import net.jessechen.instawifi.util.Base64;
 import net.jessechen.instawifi.util.Base64DecoderException;
-import net.jessechen.instawifi.util.BillingUtil;
 import net.jessechen.instawifi.util.BillingUtil.PurchaseState;
 
 import org.json.JSONArray;
@@ -129,7 +128,7 @@ public class Security {
 			 * Generally, encryption keys / passwords should only be kept in
 			 * memory long enough to perform the operation they need to perform.
 			 */
-			String base64EncodedPublicKey = "your public key here";
+			String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw5qz04MXNlHio5M4CvyVIrMPkTJ1NiQASHPN0ES8MlwQw1UoaG5SCM+nAerVVYUWtG9LBv7jt6MM2o1/2stvlA5euGajNJlPyDifjhGwSnjT/8KoiEFvWayRG2Symzj5ln8ugvqSN418Kwevb/sLoZmBZPAzG3frThrQpjNeACYkdQlmUIRJh+uWe8gP2dYuOqlsG8Ye1sq1I6n7fbF9w6LfeMiOc02yZNLAtmQ4nhx//DbYVXrrBocOlO1vXw4qtEnS8vhlpWpHGVnUx595rFTkmFv67BcMircmz14afWfA5fEaWdV+RizUdUfDYJ+ZmAXguUNrzyCLY7L9SN2lMQIDAQAB";
 			PublicKey key = Security.generatePublicKey(base64EncodedPublicKey);
 			verified = Security.verify(key, signedData, signature);
 			if (!verified) {
