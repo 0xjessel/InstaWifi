@@ -53,6 +53,12 @@ public class DonateActivity extends SherlockActivity implements
 
 		donateButton.setOnClickListener(this);
 	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		mBillingService.unbind();
+	}
 
 	@Override
 	public void onClick(View v) {

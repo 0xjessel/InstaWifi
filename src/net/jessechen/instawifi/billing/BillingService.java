@@ -142,6 +142,18 @@ public class BillingService extends Service implements ServiceConnection {
 		return false;
 	}
 
+	/**
+	 * Unbinds from the MarketBillingService. Call this when the application
+	 * terminates to avoid leaking a ServiceConnection.
+	 */
+	public void unbind() {
+		try {
+			unbindService(this);
+		} catch (IllegalArgumentException e) {
+			// This might happen if the service was disconnected
+		}
+	}
+
 	protected Bundle makeRequestBundle(String method) {
 		Bundle request = new Bundle();
 		request.putString(BillingUtil.BILLING_REQUEST_METHOD, method);
