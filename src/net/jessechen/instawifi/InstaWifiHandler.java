@@ -16,8 +16,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockActivity;
+
 @TargetApi(10)
-public class InstaWifiHandler extends Activity {
+public class InstaWifiHandler extends SherlockActivity {
 	static TextView status;
 	NfcAdapter mNfcAdapter;
 	WifiReceiver mReceiver;
