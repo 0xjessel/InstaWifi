@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="hello">Hello World, InstaWifiActivity!</string>
-    <string name="app_name">InstaWifi Beta</string>
+    <string name="app_name">InstaWifi</string>
     <string name="write_tag">Write to Tag</string>
     <string name="tag_read_only">Tag is read-only</string>
     <string name="tag_too_small">Tag does not have enough memory for message</string>
@@ -35,7 +33,7 @@
     <string name="qr_code_image_description">qr code for selected WiFi</string>
     <string name="qr_share_fail">Failed to generate QR image :(</string>
     <string name="qr_share_subject">WiFi QR code for %1$s</string>
-    <string name="qr_share_text">Scan this QR code to connect to the WiFi network \&quot;%1$s\&quot;.  For Android devices, use the \&quot;Barcode Scanner\&quot; app, download link (https://play.google.com/store/apps/details?id=com.google.zxing.client.android).\n\nThis QR code was generated via InstaWifi.</string>
+    <string name="qr_share_text">Scan this QR code to connect to the WiFi network \&quot;%1$s\&quot;.  For Android devices, use the \&quot;Barcode Scanner\&quot; app, download link (https://play.google.com/store/apps/details?id=com.google.zxing.client.android).\n\nThis QR code was generated via InstaWifi (https://play.google.com/store/apps/details?id=net.jessechen.instawifi).</string>
     <string name="qr_share_dialog_title">Share QR Code for \&quot;%1$s\&quot; via</string>
     <string name="show_wifi_add_title">Enable WiFi</string>
     <string name="show_wifi_msg_add">To add a new network, WiFi needs to be on.</string>
@@ -58,10 +56,9 @@
     <string name="donate_email_subject_multi">Send me my NFC stickers! Order ID: %1$s</string>
     <string name="donate_email_subject_one">Send me my NFC sticker!</string>
     <string name="donate_email_body">Hi Jesse,\n\nI\'m awesome for donating %1$d$.  Below is my name and address to send me my %2$d free NFC sticker(s):\n\nName: \n\nAddress:\n\nI will make sure to contact you if I ever have any questions or comments.  Thanks!</string>
-   	<string name="donate_thank_you_stickers">Thank you so much for supporting an independent developer.  Email me your name and address so you can enjoy your free Android NFC sticker(s)!</string>
+    <string name="donate_thank_you_stickers">Thank you so much for supporting an independent developer.  Email me your name and address so you can enjoy your free Android NFC sticker(s)!</string>
     <string name="donate_thank_you">Hi, thank you so much for supporting an independent developer.  You are awesome!</string>
     <string name="action_share">Share App/QR Code</string>
     <string name="action_edit">Add New Network</string>
     <string name="action_donate">Donate</string>
-
 </resources>
