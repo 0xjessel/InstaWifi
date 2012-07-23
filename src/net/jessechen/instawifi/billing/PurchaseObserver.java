@@ -61,12 +61,12 @@ public abstract class PurchaseObserver {
      * String, String, long)}.
      * @param purchaseState the purchase state of the item
      * @param itemId a string identifying the item (the "SKU")
-     * @param quantity the current quantity of this item after the purchase
+     * @param orderId the current quantity of this item after the purchase
      * @param purchaseTime the time the product was purchased, in
      * milliseconds since the epoch (Jan 1, 1970)
      */
     public abstract void onPurchaseStateChange(PurchaseState purchaseState,
-            String itemId, int quantity, long purchaseTime, String developerPayload);
+            String itemId, String orderId, long purchaseTime, String developerPayload);
 
     /**
      * This is called when we receive a response code from Market for a
@@ -147,15 +147,15 @@ public abstract class PurchaseObserver {
      * thread.
      * @param purchaseState the purchase state of the item
      * @param itemId a string identifying the item
-     * @param quantity the quantity of items in this purchase
+     * @param orderId the quantity of items in this purchase
      */
     void postPurchaseStateChange(final PurchaseState purchaseState, final String itemId,
-            final int quantity, final long purchaseTime, final String developerPayload) {
+            final String orderId, final long purchaseTime, final String developerPayload) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 onPurchaseStateChange(
-                        purchaseState, itemId, quantity, purchaseTime, developerPayload);
+                        purchaseState, itemId, orderId, purchaseTime, developerPayload);
             }
         });
     }

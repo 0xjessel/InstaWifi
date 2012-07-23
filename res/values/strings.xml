@@ -46,6 +46,7 @@
     <string name="status_connected">Connected!</string>
     <string name="show_wifi_msg_default">This app requires WiFi to work.</string>
     <string name="updated_qr_code">QR code updated!</string>
+    <string name="donate_not_supported">Your version of Google\'s Play Store does not support in-app billing. Sorry for the inconvenience.</string>
     <string name="donate_intro">Love the app? Donate to support the developer!</string>
     <string name="donate_explain"><b>USA/CANADA/MEXICO ONLY:</b> Donate 4$ and receive one Android NFC sticker for free.  6$ gets you two, and 10$ gets you 4.  No additional shipping costs!</string>
     <string name="donate_option_1">2$</string>
@@ -54,7 +55,7 @@
     <string name="donate_option_4">10$</string>
     <string name="donate_button">Donate %1$s</string>
     <string name="donate_email_template">mailto:instawifi@jessechen.net?subject=%1$s&amp;body=%2$s</string>
-    <string name="donate_email_subject_multi">Send me my NFC stickers!</string>
+    <string name="donate_email_subject_multi">Send me my NFC stickers! Order ID: %1$s</string>
     <string name="donate_email_subject_one">Send me my NFC sticker!</string>
     <string name="donate_email_body">Hi Jesse,\n\nI\'m awesome for donating %1$d$.  Below is my name and address to send me my %2$d free NFC sticker(s):\n\nName: \n\nAddress:\n\nI will make sure to contact you if I ever have any questions or comments.  Thanks!</string>
    	<string name="donate_thank_you_stickers">Thank you so much for supporting an independent developer.  Email me your name and address so you can enjoy your free Android NFC sticker(s)!</string>

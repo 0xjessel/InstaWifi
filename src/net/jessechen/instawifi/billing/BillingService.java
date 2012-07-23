@@ -204,6 +204,18 @@ public class BillingService extends Service implements ServiceConnection {
 	}
 
 	/**
+	 * Checks if in-app billing is supported.
+	 * 
+	 * @pram itemType Either Consts.ITEM_TYPE_INAPP or
+	 *       Consts.ITEM_TYPE_SUBSCRIPTION, indicating the type of item support
+	 *       is being checked for.
+	 * @return true if supported; false otherwise
+	 */
+	public boolean checkBillingSupported() {
+		return new CheckBillingSupported().runRequest();
+	}
+
+	/**
 	 * This is called when we receive a response code from Android Market for a
 	 * request that we made. This is used for reporting various errors and for
 	 * acknowledging that an order was sent to the server. This is NOT used for
@@ -443,6 +455,72 @@ public class BillingService extends Service implements ServiceConnection {
 			ResponseCode responseCode = ResponseCode.valueOf(response
 					.getInt(BillingUtil.BILLING_RESPONSE_RESPONSE_CODE));
 			Log.e(TAG, method + " received " + responseCode.toString());
+		}
+	}
+
+	/**
+	 * Wrapper class that checks if in-app billing is supported.
+	 * 
+	 * Note: Support for subscriptions implies support for one-time purchases.
+	 * However, the opposite is not true.
+	 * 
+	 * Developers may want to perform two checks if both one-time and
+	 * subscription products are available.
+	 */
+	class CheckBillingSupported extends BillingRequest {
+		public String mProductType = null;
+
+		/**
+		 * Legacy contrustor
+		 * 
+		 * This constructor is provided for legacy purposes. Assumes the calling
+		 * application will not be using any features not present in API v1,
+		 * such as subscriptions.
+		 */
+		@Deprecated
+		public CheckBillingSupported() {
+			// This object is never created as a side effect of starting this
+			// service so we pass -1 as the startId to indicate that we should
+			// not stop this service after executing this request.
+			super(-1);
+		}
+
+		/**
+		 * Constructor
+		 * 
+		 * Note: Support for subscriptions implies support for one-time
+		 * purchases. However, the opposite is not true.
+		 * 
+		 * Developers may want to perform two checks if both one-time and
+		 * subscription products are available.
+		 * 
+		 * @pram itemType Either Consts.ITEM_TYPE_INAPP or
+		 *       Consts.ITEM_TYPE_SUBSCRIPTION, indicating the type of item
+		 *       support is being checked for.
+		 */
+		public CheckBillingSupported(String itemType) {
+			super(-1);
+			mProductType = itemType;
+		}
+
+		@Override
+		protected long run() throws RemoteException {
+			Bundle request = makeRequestBundle("CHECK_BILLING_SUPPORTED");
+			if (mProductType != null) {
+				request.putString(BillingUtil.BILLING_REQUEST_ITEM_TYPE,
+						mProductType);
+			}
+			Bundle response = mService.sendBillingRequest(request);
+			int responseCode = response
+					.getInt(BillingUtil.BILLING_RESPONSE_RESPONSE_CODE);
+			Log.i(TAG,
+					"CheckBillingSupported response code: "
+							+ ResponseCode.valueOf(responseCode));
+			boolean billingSupported = (responseCode == ResponseCode.RESULT_OK
+					.ordinal());
+			ResponseHandler.checkBillingSupportedResponse(billingSupported,
+					mProductType);
+			return BillingUtil.BILLING_RESPONSE_INVALID_REQUEST_ID;
 		}
 	}
 

@@ -112,18 +112,26 @@ public class Util {
 		return intent;
 	}
 
-	public static Intent buildDonateEmailIntent(Context c,
+	public static Intent buildDonateEmailIntent(Context c, String orderId,
 			DonateOption donateOption) {
 		Intent intent = new Intent(Intent.ACTION_SENDTO);
 		if (donateOption == null || donateOption.numNfcStickers == 0) {
 			// bugsense track
 			return null;
 		}
-		String subject = donateOption.numNfcStickers > 1 ? c
-				.getString(R.string.donate_email_subject_multi) : c
-				.getString(R.string.donate_email_subject_one);
+
+		String subject;
+		if (donateOption.numNfcStickers > 1) {
+			subject = String.format(
+					c.getString(R.string.donate_email_subject_multi), orderId);
+		} else {
+			subject = String.format(
+					c.getString(R.string.donate_email_subject_one), orderId);
+		}
+
 		String message = String.format(c.getString(R.string.donate_email_body),
 				donateOption.amount, donateOption.numNfcStickers);
+		
 		String uriText = String.format(
 				c.getString(R.string.donate_email_template), subject, message);
 		uriText.replace(" ", "%20");

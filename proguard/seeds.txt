@@ -1357,6 +1357,10 @@ com.actionbarsherlock.R$id: int donate
 com.actionbarsherlock.R$id: int donate_button
 com.actionbarsherlock.R$id: int donate_layout
 com.actionbarsherlock.R$id: int donate_options
+com.actionbarsherlock.R$id: int donate_rb1
+com.actionbarsherlock.R$id: int donate_rb2
+com.actionbarsherlock.R$id: int donate_rb3
+com.actionbarsherlock.R$id: int donate_rb4
 com.actionbarsherlock.R$id: int fragment
 com.actionbarsherlock.R$id: int gridlayout_qr
 com.actionbarsherlock.R$id: int homeAsUp
@@ -1376,10 +1380,6 @@ com.actionbarsherlock.R$id: int password_text_qr
 com.actionbarsherlock.R$id: int protocol_spinner
 com.actionbarsherlock.R$id: int protocol_spinner_qr
 com.actionbarsherlock.R$id: int qr_code_image
-com.actionbarsherlock.R$id: int radioButton1
-com.actionbarsherlock.R$id: int radioButton2
-com.actionbarsherlock.R$id: int radioButton3
-com.actionbarsherlock.R$id: int radioButton4
 com.actionbarsherlock.R$id: int security_text
 com.actionbarsherlock.R$id: int security_text_qr
 com.actionbarsherlock.R$id: int share
@@ -1461,10 +1461,13 @@ com.actionbarsherlock.R$string: int donate_email_subject_one
 com.actionbarsherlock.R$string: int donate_email_template
 com.actionbarsherlock.R$string: int donate_explain
 com.actionbarsherlock.R$string: int donate_intro
+com.actionbarsherlock.R$string: int donate_not_supported
 com.actionbarsherlock.R$string: int donate_option_1
 com.actionbarsherlock.R$string: int donate_option_2
 com.actionbarsherlock.R$string: int donate_option_3
 com.actionbarsherlock.R$string: int donate_option_4
+com.actionbarsherlock.R$string: int donate_thank_you
+com.actionbarsherlock.R$string: int donate_thank_you_stickers
 com.actionbarsherlock.R$string: int enable
 com.actionbarsherlock.R$string: int enable_wifi_fail
 com.actionbarsherlock.R$string: int general_fail

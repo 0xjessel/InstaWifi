@@ -42,6 +42,7 @@ public class DonateActivity extends SherlockActivity implements
 		mDonatePurchaseObserver = new DonatePurchaseObserver(mHandler);
 		mBillingService = new BillingService();
 		mBillingService.setContext(this);
+		mBillingService.checkBillingSupported();
 
 		ResponseHandler.register(mDonatePurchaseObserver);
 
@@ -78,8 +79,6 @@ public class DonateActivity extends SherlockActivity implements
 	@Override
 	public void onClick(View v) {
 		if (v == donateButton) {
-			// launch android billing service here
-			Log.d(TAG, "donateButton pressed");
 			RadioButton selected = (RadioButton) donateOptions
 					.findViewById(donateOptions.getCheckedRadioButtonId());
 			mBillingService.requestPurchase((DonateOption) selected.getTag(),
@@ -107,12 +106,16 @@ public class DonateActivity extends SherlockActivity implements
 
 		@Override
 		public void onBillingSupported(boolean supported, String type) {
+			if (!supported) {
+				Util.longToast(getApplicationContext(), getApplicationContext().getString(R.string.donate_not_supported));
+				donateButton.setEnabled(false);
+			}
 			Log.i(TAG, "supported: " + supported);
 		}
 
 		@Override
 		public void onPurchaseStateChange(PurchaseState purchaseState,
-				String itemId, int quantity, long purchaseTime,
+				String itemId, String orderId, long purchaseTime,
 				String developerPayload) {
 			Log.i(TAG, "onPurchaseStateChange() itemId: " + itemId + " "
 					+ purchaseState);
@@ -129,7 +132,7 @@ public class DonateActivity extends SherlockActivity implements
 							getApplicationContext().getString(
 									R.string.donate_thank_you_stickers));
 					Intent intent = Util.buildDonateEmailIntent(
-							getApplicationContext(),
+							getApplicationContext(), orderId,
 							BillingUtil.map.get(itemId));
 					startActivity(intent);
 				}

@@ -126,23 +126,14 @@ public class ResponseHandler {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				/*PurchaseDatabase db = new PurchaseDatabase(context);
-				int quantity = db.updatePurchase(orderId, productId,
-						purchaseState, purchaseTime, developerPayload);
-				db.close();
-				*/
-				
-				int quantity = 1;
-				
-				
 				// This needs to be synchronized because the UI thread can
 				// change the
 				// value of sPurchaseObserver.
 				synchronized (ResponseHandler.class) {
 					if (sPurchaseObserver != null) {
 						sPurchaseObserver.postPurchaseStateChange(
-								purchaseState, productId, quantity,
-								purchaseTime, developerPayload);
+								purchaseState, productId, orderId, purchaseTime,
+								developerPayload);
 					}
 				}
 			}
