@@ -107,7 +107,8 @@ public class DonateActivity extends SherlockActivity implements
 		@Override
 		public void onBillingSupported(boolean supported, String type) {
 			if (!supported) {
-				Util.longToast(getApplicationContext(), getApplicationContext().getString(R.string.donate_not_supported));
+				Util.longToast(getApplicationContext(), getApplicationContext()
+						.getString(R.string.donate_not_supported));
 				donateButton.setEnabled(false);
 			}
 			Log.i(TAG, "supported: " + supported);
@@ -120,12 +121,11 @@ public class DonateActivity extends SherlockActivity implements
 			Log.i(TAG, "onPurchaseStateChange() itemId: " + itemId + " "
 					+ purchaseState);
 			if (PurchaseState.PURCHASED.equals(purchaseState)) {
-				if (BillingUtil.donateOption1.equals(itemId)) {
+				if (BillingUtil.itemId1.equals(itemId)) {
 					Util.shortToast(
 							getApplicationContext(),
 							getApplicationContext().getString(
 									R.string.donate_thank_you));
-					return;
 				} else {
 					Util.shortToast(
 							getApplicationContext(),
