@@ -1,26 +1,27 @@
 android.annotation.SuppressLint
 android.annotation.TargetApi
-android.support.v4.android.accessibilityservice.AccessibilityServiceInfoCompat
-android.support.v4.android.accessibilityservice.AccessibilityServiceInfoCompat$AccessibilityServiceInfoIcsImpl
-android.support.v4.android.accessibilityservice.AccessibilityServiceInfoCompat$AccessibilityServiceInfoStubImpl
-android.support.v4.android.accessibilityservice.AccessibilityServiceInfoCompat$AccessibilityServiceInfoVersionImpl
-android.support.v4.android.accessibilityservice.AccessibilityServiceInfoCompatIcs
+android.support.v4.accessibilityservice.AccessibilityServiceInfoCompat
+android.support.v4.accessibilityservice.AccessibilityServiceInfoCompat$AccessibilityServiceInfoIcsImpl
+android.support.v4.accessibilityservice.AccessibilityServiceInfoCompat$AccessibilityServiceInfoStubImpl
+android.support.v4.accessibilityservice.AccessibilityServiceInfoCompat$AccessibilityServiceInfoVersionImpl
+android.support.v4.accessibilityservice.AccessibilityServiceInfoCompatIcs
 android.support.v4.content.AsyncTaskLoader
 android.support.v4.content.AsyncTaskLoader$LoadTask
 android.support.v4.content.CursorLoader
+android.support.v4.content.IntentCompat
 android.support.v4.content.Loader:
     android.content.Context mContext
-    75:77:public Loader(android.content.Context)
-    87:90:public void deliverResult(java.lang.Object)
-    96:96:public android.content.Context getContext()
-    103:103:public int getId()
-    142:142:public boolean isStarted()
-    151:151:public boolean isAbandoned()
-    160:160:public boolean isReset()
-    202:203:public void forceLoad()
-    210:210:protected void onForceLoad()
-    297:299:public boolean takeContentChanged()
-    311:319:public void onContentChanged()
+    90:92:public Loader(android.content.Context)
+    102:105:public void deliverResult(java.lang.Object)
+    111:111:public android.content.Context getContext()
+    118:118:public int getId()
+    157:157:public boolean isStarted()
+    166:166:public boolean isAbandoned()
+    175:175:public boolean isReset()
+    217:218:public void forceLoad()
+    225:225:protected void onForceLoad()
+    312:314:public boolean takeContentChanged()
+    326:334:public void onContentChanged()
 android.support.v4.content.Loader$ForceLoadContentObserver
 android.support.v4.content.Loader$OnLoadCompleteListener:
     public abstract void onLoadComplete(android.support.v4.content.Loader,java.lang.Object)
@@ -37,12 +38,14 @@ android.support.v4.content.ModernAsyncTask$AsyncTaskResult
 android.support.v4.content.ModernAsyncTask$InternalHandler
 android.support.v4.content.ModernAsyncTask$Status
 android.support.v4.content.ModernAsyncTask$WorkerRunnable
+android.support.v4.content.pm.ActivityInfoCompat
+android.support.v4.database.DatabaseUtilsCompat
 android.support.v4.os.ParcelableCompat:
-    22:31:public ParcelableCompat()
+    26:42:public ParcelableCompat()
 android.support.v4.os.ParcelableCompatCreatorHoneycombMR2Stub:
     22:22:ParcelableCompatCreatorHoneycombMR2Stub()
 android.support.v4.util.DebugUtils:
-    22:22:public DebugUtils()
+    25:25:public DebugUtils()
 android.support.v4.util.LruCache
 android.support.v4.util.TimeUtils
 android.support.v4.view.AccessibilityDelegateCompat
@@ -72,7 +75,11 @@ android.support.v4.view.MenuCompat
 android.support.v4.view.MenuCompat$BaseMenuVersionImpl
 android.support.v4.view.MenuCompat$HoneycombMenuVersionImpl
 android.support.v4.view.MenuCompat$MenuVersionImpl
-android.support.v4.view.MenuCompatHoneycomb
+android.support.v4.view.MenuItemCompat
+android.support.v4.view.MenuItemCompat$BaseMenuVersionImpl
+android.support.v4.view.MenuItemCompat$HoneycombMenuVersionImpl
+android.support.v4.view.MenuItemCompat$MenuVersionImpl
+android.support.v4.view.MenuItemCompatHoneycomb
 android.support.v4.view.MotionEventCompat:
     public static final int ACTION_MASK
     public static final int ACTION_POINTER_DOWN
@@ -81,17 +88,24 @@ android.support.v4.view.MotionEventCompat:
     public static final int ACTION_SCROLL
     public static final int ACTION_POINTER_INDEX_MASK
     public static final int ACTION_POINTER_INDEX_SHIFT
-    24:74:public MotionEventCompat()
-    147:147:public static int getActionMasked(android.view.MotionEvent)
+    25:75:public MotionEventCompat()
+    148:148:public static int getActionMasked(android.view.MotionEvent)
 android.support.v4.view.MotionEventCompatEclair:
     24:24:MotionEventCompatEclair()
+android.support.v4.view.PagerTitleStrip:
+    private static final java.lang.String TAG
+    private static final int SIDE_ALPHA
+    private static final int TEXT_SPACING
+    67:68:public PagerTitleStrip(android.content.Context)
+android.support.v4.view.PagerTitleStrip$PageListener:
+    318:319:public void onAdapterChanged(android.support.v4.view.PagerAdapter,android.support.v4.view.PagerAdapter)
 android.support.v4.view.VelocityTrackerCompat:
-    24:50:public VelocityTrackerCompat()
-    90:90:public static float getYVelocity(android.view.VelocityTracker,int)
+    25:51:public VelocityTrackerCompat()
+    91:91:public static float getYVelocity(android.view.VelocityTracker,int)
 android.support.v4.view.VelocityTrackerCompat$BaseVelocityTrackerVersionImpl:
-    43:43:public float getYVelocity(android.view.VelocityTracker,int)
+    44:44:public float getYVelocity(android.view.VelocityTracker,int)
 android.support.v4.view.VelocityTrackerCompat$HoneycombVelocityTrackerVersionImpl:
-    57:57:public float getYVelocity(android.view.VelocityTracker,int)
+    58:58:public float getYVelocity(android.view.VelocityTracker,int)
 android.support.v4.view.VelocityTrackerCompat$VelocityTrackerVersionImpl:
     public abstract float getYVelocity(android.view.VelocityTracker,int)
 android.support.v4.view.VelocityTrackerCompatHoneycomb:
@@ -101,28 +115,28 @@ android.support.v4.view.ViewCompat:
     public static final int OVER_SCROLL_ALWAYS
     public static final int OVER_SCROLL_IF_CONTENT_SCROLLS
     public static final int OVER_SCROLL_NEVER
-    26:93:public ViewCompat()
-    137:137:public static boolean canScrollVertically(android.view.View,int)
-    145:146:public static void setOverScrollMode(android.view.View,int)
-    149:150:public static void onPopulateAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent)
-    153:154:public static void onInitializeAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent)
-    157:158:public static void onInitializeAccessibilityNodeInfo(android.view.View,android.support.v4.view.accessibility.AccessibilityNodeInfoCompat)
-    161:162:public static void setAccessibilityDelegate(android.view.View,android.support.v4.view.AccessibilityDelegateCompat)
+    28:95:public ViewCompat()
+    153:153:public static boolean canScrollVertically(android.view.View,int)
+    182:183:public static void setOverScrollMode(android.view.View,int)
+    219:220:public static void onPopulateAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent)
+    252:253:public static void onInitializeAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent)
+    288:289:public static void onInitializeAccessibilityNodeInfo(android.view.View,android.support.v4.view.accessibility.AccessibilityNodeInfoCompat)
+    303:304:public static void setAccessibilityDelegate(android.view.View,android.support.v4.view.AccessibilityDelegateCompat)
 android.support.v4.view.ViewCompat$BaseViewCompatImpl:
-    60:60:public boolean canScrollVertically(android.view.View,int)
-    67:67:public void setOverScrollMode(android.view.View,int)
-    70:70:public void setAccessibilityDelegate(android.view.View,android.support.v4.view.AccessibilityDelegateCompat)
-    73:73:public void onPopulateAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent)
-    76:76:public void onInitializeAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent)
-    79:79:public void onInitializeAccessibilityNodeInfo(android.view.View,android.support.v4.view.accessibility.AccessibilityNodeInfoCompat)
+    62:62:public boolean canScrollVertically(android.view.View,int)
+    69:69:public void setOverScrollMode(android.view.View,int)
+    72:72:public void setAccessibilityDelegate(android.view.View,android.support.v4.view.AccessibilityDelegateCompat)
+    75:75:public void onPopulateAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent)
+    78:78:public void onInitializeAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent)
+    81:81:public void onInitializeAccessibilityNodeInfo(android.view.View,android.support.v4.view.accessibility.AccessibilityNodeInfoCompat)
 android.support.v4.view.ViewCompat$GBViewCompatImpl:
-    89:90:public void setOverScrollMode(android.view.View,int)
+    91:92:public void setOverScrollMode(android.view.View,int)
 android.support.v4.view.ViewCompat$ICSViewCompatImpl:
-    100:100:public boolean canScrollVertically(android.view.View,int)
-    104:105:public void onPopulateAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent)
-    108:109:public void onInitializeAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent)
-    112:113:public void onInitializeAccessibilityNodeInfo(android.view.View,android.support.v4.view.accessibility.AccessibilityNodeInfoCompat)
-    116:117:public void setAccessibilityDelegate(android.view.View,android.support.v4.view.AccessibilityDelegateCompat)
+    102:102:public boolean canScrollVertically(android.view.View,int)
+    106:107:public void onPopulateAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent)
+    110:111:public void onInitializeAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent)
+    114:115:public void onInitializeAccessibilityNodeInfo(android.view.View,android.support.v4.view.accessibility.AccessibilityNodeInfoCompat)
+    118:119:public void setAccessibilityDelegate(android.view.View,android.support.v4.view.AccessibilityDelegateCompat)
 android.support.v4.view.ViewCompat$ViewCompatImpl:
     public abstract boolean canScrollVertically(android.view.View,int)
     public abstract void setOverScrollMode(android.view.View,int)
@@ -131,7 +145,7 @@ android.support.v4.view.ViewCompat$ViewCompatImpl:
     public abstract void onInitializeAccessibilityNodeInfo(android.view.View,android.support.v4.view.accessibility.AccessibilityNodeInfoCompat)
     public abstract void setAccessibilityDelegate(android.view.View,android.support.v4.view.AccessibilityDelegateCompat)
 android.support.v4.view.ViewCompatGingerbread:
-    21:21:public ViewCompatGingerbread()
+    21:21:ViewCompatGingerbread()
     27:28:public static void setOverScrollMode(android.view.View,int)
 android.support.v4.view.ViewCompatICS:
     27:27:ViewCompatICS()
@@ -141,7 +155,7 @@ android.support.v4.view.ViewCompatICS:
     46:47:public static void onInitializeAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent)
     50:51:public static void onInitializeAccessibilityNodeInfo(android.view.View,java.lang.Object)
 android.support.v4.view.ViewConfigurationCompat:
-    24:45:public ViewConfigurationCompat()
+    25:46:public ViewConfigurationCompat()
 android.support.v4.view.ViewConfigurationCompatFroyo:
     24:24:ViewConfigurationCompatFroyo()
 android.support.v4.view.ViewGroupCompat
@@ -155,32 +169,33 @@ android.support.v4.view.ViewPager:
     private static final boolean USE_CACHE
     private static final int DEFAULT_OFFSCREEN_PAGES
     private static final int MAX_SETTLE_DURATION
-    private android.support.v4.view.PagerAdapter$DataSetObserver mObserver
+    private static final int MIN_DISTANCE_FOR_FLING
+    private android.support.v4.view.ViewPager$PagerObserver mObserver
     private static final int INVALID_POINTER
     private long mFakeDragBeginTime
     public static final int SCROLL_STATE_IDLE
     public static final int SCROLL_STATE_DRAGGING
     public static final int SCROLL_STATE_SETTLING
-    228:230:public ViewPager(android.content.Context)
-    267:299:public void setAdapter(android.support.v4.view.PagerAdapter)
-    302:302:public android.support.v4.view.PagerAdapter getAdapter()
-    313:315:public void setCurrentItem(int)
-    329:329:public int getCurrentItem()
-    378:379:public void setOnPageChangeListener(android.support.v4.view.ViewPager$OnPageChangeListener)
-    389:389:public int getOffscreenPageLimit()
-    410:419:public void setOffscreenPageLimit(int)
-    430:437:public void setPageMargin(int)
-    445:445:public int getPageMargin()
-    454:458:public void setPageMarginDrawable(android.graphics.drawable.Drawable)
-    466:467:public void setPageMarginDrawable(int)
-    488:490:float distanceInfluenceForSnapDuration(float)
-    500:501:void smoothScrollTo(int,int)
-    559:605:void dataSetChanged()
-    1334:1350:public boolean beginFakeDrag()
-    1360:1382:public void endFakeDrag()
-    1392:1426:public void fakeDragBy(float)
-    1438:1438:public boolean isFakeDragging()
-android.support.v4.view.ViewPager$DataSetObserver
+    271:273:public ViewPager(android.content.Context)
+    314:351:public void setAdapter(android.support.v4.view.PagerAdapter)
+    354:362:private void removeNonDecorViews()
+    385:387:public void setCurrentItem(int)
+    462:463:public void setOnPageChangeListener(android.support.v4.view.ViewPager$OnPageChangeListener)
+    485:485:public int getOffscreenPageLimit()
+    506:515:public void setOffscreenPageLimit(int)
+    526:533:public void setPageMargin(int)
+    541:541:public int getPageMargin()
+    550:554:public void setPageMarginDrawable(android.graphics.drawable.Drawable)
+    562:563:public void setPageMarginDrawable(int)
+    596:597:void smoothScrollTo(int,int)
+    660:717:void dataSetChanged()
+    1652:1668:public boolean beginFakeDrag()
+    1678:1697:public void endFakeDrag()
+    1707:1735:public void fakeDragBy(float)
+    1747:1747:public boolean isFakeDragging()
+android.support.v4.view.ViewPager$OnAdapterChangeListener:
+    public abstract void onAdapterChanged(android.support.v4.view.PagerAdapter,android.support.v4.view.PagerAdapter)
+android.support.v4.view.ViewPager$PagerObserver
 android.support.v4.view.ViewPager$SimpleOnPageChangeListener
 android.support.v4.view.accessibility.AccessibilityEventCompat
 android.support.v4.view.accessibility.AccessibilityEventCompat$AccessibilityEventIcsImpl
@@ -213,20 +228,35 @@ android.support.v4.widget.CursorAdapter$MyDataSetObserver
 android.support.v4.widget.CursorFilter
 android.support.v4.widget.CursorFilter$CursorFilterClient
 android.support.v4.widget.EdgeEffectCompat:
-    203:203:public boolean onAbsorb(int)
+    204:204:public boolean onAbsorb(int)
 android.support.v4.widget.EdgeEffectCompat$BaseEdgeEffectImpl:
-    81:81:public boolean onAbsorb(java.lang.Object,int)
+    82:82:public boolean onAbsorb(java.lang.Object,int)
 android.support.v4.widget.EdgeEffectCompat$EdgeEffectIcsImpl:
-    115:115:public boolean onAbsorb(java.lang.Object,int)
+    116:116:public boolean onAbsorb(java.lang.Object,int)
 android.support.v4.widget.EdgeEffectCompat$EdgeEffectImpl:
     public abstract boolean onAbsorb(java.lang.Object,int)
 android.support.v4.widget.EdgeEffectCompatIcs:
     28:28:EdgeEffectCompatIcs()
     57:58:public static boolean onAbsorb(java.lang.Object,int)
 android.support.v4.widget.ResourceCursorAdapter
+android.support.v4.widget.SearchViewCompat
+android.support.v4.widget.SearchViewCompat$OnQueryTextListenerCompat
+android.support.v4.widget.SearchViewCompat$SearchViewCompatHoneycombImpl
+android.support.v4.widget.SearchViewCompat$SearchViewCompatHoneycombImpl$1
+android.support.v4.widget.SearchViewCompat$SearchViewCompatImpl
+android.support.v4.widget.SearchViewCompat$SearchViewCompatStubImpl
+android.support.v4.widget.SearchViewCompatHoneycomb
+android.support.v4.widget.SearchViewCompatHoneycomb$1
+android.support.v4.widget.SearchViewCompatHoneycomb$OnQueryTextListenerCompatBridge
 android.support.v4.widget.SimpleCursorAdapter
 android.support.v4.widget.SimpleCursorAdapter$CursorToStringConverter
 android.support.v4.widget.SimpleCursorAdapter$ViewBinder
+com.android.vending.billing.IMarketBillingService$Stub:
+    private static final java.lang.String DESCRIPTOR
+    static final int TRANSACTION_sendBillingRequest
+    34:34:public android.os.IBinder asBinder()
+com.android.vending.billing.IMarketBillingService$Stub$Proxy:
+    82:82:public java.lang.String getInterfaceDescriptor()
 com.bugsense.trace.BugSense:
     public BugSense()
 com.bugsense.trace.BugSense$1:
@@ -573,7 +603,7 @@ com.gridlayout.R$dimen:
     public static final int abs__dialog_min_width_major
     public static final int abs__dialog_min_width_minor
     public static final int action_button_min_width
-    664:664:public R$dimen()
+    702:702:public R$dimen()
 com.gridlayout.R$drawable
 com.gridlayout.R$id
 com.gridlayout.R$integer
@@ -619,6 +649,9 @@ com.gridlayout.R$styleable:
     public static final int SherlockActionMode_height
     public static final int SherlockActionMode_subtitleTextStyle
     public static final int SherlockActionMode_titleTextStyle
+    public static final int SherlockActivityChooserView_android_background
+    public static final int SherlockActivityChooserView_expandActivityOverflowButtonDrawable
+    public static final int SherlockActivityChooserView_initialActivityCount
     public static final int SherlockMenuGroup_android_checkableBehavior
     public static final int SherlockMenuGroup_android_enabled
     public static final int SherlockMenuGroup_android_id
@@ -676,16 +709,20 @@ com.gridlayout.R$styleable:
     public static final int SherlockTheme_actionModeCloseButtonStyle
     public static final int SherlockTheme_actionModeCloseDrawable
     public static final int SherlockTheme_actionModePopupWindowStyle
+    public static final int SherlockTheme_actionModeShareDrawable
     public static final int SherlockTheme_actionModeSplitBackground
     public static final int SherlockTheme_actionModeStyle
     public static final int SherlockTheme_actionOverflowButtonStyle
     public static final int SherlockTheme_actionSpinnerItemStyle
+    public static final int SherlockTheme_activatedBackgroundIndicator
+    public static final int SherlockTheme_activityChooserViewStyle
     public static final int SherlockTheme_android_windowIsFloating
     public static final int SherlockTheme_buttonStyleSmall
     public static final int SherlockTheme_dividerVertical
     public static final int SherlockTheme_dropDownListViewStyle
     public static final int SherlockTheme_dropdownListPreferredItemHeight
     public static final int SherlockTheme_homeAsUpIndicator
+    public static final int SherlockTheme_listPopupWindowStyle
     public static final int SherlockTheme_listPreferredItemHeightSmall
     public static final int SherlockTheme_listPreferredItemPaddingLeft
     public static final int SherlockTheme_listPreferredItemPaddingRight
@@ -712,10 +749,13 @@ com.gridlayout.R$styleable:
     public static final int ViewGroup_MarginLayout_android_layout_marginLeft
     public static final int ViewGroup_MarginLayout_android_layout_marginRight
     public static final int ViewGroup_MarginLayout_android_layout_marginTop
-    1107:1107:public R$styleable()
+    1206:1206:public R$styleable()
 com.gridlayout.Space:
     51:52:public Space(android.content.Context)
 net.jessechen.instawifi.BuildConfig
+net.jessechen.instawifi.DonateActivity$DonatePurchaseObserver:
+    95:96:public void onBillingSupported(boolean,java.lang.String)
+    130:137:public void onRestoreTransactionsResponse(net.jessechen.instawifi.billing.BillingService$RestoreTransactions,net.jessechen.instawifi.util.BillingUtil$ResponseCode)
 net.jessechen.instawifi.NfcActivity:
     static final int MESSAGE_SENT
 net.jessechen.instawifi.QrFragment:
@@ -733,8 +773,78 @@ net.jessechen.instawifi.R$menu
 net.jessechen.instawifi.R$string
 net.jessechen.instawifi.R$style
 net.jessechen.instawifi.R$styleable
+net.jessechen.instawifi.billing.BillingService:
+    158:163:protected android.os.Bundle makeRequestBundle(java.lang.String)
+net.jessechen.instawifi.billing.BillingService$RequestPurchase:
+    520:521:public BillingService$RequestPurchase(net.jessechen.instawifi.billing.BillingService,java.lang.String)
+    534:535:public BillingService$RequestPurchase(net.jessechen.instawifi.billing.BillingService,java.lang.String,java.lang.String)
+net.jessechen.instawifi.billing.BillingService$RestoreTransactions
+net.jessechen.instawifi.billing.PurchaseObserver:
+    private static final java.lang.String TAG
+    public abstract void onBillingSupported(boolean,java.lang.String)
+    public abstract void onRestoreTransactionsResponse(net.jessechen.instawifi.billing.BillingService$RestoreTransactions,net.jessechen.instawifi.util.BillingUtil$ResponseCode)
+net.jessechen.instawifi.billing.ResponseHandler:
+    private static final java.lang.String TAG
+    54:55:public static synchronized void unregister(net.jessechen.instawifi.billing.PurchaseObserver)
+    67:70:public static void checkBillingSupportedResponse(boolean,java.lang.String)
+    191:195:public static void responseCodeReceived(android.content.Context,net.jessechen.instawifi.billing.BillingService$RestoreTransactions,net.jessechen.instawifi.util.BillingUtil$ResponseCode)
+net.jessechen.instawifi.billing.Security:
+    private static final java.lang.String KEY_FACTORY_ALGORITHM
+    private static final java.lang.String SIGNATURE_ALGORITHM
 net.jessechen.instawifi.misc.AddNetworkDialog:
     32:32:public AddNetworkDialog()
+net.jessechen.instawifi.util.Base64:
+    public static final boolean ENCODE
+    public static final boolean DECODE
+    private static final byte EQUALS_SIGN
+    private static final byte NEW_LINE
+    private static final byte WHITE_SPACE_ENC
+    private static final byte EQUALS_SIGN_ENC
+    210:234:private static byte[] encode3to4(byte[],int,int,byte[],int,byte[])
+    247:247:public static java.lang.String encode(byte[])
+    258:258:public static java.lang.String encodeWebSafe(byte[],boolean)
+    274:286:public static java.lang.String encode(byte[],int,int,byte[],boolean)
+    301:345:public static byte[] encode(byte[],int,int,byte[],int)
+    431:432:public static byte[] decodeWebSafe(java.lang.String)
+    445:445:public static byte[] decode(byte[])
+    458:458:public static byte[] decodeWebSafe(byte[])
+    489:489:public static byte[] decodeWebSafe(byte[],int,int)
+net.jessechen.instawifi.util.Base64DecoderException:
+    private static final long serialVersionUID
+net.jessechen.instawifi.util.BillingUtil:
+    public static final int donateOption1
+    public static final int donateOption2
+    public static final int donateOption3
+    public static final int donateOption4
+    public static final java.lang.String MARKET_BILLING_SERVICE_ACTION
+    public static final java.lang.String ACTION_CONFIRM_NOTIFICATION
+    public static final java.lang.String ACTION_GET_PURCHASE_INFORMATION
+    public static final java.lang.String ACTION_RESTORE_TRANSACTIONS
+    public static final java.lang.String ACTION_NOTIFY
+    public static final java.lang.String ACTION_RESPONSE_CODE
+    public static final java.lang.String ACTION_PURCHASE_STATE_CHANGED
+    public static final java.lang.String NOTIFICATION_ID
+    public static final java.lang.String INAPP_SIGNED_DATA
+    public static final java.lang.String INAPP_SIGNATURE
+    public static final java.lang.String INAPP_REQUEST_ID
+    public static final java.lang.String INAPP_RESPONSE_CODE
+    public static final java.lang.String BILLING_REQUEST_METHOD
+    public static final java.lang.String BILLING_REQUEST_API_VERSION
+    public static final java.lang.String BILLING_REQUEST_PACKAGE_NAME
+    public static final java.lang.String BILLING_REQUEST_ITEM_ID
+    public static final java.lang.String BILLING_REQUEST_ITEM_TYPE
+    public static final java.lang.String BILLING_REQUEST_DEVELOPER_PAYLOAD
+    public static final java.lang.String BILLING_REQUEST_NOTIFY_IDS
+    public static final java.lang.String BILLING_REQUEST_NONCE
+    public static final java.lang.String BILLING_RESPONSE_RESPONSE_CODE
+    public static final java.lang.String BILLING_RESPONSE_PURCHASE_INTENT
+    public static final java.lang.String BILLING_RESPONSE_REQUEST_ID
+    public static final java.lang.String ITEM_TYPE_INAPP
+    public static final java.lang.String ITEM_TYPE_SUBSCRIPTION
+    6:6:public BillingUtil()
+    91:93:public static long generateNonce()
+    97:98:public static void removeNonce(long)
+    101:101:public static boolean isNonceKnown(long)
 net.jessechen.instawifi.util.QrUtil:
     12:12:public QrUtil()
 net.jessechen.instawifi.util.RootUtil:
@@ -742,10 +852,11 @@ net.jessechen.instawifi.util.RootUtil:
 net.jessechen.instawifi.util.RootUtil$ExecuteAsRootBase:
     220:268:public static boolean canRunRootCommands()
 net.jessechen.instawifi.util.Util:
+    public static final java.lang.String NFC
+    public static final java.lang.String QR
     public static final java.lang.String bugsenseKey
-    67:74:public static void initNetworkSpinner(android.content.Context,android.widget.Spinner,android.widget.AdapterView$OnItemSelectedListener)
-    77:82:public static void initProtocolSpinner(android.content.Context,android.widget.Spinner)
-    99:103:public static android.content.Intent buildAppShareIntent(android.content.Context)
+    75:82:public static void initNetworkSpinner(android.content.Context,android.widget.Spinner,android.widget.AdapterView$OnItemSelectedListener)
+    85:90:public static void initProtocolSpinner(android.content.Context,android.widget.Spinner)
 net.jessechen.instawifi.util.WifiUtil:
     public static final int NONE
     public static final int WEP

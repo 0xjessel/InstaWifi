@@ -1,15 +1,52 @@
 package net.jessechen.instawifi.util;
 
 import java.security.SecureRandom;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
 
 public class BillingUtil {
-	// need mapping between itemId and donateOption
-	// need mapping between donateOption to # of NFC stickers
-	public static final int donateOption1 = 2;
-	public static final int donateOption2 = 4;
-	public static final int donateOption3 = 6;
-	public static final int donateOption4 = 10;
+	public static final String itemId1 = "thankyou_s";
+	public static final String itemId2 = "thankyou_m";
+	public static final String itemId3 = "thankyou_l";
+	public static final String itemId4 = "thankyou_xl";
+	public static final DonateOption donateOption1 = new DonateOption(2, 0);
+	public static final DonateOption donateOption2 = new DonateOption(4, 1);
+	public static final DonateOption donateOption3 = new DonateOption(6, 2);
+	public static final DonateOption donateOption4 = new DonateOption(10, 4);
+	
+	public static class DonateOption {
+		public int amount;
+		public int numNfcStickers;
+		
+		public DonateOption(int amount, int numNfcStickers) {
+			this.amount = amount;
+			this.numNfcStickers = numNfcStickers;
+		}
+		
+		public String toString() {
+			return amount + "$";
+		}
+	}
+	
+	@SuppressWarnings("serial")
+	public static HashMap<String, DonateOption> map = new HashMap<String, DonateOption>() {
+		{
+			put(itemId1, donateOption1);
+			put(itemId2, donateOption2);
+			put(itemId3, donateOption3);
+			put(itemId4, donateOption4);
+		}
+	};
+	
+	public static String getItemId(DonateOption donateOption) {
+		for (Entry<String, DonateOption> entry : map.entrySet()) {
+			if (donateOption.equals(entry.getValue())) {
+				return entry.getKey();
+			}
+		}
+		return null;
+	}
 
 	// The response codes for a request, defined by Android Market.
 	public enum ResponseCode {

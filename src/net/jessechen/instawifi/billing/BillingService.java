@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import net.jessechen.instawifi.util.BillingUtil;
+import net.jessechen.instawifi.util.BillingUtil.DonateOption;
+import net.jessechen.instawifi.util.BillingUtil.PurchaseState;
 import net.jessechen.instawifi.util.BillingUtil.ResponseCode;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -337,9 +339,10 @@ public class BillingService extends Service implements ServiceConnection {
 		}
 	}
 
-	public boolean requestPurchase(String productId, String itemType,
+	public boolean requestPurchase(DonateOption donateOption, String itemType,
 			String developerPayload) {
-		return new RequestPurchase(productId, itemType, developerPayload)
+		String itemId = BillingUtil.getItemId(donateOption);
+		return new RequestPurchase(itemId, itemType, developerPayload)
 				.runRequest();
 	}
 

@@ -3,6 +3,7 @@ package net.jessechen.instawifi.util;
 import java.io.File;
 
 import net.jessechen.instawifi.R;
+import net.jessechen.instawifi.util.BillingUtil.DonateOption;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -94,7 +95,6 @@ public class Util {
 		picIntent.setType("image/*");
 		Uri uri = Uri.fromFile(file);
 		picIntent.putExtra(Intent.EXTRA_STREAM, uri);
-
 		picIntent.putExtra(Intent.EXTRA_SUBJECT,
 				String.format(c.getString(R.string.qr_share_subject), ssid));
 		picIntent.putExtra(Intent.EXTRA_TEXT,
@@ -112,13 +112,18 @@ public class Util {
 		return intent;
 	}
 
-	public static Intent buildDonateEmailIntent(Context c, int donateAmount) {
+	public static Intent buildDonateEmailIntent(Context c,
+			DonateOption donateOption) {
 		Intent intent = new Intent(Intent.ACTION_SENDTO);
-		String subject = donateAmount >= BillingUtil.donateOption2 ? c
+		if (donateOption == null || donateOption.numNfcStickers == 0) {
+			// bugsense track
+			return null;
+		}
+		String subject = donateOption.numNfcStickers > 1 ? c
 				.getString(R.string.donate_email_subject_multi) : c
 				.getString(R.string.donate_email_subject_one);
 		String message = String.format(c.getString(R.string.donate_email_body),
-				donateAmount, 2);
+				donateOption.amount, donateOption.numNfcStickers);
 		String uriText = String.format(
 				c.getString(R.string.donate_email_template), subject, message);
 		uriText.replace(" ", "%20");

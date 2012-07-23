@@ -13,7 +13,7 @@
         android:layout_marginRight="16dip"
         android:gravity="center_horizontal"
         android:orientation="vertical" >
-
+
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
@@ -40,33 +40,28 @@
             android:id="@+id/donate_options"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dip"
             android:orientation="vertical" >
 
             <RadioButton
-                android:id="@+id/radioButton1"
+                android:id="@+id/donate_rb1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/donate_option_1" />
+                android:layout_height="wrap_content" />
 
             <RadioButton
-                android:id="@+id/radioButton2"
+                android:id="@+id/donate_rb2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/donate_option_2" />
+                android:layout_height="wrap_content" />
 
             <RadioButton
-                android:id="@+id/radioButton3"
+                android:id="@+id/donate_rb3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/donate_option_3" />
+                android:checked="true" />
 
             <RadioButton
-                android:id="@+id/radioButton4"
+                android:id="@+id/donate_rb4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/donate_option_4" />
+                android:layout_height="wrap_content" />
         </RadioGroup>
 
         <Button

@@ -6,6 +6,7 @@ import net.jessechen.instawifi.billing.BillingService.RestoreTransactions;
 import net.jessechen.instawifi.billing.PurchaseObserver;
 import net.jessechen.instawifi.billing.ResponseHandler;
 import net.jessechen.instawifi.util.BillingUtil;
+import net.jessechen.instawifi.util.BillingUtil.DonateOption;
 import net.jessechen.instawifi.util.BillingUtil.PurchaseState;
 import net.jessechen.instawifi.util.BillingUtil.ResponseCode;
 import net.jessechen.instawifi.util.Util;
@@ -43,19 +44,31 @@ public class DonateActivity extends SherlockActivity implements
 		mBillingService.setContext(this);
 
 		ResponseHandler.register(mDonatePurchaseObserver);
-		
+
 		donateButton = (Button) findViewById(R.id.donate_button);
 		donateOptions = (RadioGroup) findViewById(R.id.donate_options);
+		RadioButton rb1 = (RadioButton) findViewById(R.id.donate_rb1);
+		rb1.setText(BillingUtil.donateOption1.toString());
+		rb1.setTag(BillingUtil.donateOption1);
+		RadioButton rb2 = (RadioButton) findViewById(R.id.donate_rb2);
+		rb2.setText(BillingUtil.donateOption2.toString());
+		rb2.setTag(BillingUtil.donateOption2);
+		RadioButton rb3 = (RadioButton) findViewById(R.id.donate_rb3);
+		rb3.setText(BillingUtil.donateOption3.toString());
+		rb3.setTag(BillingUtil.donateOption3);
+		RadioButton rb4 = (RadioButton) findViewById(R.id.donate_rb4);
+		rb4.setText(BillingUtil.donateOption4.toString());
+		rb4.setTag(BillingUtil.donateOption4);
 
 		RadioButton defaultOption = (RadioButton) donateOptions
 				.findViewById(donateOptions.getCheckedRadioButtonId());
 		donateButton.setText(String.format(getString(R.string.donate_button),
 				defaultOption.getText().toString()));
-		donateOptions.setOnCheckedChangeListener(this);
 
+		donateOptions.setOnCheckedChangeListener(this);
 		donateButton.setOnClickListener(this);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -67,7 +80,9 @@ public class DonateActivity extends SherlockActivity implements
 		if (v == donateButton) {
 			// launch android billing service here
 			Log.d(TAG, "donateButton pressed");
-			mBillingService.requestPurchase("android.test.purchased",
+			RadioButton selected = (RadioButton) donateOptions
+					.findViewById(donateOptions.getCheckedRadioButtonId());
+			mBillingService.requestPurchase((DonateOption) selected.getTag(),
 					BillingUtil.ITEM_TYPE_INAPP, null);
 			return;
 		}
@@ -102,10 +117,20 @@ public class DonateActivity extends SherlockActivity implements
 			Log.i(TAG, "onPurchaseStateChange() itemId: " + itemId + " "
 					+ purchaseState);
 			if (PurchaseState.PURCHASED.equals(purchaseState)) {
-				// dont send email if donateOption1
-				if (itemId.equals("android.test.purchased")) {
-					// map itemId to donateOption
-					Intent intent = Util.buildDonateEmailIntent(getApplicationContext(), 6);
+				if (BillingUtil.donateOption1.equals(itemId)) {
+					Util.shortToast(
+							getApplicationContext(),
+							getApplicationContext().getString(
+									R.string.donate_thank_you));
+					return;
+				} else {
+					Util.shortToast(
+							getApplicationContext(),
+							getApplicationContext().getString(
+									R.string.donate_thank_you_stickers));
+					Intent intent = Util.buildDonateEmailIntent(
+							getApplicationContext(),
+							BillingUtil.map.get(itemId));
 					startActivity(intent);
 				}
 			}
