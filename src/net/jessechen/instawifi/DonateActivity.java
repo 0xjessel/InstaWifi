@@ -111,15 +111,19 @@ public class DonateActivity extends SherlockActivity implements
 						.getString(R.string.donate_not_supported));
 				donateButton.setEnabled(false);
 			}
-			Log.i(TAG, "supported: " + supported);
+			if (BillingUtil.DEBUG) {
+				Log.i(TAG, "supported: " + supported);
+			}
 		}
 
 		@Override
 		public void onPurchaseStateChange(PurchaseState purchaseState,
 				String itemId, String orderId, long purchaseTime,
 				String developerPayload) {
-			Log.i(TAG, "onPurchaseStateChange() itemId: " + itemId + " "
-					+ purchaseState);
+			if (BillingUtil.DEBUG) {
+				Log.i(TAG, "onPurchaseStateChange() itemId: " + itemId + " "
+						+ purchaseState);
+			}
 			if (PurchaseState.PURCHASED.equals(purchaseState)) {
 				if (BillingUtil.itemId1.equals(itemId)) {
 					Util.shortToast(
@@ -142,13 +146,21 @@ public class DonateActivity extends SherlockActivity implements
 		@Override
 		public void onRequestPurchaseResponse(RequestPurchase request,
 				ResponseCode responseCode) {
-			Log.d(TAG, request.mProductId + ": " + responseCode);
+			if (BillingUtil.DEBUG) {
+				Log.d(TAG, request.mProductId + ": " + responseCode);
+			}
 			if (responseCode == ResponseCode.RESULT_OK) {
-				Log.i(TAG, "purchase was successfully sent to server");
+				if (BillingUtil.DEBUG) {
+					Log.i(TAG, "purchase was successfully sent to server");
+				}
 			} else if (responseCode == ResponseCode.RESULT_USER_CANCELED) {
-				Log.i(TAG, "user canceled purchase");
+				if (BillingUtil.DEBUG) {
+					Log.i(TAG, "user canceled purchase");
+				}
 			} else {
-				Log.i(TAG, "purchase failed");
+				if (BillingUtil.DEBUG) {
+					Log.i(TAG, "purchase failed");
+				}
 			}
 		}
 

@@ -6,6 +6,7 @@ import java.security.Security;
 
 import net.jessechen.instawifi.billing.BillingService.RequestPurchase;
 import net.jessechen.instawifi.billing.BillingService.RestoreTransactions;
+import net.jessechen.instawifi.util.BillingUtil;
 import net.jessechen.instawifi.util.BillingUtil.PurchaseState;
 import net.jessechen.instawifi.util.BillingUtil.ResponseCode;
 import android.app.PendingIntent;
@@ -84,7 +85,9 @@ public class ResponseHandler {
 	public static void buyPageIntentResponse(PendingIntent pendingIntent,
 			Intent intent) {
 		if (sPurchaseObserver == null) {
-			Log.d(TAG, "UI is not running");
+			if (BillingUtil.DEBUG) {
+				Log.d(TAG, "UI is not running");
+			}
 			return;
 		}
 		sPurchaseObserver.startBuyPageActivity(pendingIntent, intent);
@@ -132,8 +135,8 @@ public class ResponseHandler {
 				synchronized (ResponseHandler.class) {
 					if (sPurchaseObserver != null) {
 						sPurchaseObserver.postPurchaseStateChange(
-								purchaseState, productId, orderId, purchaseTime,
-								developerPayload);
+								purchaseState, productId, orderId,
+								purchaseTime, developerPayload);
 					}
 				}
 			}

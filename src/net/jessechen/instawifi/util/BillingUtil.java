@@ -127,6 +127,8 @@ public class BillingUtil {
 	public static final String ITEM_TYPE_INAPP = "inapp";
 	public static final String ITEM_TYPE_SUBSCRIPTION = "subs";
 
+	public static final boolean DEBUG = false;
+	
 	private static final SecureRandom RANDOM = new SecureRandom();
 	private static final HashSet<Long> sKnownNonces = new HashSet<Long>();
 
