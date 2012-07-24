@@ -1301,12 +1301,15 @@ com.actionbarsherlock.R$drawable: int abs__tab_selected_holo
 com.actionbarsherlock.R$drawable: int abs__tab_selected_pressed_holo
 com.actionbarsherlock.R$drawable: int abs__tab_unselected_pressed_holo
 com.actionbarsherlock.R$drawable: int backrepeat
+com.actionbarsherlock.R$drawable: int fb_logo
 com.actionbarsherlock.R$drawable: int ic_action_donate
 com.actionbarsherlock.R$drawable: int ic_action_edit
+com.actionbarsherlock.R$drawable: int ic_action_help
 com.actionbarsherlock.R$drawable: int ic_action_share
 com.actionbarsherlock.R$drawable: int ic_launcher_instawifi
 com.actionbarsherlock.R$drawable: int nfc_sticker
 com.actionbarsherlock.R$drawable: int placeholder
+com.actionbarsherlock.R$drawable: int twitter_logo
 com.actionbarsherlock.R$drawable: int white_plaster
 com.actionbarsherlock.R$drawable: int wifi
 com.actionbarsherlock.R$drawable: R$drawable()
@@ -1355,21 +1358,32 @@ com.actionbarsherlock.R$id: int dialog_root
 com.actionbarsherlock.R$id: int disableHome
 com.actionbarsherlock.R$id: int donate
 com.actionbarsherlock.R$id: int donate_button
+com.actionbarsherlock.R$id: int donate_explain
+com.actionbarsherlock.R$id: int donate_intro
 com.actionbarsherlock.R$id: int donate_layout
 com.actionbarsherlock.R$id: int donate_options
 com.actionbarsherlock.R$id: int donate_rb1
 com.actionbarsherlock.R$id: int donate_rb2
 com.actionbarsherlock.R$id: int donate_rb3
 com.actionbarsherlock.R$id: int donate_rb4
+com.actionbarsherlock.R$id: int fb_button
 com.actionbarsherlock.R$id: int fragment
 com.actionbarsherlock.R$id: int gridlayout_qr
+com.actionbarsherlock.R$id: int help
+com.actionbarsherlock.R$id: int help_contact_link
+com.actionbarsherlock.R$id: int help_contact_title
+com.actionbarsherlock.R$id: int help_donate
+com.actionbarsherlock.R$id: int help_nfc
+com.actionbarsherlock.R$id: int help_qr
+com.actionbarsherlock.R$id: int help_tutorial_link
+com.actionbarsherlock.R$id: int help_tutorial_title
 com.actionbarsherlock.R$id: int homeAsUp
-com.actionbarsherlock.R$id: int imageView1
 com.actionbarsherlock.R$id: int listMode
 com.actionbarsherlock.R$id: int loading
 com.actionbarsherlock.R$id: int network_spinner
 com.actionbarsherlock.R$id: int network_spinner_qr
 com.actionbarsherlock.R$id: int nfc_layout
+com.actionbarsherlock.R$id: int nfc_sticker
 com.actionbarsherlock.R$id: int normal
 com.actionbarsherlock.R$id: int password_checkbox
 com.actionbarsherlock.R$id: int password_checkbox_qr
@@ -1390,8 +1404,7 @@ com.actionbarsherlock.R$id: int ssid_text
 com.actionbarsherlock.R$id: int ssid_text_qr
 com.actionbarsherlock.R$id: int status_text
 com.actionbarsherlock.R$id: int tabMode
-com.actionbarsherlock.R$id: int textView1
-com.actionbarsherlock.R$id: int textView2
+com.actionbarsherlock.R$id: int twitter_button
 com.actionbarsherlock.R$id: int useLogo
 com.actionbarsherlock.R$id: int wrap_content
 com.actionbarsherlock.R$id: R$id()
@@ -1422,6 +1435,7 @@ com.actionbarsherlock.R$layout: int abs__screen_simple_overlay_action_mode
 com.actionbarsherlock.R$layout: int add_dialog
 com.actionbarsherlock.R$layout: int donate_activity
 com.actionbarsherlock.R$layout: int handler
+com.actionbarsherlock.R$layout: int help_activity
 com.actionbarsherlock.R$layout: int nfc_activity
 com.actionbarsherlock.R$layout: int qr_activity
 com.actionbarsherlock.R$layout: int sherlock_spinner_dropdown_item
@@ -1443,6 +1457,7 @@ com.actionbarsherlock.R$string: int abs__shareactionprovider_share_with
 com.actionbarsherlock.R$string: int abs__shareactionprovider_share_with_application
 com.actionbarsherlock.R$string: int action_donate
 com.actionbarsherlock.R$string: int action_edit
+com.actionbarsherlock.R$string: int action_help
 com.actionbarsherlock.R$string: int action_share
 com.actionbarsherlock.R$string: int add_button
 com.actionbarsherlock.R$string: int add_new_network
@@ -1462,15 +1477,19 @@ com.actionbarsherlock.R$string: int donate_email_template
 com.actionbarsherlock.R$string: int donate_explain
 com.actionbarsherlock.R$string: int donate_intro
 com.actionbarsherlock.R$string: int donate_not_supported
-com.actionbarsherlock.R$string: int donate_option_1
-com.actionbarsherlock.R$string: int donate_option_2
-com.actionbarsherlock.R$string: int donate_option_3
-com.actionbarsherlock.R$string: int donate_option_4
 com.actionbarsherlock.R$string: int donate_thank_you
 com.actionbarsherlock.R$string: int donate_thank_you_stickers
 com.actionbarsherlock.R$string: int enable
 com.actionbarsherlock.R$string: int enable_wifi_fail
+com.actionbarsherlock.R$string: int fb_url
 com.actionbarsherlock.R$string: int general_fail
+com.actionbarsherlock.R$string: int help_contact_link
+com.actionbarsherlock.R$string: int help_contact_title
+com.actionbarsherlock.R$string: int help_donate
+com.actionbarsherlock.R$string: int help_nfc
+com.actionbarsherlock.R$string: int help_qr
+com.actionbarsherlock.R$string: int help_tutorial_link
+com.actionbarsherlock.R$string: int help_tutorial_title
 com.actionbarsherlock.R$string: int invalid_wifi_sticker
 com.actionbarsherlock.R$string: int nfc_not_available
 com.actionbarsherlock.R$string: int password_text
@@ -1495,6 +1514,7 @@ com.actionbarsherlock.R$string: int tag_format_fail
 com.actionbarsherlock.R$string: int tag_ndef_not_supported
 com.actionbarsherlock.R$string: int tag_read_only
 com.actionbarsherlock.R$string: int tag_too_small
+com.actionbarsherlock.R$string: int twitter_url
 com.actionbarsherlock.R$string: int updated_qr_code
 com.actionbarsherlock.R$string: int wifi_connect_already
 com.actionbarsherlock.R$string: int wifi_connect_fail
@@ -5261,6 +5281,9 @@ com.gridlayout.Space: Space(android.content.Context,android.util.AttributeSet)
 net.jessechen.instawifi.DonateActivity
 net.jessechen.instawifi.DonateActivity: DonateActivity()
 net.jessechen.instawifi.DonateActivity: void onClick(android.view.View)
+net.jessechen.instawifi.HelpActivity
+net.jessechen.instawifi.HelpActivity: HelpActivity()
+net.jessechen.instawifi.HelpActivity: void onClick(android.view.View)
 net.jessechen.instawifi.InstaWifiHandler
 net.jessechen.instawifi.InstaWifiHandler: InstaWifiHandler()
 net.jessechen.instawifi.NfcActivity

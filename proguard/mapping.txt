@@ -1492,12 +1492,15 @@ com.actionbarsherlock.R$drawable -> com.actionbarsherlock.R$drawable:
     int abs__tab_selected_pressed_holo -> abs__tab_selected_pressed_holo
     int abs__tab_unselected_pressed_holo -> abs__tab_unselected_pressed_holo
     int backrepeat -> backrepeat
+    int fb_logo -> fb_logo
     int ic_action_donate -> ic_action_donate
     int ic_action_edit -> ic_action_edit
+    int ic_action_help -> ic_action_help
     int ic_action_share -> ic_action_share
     int ic_launcher_instawifi -> ic_launcher_instawifi
     int nfc_sticker -> nfc_sticker
     int placeholder -> placeholder
+    int twitter_logo -> twitter_logo
     int white_plaster -> white_plaster
     int wifi -> wifi
 com.actionbarsherlock.R$id -> com.actionbarsherlock.R$id:
@@ -1545,21 +1548,32 @@ com.actionbarsherlock.R$id -> com.actionbarsherlock.R$id:
     int disableHome -> disableHome
     int donate -> donate
     int donate_button -> donate_button
+    int donate_explain -> donate_explain
+    int donate_intro -> donate_intro
     int donate_layout -> donate_layout
     int donate_options -> donate_options
     int donate_rb1 -> donate_rb1
     int donate_rb2 -> donate_rb2
     int donate_rb3 -> donate_rb3
     int donate_rb4 -> donate_rb4
+    int fb_button -> fb_button
     int fragment -> fragment
     int gridlayout_qr -> gridlayout_qr
+    int help -> help
+    int help_contact_link -> help_contact_link
+    int help_contact_title -> help_contact_title
+    int help_donate -> help_donate
+    int help_nfc -> help_nfc
+    int help_qr -> help_qr
+    int help_tutorial_link -> help_tutorial_link
+    int help_tutorial_title -> help_tutorial_title
     int homeAsUp -> homeAsUp
-    int imageView1 -> imageView1
     int listMode -> listMode
     int loading -> loading
     int network_spinner -> network_spinner
     int network_spinner_qr -> network_spinner_qr
     int nfc_layout -> nfc_layout
+    int nfc_sticker -> nfc_sticker
     int normal -> normal
     int password_checkbox -> password_checkbox
     int password_checkbox_qr -> password_checkbox_qr
@@ -1580,8 +1594,7 @@ com.actionbarsherlock.R$id -> com.actionbarsherlock.R$id:
     int ssid_text_qr -> ssid_text_qr
     int status_text -> status_text
     int tabMode -> tabMode
-    int textView1 -> textView1
-    int textView2 -> textView2
+    int twitter_button -> twitter_button
     int useLogo -> useLogo
     int wrap_content -> wrap_content
 com.actionbarsherlock.R$integer -> com.actionbarsherlock.R$integer:
@@ -1610,6 +1623,7 @@ com.actionbarsherlock.R$layout -> com.actionbarsherlock.R$layout:
     int add_dialog -> add_dialog
     int donate_activity -> donate_activity
     int handler -> handler
+    int help_activity -> help_activity
     int nfc_activity -> nfc_activity
     int qr_activity -> qr_activity
     int sherlock_spinner_dropdown_item -> sherlock_spinner_dropdown_item
@@ -1629,6 +1643,7 @@ com.actionbarsherlock.R$string -> com.actionbarsherlock.R$string:
     int abs__shareactionprovider_share_with_application -> abs__shareactionprovider_share_with_application
     int action_donate -> action_donate
     int action_edit -> action_edit
+    int action_help -> action_help
     int action_share -> action_share
     int add_button -> add_button
     int add_new_network -> add_new_network
@@ -1648,15 +1663,19 @@ com.actionbarsherlock.R$string -> com.actionbarsherlock.R$string:
     int donate_explain -> donate_explain
     int donate_intro -> donate_intro
     int donate_not_supported -> donate_not_supported
-    int donate_option_1 -> donate_option_1
-    int donate_option_2 -> donate_option_2
-    int donate_option_3 -> donate_option_3
-    int donate_option_4 -> donate_option_4
     int donate_thank_you -> donate_thank_you
     int donate_thank_you_stickers -> donate_thank_you_stickers
     int enable -> enable
     int enable_wifi_fail -> enable_wifi_fail
+    int fb_url -> fb_url
     int general_fail -> general_fail
+    int help_contact_link -> help_contact_link
+    int help_contact_title -> help_contact_title
+    int help_donate -> help_donate
+    int help_nfc -> help_nfc
+    int help_qr -> help_qr
+    int help_tutorial_link -> help_tutorial_link
+    int help_tutorial_title -> help_tutorial_title
     int invalid_wifi_sticker -> invalid_wifi_sticker
     int nfc_not_available -> nfc_not_available
     int password_text -> password_text
@@ -1681,6 +1700,7 @@ com.actionbarsherlock.R$string -> com.actionbarsherlock.R$string:
     int tag_ndef_not_supported -> tag_ndef_not_supported
     int tag_read_only -> tag_read_only
     int tag_too_small -> tag_too_small
+    int twitter_url -> twitter_url
     int updated_qr_code -> updated_qr_code
     int wifi_connect_already -> wifi_connect_already
     int wifi_connect_fail -> wifi_connect_fail
@@ -5717,6 +5737,11 @@ net.jessechen.instawifi.DonateActivity$DonatePurchaseObserver -> net.jessechen.i
     109:115:void onBillingSupported$2598ce09(boolean) -> a
     121:140:void onPurchaseStateChange$767ccba(net.jessechen.instawifi.util.BillingUtil$PurchaseState,java.lang.String,java.lang.String) -> a
     145:153:void onRequestPurchaseResponse(net.jessechen.instawifi.billing.BillingService$RequestPurchase,net.jessechen.instawifi.util.BillingUtil$ResponseCode) -> a
+net.jessechen.instawifi.HelpActivity -> net.jessechen.instawifi.HelpActivity:
+    android.widget.ImageButton fbButton -> a
+    android.widget.ImageButton twitterButton -> b
+    17:25:void onCreate(android.os.Bundle) -> onCreate
+    29:40:void onClick(android.view.View) -> onClick
 net.jessechen.instawifi.InstaWifiHandler -> net.jessechen.instawifi.InstaWifiHandler:
     android.widget.TextView status -> a
     android.nfc.NfcAdapter mNfcAdapter -> b
@@ -5758,25 +5783,25 @@ net.jessechen.instawifi.NfcActivity -> net.jessechen.instawifi.NfcActivity:
     233:234:void onDestroy() -> onDestroy
     239:264:void onNewIntent(android.content.Intent) -> onNewIntent
     323:325:boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu) -> onCreateOptionsMenu
-    330:365:boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem) -> onOptionsItemSelected
-    422:452:void onItemSelected(android.widget.AdapterView,android.view.View,int,long) -> onItemSelected
-    456:456:void onNothingSelected(android.widget.AdapterView) -> onNothingSelected
-    405:405:void access$0(net.jessechen.instawifi.NfcActivity) -> a
-    414:414:void access$1(net.jessechen.instawifi.NfcActivity) -> b
+    330:368:boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem) -> onOptionsItemSelected
+    425:455:void onItemSelected(android.widget.AdapterView,android.view.View,int,long) -> onItemSelected
+    459:459:void onNothingSelected(android.widget.AdapterView) -> onNothingSelected
+    408:408:void access$0(net.jessechen.instawifi.NfcActivity) -> a
+    417:417:void access$1(net.jessechen.instawifi.NfcActivity) -> b
     162:162:void access$2(net.jessechen.instawifi.NfcActivity,java.lang.String[]) -> a
     310:310:android.os.Handler access$3() -> a
 net.jessechen.instawifi.NfcActivity$1 -> net.jessechen.instawifi.b:
     313:318:void handleMessage(android.os.Message) -> handleMessage
 net.jessechen.instawifi.NfcActivity$2 -> net.jessechen.instawifi.c:
     net.jessechen.instawifi.NfcActivity this$0 -> a
-    372:388:void onClick(android.view.View) -> onClick
-    369:369:net.jessechen.instawifi.NfcActivity access$0(net.jessechen.instawifi.NfcActivity$2) -> a
+    375:391:void onClick(android.view.View) -> onClick
+    372:372:net.jessechen.instawifi.NfcActivity access$0(net.jessechen.instawifi.NfcActivity$2) -> a
 net.jessechen.instawifi.NfcActivity$2$1 -> net.jessechen.instawifi.d:
     net.jessechen.instawifi.NfcActivity$2 this$1 -> a
-    383:384:void onCancel(android.content.DialogInterface) -> onCancel
+    386:387:void onCancel(android.content.DialogInterface) -> onCancel
 net.jessechen.instawifi.NfcActivity$3 -> net.jessechen.instawifi.e:
     net.jessechen.instawifi.NfcActivity this$0 -> a
-    396:402:void onCheckedChanged(android.widget.CompoundButton,boolean) -> onCheckedChanged
+    399:405:void onCheckedChanged(android.widget.CompoundButton,boolean) -> onCheckedChanged
 net.jessechen.instawifi.NfcActivity$4 -> net.jessechen.instawifi.f:
     net.jessechen.instawifi.NfcActivity this$0 -> a
     122:123:void OnWifiEnabled() -> a
@@ -5917,11 +5942,11 @@ net.jessechen.instawifi.billing.Security -> net.jessechen.instawifi.billing.j:
     java.lang.String TAG -> a
     java.security.SecureRandom RANDOM -> b
     java.util.HashSet sKnownNonces -> c
-    79:81:long generateNonce() -> a
-    85:86:void removeNonce(long) -> a
-    109:192:java.util.ArrayList verifyPurchase(java.lang.String,java.lang.String) -> a
-    206:218:java.security.PublicKey generatePublicKey(java.lang.String) -> a
-    236:256:boolean verify(java.security.PublicKey,java.lang.String,java.lang.String) -> a
+    85:87:long generateNonce() -> a
+    93:94:void removeNonce(long) -> a
+    116:202:java.util.ArrayList verifyPurchase(java.lang.String,java.lang.String) -> a
+    218:228:java.security.PublicKey generatePublicKey(java.lang.String) -> a
+    249:269:boolean verify(java.security.PublicKey,java.lang.String,java.lang.String) -> a
 net.jessechen.instawifi.billing.Security$VerifiedPurchase -> net.jessechen.instawifi.billing.k:
     net.jessechen.instawifi.util.BillingUtil$PurchaseState purchaseState -> a
     java.lang.String notificationId -> b
@@ -6023,18 +6048,18 @@ net.jessechen.instawifi.util.BillingUtil -> net.jessechen.instawifi.b.c:
     long BILLING_RESPONSE_INVALID_REQUEST_ID -> f
     java.security.SecureRandom RANDOM -> g
     java.util.HashSet sKnownNonces -> h
-    43:48:java.lang.String getItemId(net.jessechen.instawifi.util.BillingUtil$DonateOption) -> a
+    44:49:java.lang.String getItemId(net.jessechen.instawifi.util.BillingUtil$DonateOption) -> a
 net.jessechen.instawifi.util.BillingUtil$1 -> net.jessechen.instawifi.b.d:
 net.jessechen.instawifi.util.BillingUtil$DonateOption -> net.jessechen.instawifi.b.e:
     int amount -> a
     int numNfcStickers -> b
-    28:28:java.lang.String toString() -> toString
+    29:29:java.lang.String toString() -> toString
 net.jessechen.instawifi.util.BillingUtil$PurchaseState -> net.jessechen.instawifi.b.f:
     net.jessechen.instawifi.util.BillingUtil$PurchaseState PURCHASED -> a
     net.jessechen.instawifi.util.BillingUtil$PurchaseState CANCELED -> b
     net.jessechen.instawifi.util.BillingUtil$PurchaseState REFUNDED -> c
     net.jessechen.instawifi.util.BillingUtil$PurchaseState[] ENUM$VALUES -> d
-    74:78:net.jessechen.instawifi.util.BillingUtil$PurchaseState valueOf(int) -> a
+    75:79:net.jessechen.instawifi.util.BillingUtil$PurchaseState valueOf(int) -> a
     1:1:net.jessechen.instawifi.util.BillingUtil$PurchaseState[] values() -> values
     1:1:net.jessechen.instawifi.util.BillingUtil$PurchaseState valueOf(java.lang.String) -> valueOf
 net.jessechen.instawifi.util.BillingUtil$ResponseCode -> net.jessechen.instawifi.b.g:
@@ -6046,7 +6071,7 @@ net.jessechen.instawifi.util.BillingUtil$ResponseCode -> net.jessechen.instawifi
     net.jessechen.instawifi.util.BillingUtil$ResponseCode RESULT_DEVELOPER_ERROR -> f
     net.jessechen.instawifi.util.BillingUtil$ResponseCode RESULT_ERROR -> g
     net.jessechen.instawifi.util.BillingUtil$ResponseCode[] ENUM$VALUES -> h
-    57:61:net.jessechen.instawifi.util.BillingUtil$ResponseCode valueOf(int) -> a
+    58:62:net.jessechen.instawifi.util.BillingUtil$ResponseCode valueOf(int) -> a
     1:1:net.jessechen.instawifi.util.BillingUtil$ResponseCode[] values() -> values
     1:1:net.jessechen.instawifi.util.BillingUtil$ResponseCode valueOf(java.lang.String) -> valueOf
 net.jessechen.instawifi.util.NfcUtil -> net.jessechen.instawifi.b.h:
@@ -6103,26 +6128,26 @@ net.jessechen.instawifi.util.WifiUtil -> net.jessechen.instawifi.b.p:
     java.lang.String[] protocolStrings -> c
     java.lang.String TAG -> d
     int[] $SWITCH_TABLE$net$jessechen$instawifi$util$WifiUtil$ConnectToWifiResult -> e
-    40:55:net.jessechen.instawifi.models.WifiModel getCurrentWifiModel(android.content.Context) -> a
-    73:83:net.jessechen.instawifi.models.WifiModel getWifiModelFromSsid(android.content.Context,java.lang.String) -> a
-    129:146:int getWifiProtocol(android.net.wifi.WifiConfiguration) -> a
-    151:157:boolean isWifiEnabled(android.content.Context) -> b
-    167:175:boolean isValidWifiUri(android.net.Uri) -> a
-    185:191:boolean isValidWifiModel(net.jessechen.instawifi.models.WifiModel) -> a
-    196:196:boolean isValidSsid(java.lang.String) -> a
-    200:208:boolean isValidPassword(int,java.lang.String) -> a
-    257:335:int addWifiNetwork$7fac1e3(net.jessechen.instawifi.models.WifiModel,android.net.wifi.WifiManager) -> a
-    357:381:boolean enableWifiAndWait(android.net.wifi.WifiManager) -> a
-    438:448:int getNetworkId$7fac1e3(net.jessechen.instawifi.models.WifiModel,android.net.wifi.WifiManager) -> b
-    452:468:java.lang.String[] getConfiguredNetworks(android.content.Context) -> c
-    474:488:void showWifiDialog(android.content.Context,java.lang.String,net.jessechen.instawifi.util.WifiUtil$EnableWifiTaskListener) -> a
-    491:531:void processWifiUri(android.app.Activity,java.lang.String) -> a
-    37:37:java.lang.String access$0() -> a
+    43:58:net.jessechen.instawifi.models.WifiModel getCurrentWifiModel(android.content.Context) -> a
+    76:86:net.jessechen.instawifi.models.WifiModel getWifiModelFromSsid(android.content.Context,java.lang.String) -> a
+    132:149:int getWifiProtocol(android.net.wifi.WifiConfiguration) -> a
+    154:160:boolean isWifiEnabled(android.content.Context) -> b
+    170:178:boolean isValidWifiUri(android.net.Uri) -> a
+    188:194:boolean isValidWifiModel(net.jessechen.instawifi.models.WifiModel) -> a
+    199:199:boolean isValidSsid(java.lang.String) -> a
+    203:211:boolean isValidPassword(int,java.lang.String) -> a
+    260:338:int addWifiNetwork$7fac1e3(net.jessechen.instawifi.models.WifiModel,android.net.wifi.WifiManager) -> a
+    360:384:boolean enableWifiAndWait(android.net.wifi.WifiManager) -> a
+    441:451:int getNetworkId$7fac1e3(net.jessechen.instawifi.models.WifiModel,android.net.wifi.WifiManager) -> b
+    455:471:java.lang.String[] getConfiguredNetworks(android.content.Context) -> c
+    477:491:void showWifiDialog(android.content.Context,java.lang.String,net.jessechen.instawifi.util.WifiUtil$EnableWifiTaskListener) -> a
+    494:534:void processWifiUri(android.app.Activity,java.lang.String) -> a
+    40:40:java.lang.String access$0() -> a
     23:23:int[] $SWITCH_TABLE$net$jessechen$instawifi$util$WifiUtil$ConnectToWifiResult() -> b
 net.jessechen.instawifi.util.WifiUtil$1 -> net.jessechen.instawifi.b.q:
     android.content.Context val$c -> a
     net.jessechen.instawifi.util.WifiUtil$EnableWifiTaskListener val$listener -> b
-    482:483:void onClick(android.content.DialogInterface,int) -> onClick
+    485:486:void onClick(android.content.DialogInterface,int) -> onClick
 net.jessechen.instawifi.util.WifiUtil$ConnectToWifiResult -> net.jessechen.instawifi.b.r:
     net.jessechen.instawifi.util.WifiUtil$ConnectToWifiResult ALREADY_CONNECTED -> a
     net.jessechen.instawifi.util.WifiUtil$ConnectToWifiResult INVALID_NET_ID -> b
@@ -6135,7 +6160,7 @@ net.jessechen.instawifi.util.WifiUtil$EnableWifiTask -> net.jessechen.instawifi.
     android.content.Context c -> a
     android.app.ProgressDialog pd -> b
     net.jessechen.instawifi.util.WifiUtil$EnableWifiTaskListener listener -> c
-    410:411:void onPreExecute() -> onPreExecute
+    413:414:void onPreExecute() -> onPreExecute
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
 net.jessechen.instawifi.util.WifiUtil$EnableWifiTaskListener -> net.jessechen.instawifi.b.t:
