@@ -34,6 +34,9 @@ public class WifiUtil {
 		ALREADY_CONNECTED, INVALID_NET_ID, NETWORK_ENABLED, NETWORK_ENABLED_FAILED
 	}
 
+	// wait up to 8 seconds for wifi to enable
+	private static final int WAIT_THRESHOLD = 40;
+
 	private static final String TAG = WifiUtil.class.getSimpleName();
 
 	public static WifiModel getCurrentWifiModel(Context c) {
@@ -159,7 +162,7 @@ public class WifiUtil {
 
 	/**
 	 * validate incoming URI to ensure that it matches this app's URI schema
-	 * 
+	 *
 	 * @param wifiUri
 	 * @return true if valid wifi URI, false otherwise
 	 */
@@ -177,7 +180,7 @@ public class WifiUtil {
 
 	/**
 	 * should call this method before executing an action on the WifiModel
-	 * 
+	 *
 	 * @param wm
 	 * @return true if valid, false otherwise
 	 */
@@ -356,8 +359,8 @@ public class WifiUtil {
 	public static boolean enableWifiAndWait(WifiManager mWm) {
 		if (enableWifi(mWm)) {
 			int wait = 0;
-			// time it so that if waited longer than 5 seconds, bail out
-			while (!mWm.isWifiEnabled() && wait < 25) {
+			// time it so that if waited longer than WAIT_THRESHOLD / 5 seconds, bail out
+			while (!mWm.isWifiEnabled() && wait < WAIT_THRESHOLD) {
 				// waiting on wifi
 				Log.v(TAG, "waiting for wifi to be enabled..");
 				try {
@@ -369,9 +372,9 @@ public class WifiUtil {
 				}
 				wait++;
 			}
-			if (wait >= 25) {
+			if (wait >= WAIT_THRESHOLD) {
 				Log.e(TAG,
-						"waited for wifi to enable for longer than 3 seconds, bailing out");
+						"waited for wifi to enable for longer than 8 seconds, bailing out");
 				BugSenseHandler.log("ENABLEWIFI", new Exception(
 						"enabling wifi timed out, user does not have wifi?"));
 				return false;
