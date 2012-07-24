@@ -72,12 +72,22 @@
             android:textAppearance="?android:attr/textAppearanceSmall" >
         </TextView>
 
+        <TextView
+            android:id="@+id/help_donate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/help_qr"
+            android:layout_marginTop="16dip"
+            android:text="@string/help_donate"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
         <ImageButton
             android:id="@+id/fb_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_below="@id/help_qr"
+            android:layout_below="@id/help_donate"
             android:layout_marginLeft="32dip"
             android:layout_marginTop="16dip"
             android:src="@drawable/fb_logo" />

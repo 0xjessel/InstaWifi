@@ -26,14 +26,7 @@ public class BillingUtil {
 
 		@Override
 		public String toString() {
-			String toReturn = amount + "$";
-			if (numNfcStickers == 1) {
-				return toReturn + " (" + numNfcStickers + " sticker)";
-			} else if (numNfcStickers > 1) {
-				return toReturn + " (" + numNfcStickers + " stickers)";
-			} else {
-				return toReturn;
-			}
+			return amount + "$";
 		}
 	}
 
