@@ -47,13 +47,13 @@
     <string name="updated_qr_code">QR code updated!</string>
     <string name="donate_not_supported">Your version of Google\'s Play Store does not support in-app billing. Sorry for the inconvenience.</string>
     <string name="donate_intro">Love the app? Donate to support the developer!</string>
-    <string name="donate_explain"><b>USA/CANADA/MEXICO ONLY:</b> Donate 4$ and I will send you one Android NFC sticker for free.  6$ gets you two, and 10$ gets you 4.  No additional shipping costs!</string>
+    <string name="donate_explain"><b>USA/CANADA/MEXICO ONLY:</b> Donate 4$ and I will send you one Android NFC sticker as a gift.  6$ gets you two, and 10$ gets you 4.  No additional shipping costs!</string>
     <string name="donate_button">Donate %1$s</string>
     <string name="donate_email_template">mailto:instawifi@jessechen.net?subject=%1$s&amp;body=%2$s</string>
     <string name="donate_email_subject_multi">Send me my NFC stickers! Order ID: %1$s</string>
     <string name="donate_email_subject_one">Send me my NFC sticker! Order ID: %1$s</string>
-    <string name="donate_email_body">Hi Jesse,\n\nI\'m awesome for donating %1$d$.  Below is my name and address to send me my %2$d free NFC sticker(s):\n\nName: \n\nAddress:\n\nI will make sure to contact you if I ever have any questions or comments.  Thanks!</string>
-    <string name="donate_thank_you_stickers">Thank you so much for supporting an independent developer.  Email me your name and address so you can enjoy your free Android NFC sticker(s)!</string>
+    <string name="donate_email_body">Hi Jesse,\n\nI\'m awesome for donating %1$d$.  Below is my name and address to send me my %2$d NFC sticker(s):\n\nName: \n\nAddress:\n\nI will make sure to contact you if I ever have any questions or comments.  Thanks!</string>
+    <string name="donate_thank_you_stickers">Thank you so much for supporting an independent developer.  Email me your name and address so you can enjoy your Android NFC sticker(s)!</string>
     <string name="donate_thank_you">Hi, thank you so much for supporting an independent developer.  You are awesome!</string>
     <string name="action_share">Share App/QR Code</string>
     <string name="action_edit">Add New Network</string>
@@ -65,7 +65,7 @@
     <string name="help_tutorial_link">http://www.youtube.com/watch?v=zYNxh6t3Ojg</string>
     <string name="help_nfc">Instructions for the NFC tab:\n1) Choose the network to configure or add a new network from menu.\n2) Fill out all the network details.\n3) Tap the "Write to Tag" button.\n4) Tap NFC sticker to write to tag\n5) Connect to that WiFi network by tapping on the sticker.\n6) Tap again to disable WiFi.\n<b>Android Beam:</b> Fill out network details and hold the phone against another NFC-enabled Android smartphone with InstaWifi installed to automatically connect the other phone to the network.</string>
     <string name="help_qr">Instructions for the QR tab:\n1) Choose the network to configure or add a new network from menu.\n2) Fill out all the network details.\n3) Share the created QR image by tapping on the share icon in the menu.\n4) Any Android smartphone with the Barcode Scanner app (https://play.google.com/store/apps/details?id=com.google.zxing.client.android) can now scan the QR image to connect to that WiFi network.</string>
-    <string name="help_donate">Your donation will support an independent developer who wants to make life easier for people like you by writing Android apps.  If you live in USA, Canada or Mexico, then as a token of appreciation I will send you a free Android-themed NFC sticker if you donate 4$, 2 for 6$, and if you\'re awesome, 4 for 10$.  After going through the in-app billing system, your email application will launch.  Just fill out the email and I will ship your Android-themed stickers to you as soon as possible.  Thanks!</string>
+    <string name="help_donate">Your donation will support an independent developer who wants to make life easier for people like you by writing Android apps.  If you live in USA, Canada or Mexico, then as a token of appreciation I will send you a Android-themed NFC sticker as a gift if you donate 4$, 2 for 6$, and if you\'re awesome, 4 for 10$.  After going through the in-app billing system, your email application will launch.  Just fill out the email and I will ship your Android-themed stickers to you as soon as possible.  Thanks!</string>
     <string name="fb_url">http://www.facebook.com/instawifi</string>
     <string name="twitter_url">http://www.twitter.com/instawifi</string>
 
