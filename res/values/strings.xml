@@ -46,7 +46,7 @@
     <string name="updated_qr_code">QR code updated!</string>
     <string name="donate_not_supported">Your version of Google\'s Play Store does not support in-app billing. Sorry for the inconvenience.</string>
     <string name="donate_intro">Love the app? Donate to support the developer!</string>
-    <string name="donate_explain"><b>USA/CANADA/MEXICO ONLY:</b> Donate 4$ and receive one Android NFC sticker for free.  6$ gets you two, and 10$ gets you 4.  No additional shipping costs!</string>
+    <string name="donate_explain"><b>USA/CANADA/MEXICO ONLY:</b> Donate 4$ and I will send you one Android NFC sticker for free.  6$ gets you two, and 10$ gets you 4.  No additional shipping costs!</string>
     <string name="donate_option_1">2$</string>
     <string name="donate_option_2">4$</string>
     <string name="donate_option_3">6$</string>

@@ -14,21 +14,29 @@ public class BillingUtil {
 	public static final DonateOption donateOption2 = new DonateOption(4, 1);
 	public static final DonateOption donateOption3 = new DonateOption(6, 2);
 	public static final DonateOption donateOption4 = new DonateOption(10, 4);
-	
+
 	public static class DonateOption {
 		public int amount;
 		public int numNfcStickers;
-		
+
 		public DonateOption(int amount, int numNfcStickers) {
 			this.amount = amount;
 			this.numNfcStickers = numNfcStickers;
 		}
-		
+
+		@Override
 		public String toString() {
-			return amount + "$";
+			String toReturn = amount + "$";
+			if (numNfcStickers == 1) {
+				return toReturn + " (" + numNfcStickers + " sticker)";
+			} else if (numNfcStickers > 1) {
+				return toReturn + " (" + numNfcStickers + " stickers)";
+			} else {
+				return toReturn;
+			}
 		}
 	}
-	
+
 	@SuppressWarnings("serial")
 	public static HashMap<String, DonateOption> map = new HashMap<String, DonateOption>() {
 		{
@@ -38,7 +46,7 @@ public class BillingUtil {
 			put(itemId4, donateOption4);
 		}
 	};
-	
+
 	public static String getItemId(DonateOption donateOption) {
 		for (Entry<String, DonateOption> entry : map.entrySet()) {
 			if (donateOption.equals(entry.getValue())) {
@@ -80,19 +88,24 @@ public class BillingUtil {
 	}
 
 	/** This is the action we use to bind to the MarketBillingService. */
-	public static final String MARKET_BILLING_SERVICE_ACTION = "com.android.vending.billing.MarketBillingService.BIND";
+	public static final String MARKET_BILLING_SERVICE_ACTION =
+			"com.android.vending.billing.MarketBillingService.BIND";
 
 	// Intent actions that we send from the BillingReceiver to the
 	// BillingService. Defined by this application.
-	public static final String ACTION_CONFIRM_NOTIFICATION = "net.jessechen.instawifi.CONFIRM_NOTIFICATION";
-	public static final String ACTION_GET_PURCHASE_INFORMATION = "net.jessechen.instawifi.GET_PURCHASE_INFORMATION";
-	public static final String ACTION_RESTORE_TRANSACTIONS = "net.jessechen.instawifi.RESTORE_TRANSACTIONS";
+	public static final String ACTION_CONFIRM_NOTIFICATION =
+			"net.jessechen.instawifi.CONFIRM_NOTIFICATION";
+	public static final String ACTION_GET_PURCHASE_INFORMATION =
+			"net.jessechen.instawifi.GET_PURCHASE_INFORMATION";
+	public static final String ACTION_RESTORE_TRANSACTIONS =
+			"net.jessechen.instawifi.RESTORE_TRANSACTIONS";
 
 	// Intent actions that we receive in the BillingReceiver from Market.
 	// These are defined by Market and cannot be changed.
 	public static final String ACTION_NOTIFY = "com.android.vending.billing.IN_APP_NOTIFY";
 	public static final String ACTION_RESPONSE_CODE = "com.android.vending.billing.RESPONSE_CODE";
-	public static final String ACTION_PURCHASE_STATE_CHANGED = "com.android.vending.billing.PURCHASE_STATE_CHANGED";
+	public static final String ACTION_PURCHASE_STATE_CHANGED =
+			"com.android.vending.billing.PURCHASE_STATE_CHANGED";
 
 	// These are the names of the extras that are passed in an intent from
 	// Market to this application and cannot be changed.
@@ -120,20 +133,20 @@ public class BillingUtil {
 	// These are the types supported in the IAB v2
 	public static final String ITEM_TYPE_INAPP = "inapp";
 	public static final String ITEM_TYPE_SUBSCRIPTION = "subs";
-	
+
 	private static final SecureRandom RANDOM = new SecureRandom();
 	private static final HashSet<Long> sKnownNonces = new HashSet<Long>();
-	
+
 	public static long generateNonce() {
 		long nonce = RANDOM.nextLong();
 		sKnownNonces.add(nonce);
 		return nonce;
 	}
-	
+
 	public static void removeNonce(long nonce) {
-		sKnownNonces.remove(nonce); 
+		sKnownNonces.remove(nonce);
 	}
-	
+
 	public static boolean isNonceKnown(long nonce) {
 		return sKnownNonces.contains(nonce);
 	}

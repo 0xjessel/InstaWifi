@@ -136,7 +136,6 @@ public class Security {
 			 * Generally, encryption keys / passwords should only be kept in
 			 * memory long enough to perform the operation they need to perform.
 			 */
-
 			String base64EncodedPublicKey =
 					seg1 + seg2 + seg3 + seg4 + seg5 + seg6 + seg7 + seg8 + seg9
 							+ "EaWdV+RizUdUfDYJ+ZmAXguUNrzyCLY7L9SN2lMQIDAQAB";
