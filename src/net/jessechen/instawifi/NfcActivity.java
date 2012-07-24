@@ -361,12 +361,15 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		case R.id.donate:
 			startActivity(new Intent(NfcActivity.this, DonateActivity.class));
 			return true;
+		case R.id.help:
+			startActivity(new Intent(NfcActivity.this, HelpActivity.class));
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
-	private View.OnClickListener mTagWriter = new View.OnClickListener() {
+	private final View.OnClickListener mTagWriter = new View.OnClickListener() {
 		@Override
 		public void onClick(View arg0) {
 			if (Util.hasNfc(c)) {
@@ -388,7 +391,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		}
 	};
 
-	private OnCheckedChangeListener mCheckBoxListener = new CompoundButton.OnCheckedChangeListener() {
+	private final OnCheckedChangeListener mCheckBoxListener = new CompoundButton.OnCheckedChangeListener() {
 
 		@Override
 		public void onCheckedChanged(CompoundButton buttonView,

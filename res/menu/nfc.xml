@@ -13,10 +13,17 @@
         android:showAsAction="always"
         android:title="@string/action_edit">
     </item>
-	<item
-		android:id="@+id/donate"
-		android:icon="@drawable/ic_action_donate"
-		android:showAsAction="ifRoom"
-		android:title="@string/action_donate">
-	</item>
+    <item
+        android:id="@+id/donate"
+        android:icon="@drawable/ic_action_donate"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_donate">
+    </item>
+    <item
+        android:id="@+id/help"
+        android:icon="@drawable/ic_action_help"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_help">
+    </item>
+
 </menu>

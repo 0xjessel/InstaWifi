@@ -56,6 +56,9 @@
                 <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".HelpActivity" >
+        </activity>
     </application>
 
 </manifest>
