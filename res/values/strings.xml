@@ -53,8 +53,8 @@
     <string name="donate_option_4">10$</string>
     <string name="donate_button">Donate %1$s</string>
     <string name="donate_email_template">mailto:instawifi@jessechen.net?subject=%1$s&amp;body=%2$s</string>
-    <string name="donate_email_subject_multi">Send me my NFC stickers! Order ID: %1$s</string>
-    <string name="donate_email_subject_one">Send me my NFC sticker!</string>
+    <string name="donate_email_subject_multi">Send me my NFC stickers! Order #: %1$s</string>
+    <string name="donate_email_subject_one">Send me my NFC sticker! Order #: %1$s</string>
     <string name="donate_email_body">Hi Jesse,\n\nI\'m awesome for donating %1$d$.  Below is my name and address to send me my %2$d free NFC sticker(s):\n\nName: \n\nAddress:\n\nI will make sure to contact you if I ever have any questions or comments.  Thanks!</string>
     <string name="donate_thank_you_stickers">Thank you so much for supporting an independent developer.  Email me your name and address so you can enjoy your free Android NFC sticker(s)!</string>
     <string name="donate_thank_you">Hi, thank you so much for supporting an independent developer.  You are awesome!</string>

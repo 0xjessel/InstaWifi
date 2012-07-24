@@ -749,7 +749,7 @@ com.gridlayout.R$styleable:
     public static final int ViewGroup_MarginLayout_android_layout_marginLeft
     public static final int ViewGroup_MarginLayout_android_layout_marginRight
     public static final int ViewGroup_MarginLayout_android_layout_marginTop
-    1209:1209:public R$styleable()
+    1208:1208:public R$styleable()
 com.gridlayout.Space:
     51:52:public Space(android.content.Context)
 net.jessechen.instawifi.BuildConfig
@@ -773,12 +773,12 @@ net.jessechen.instawifi.R$string
 net.jessechen.instawifi.R$style
 net.jessechen.instawifi.R$styleable
 net.jessechen.instawifi.billing.BillingService:
-    160:165:protected android.os.Bundle makeRequestBundle(java.lang.String)
+    162:167:protected android.os.Bundle makeRequestBundle(java.lang.String)
 net.jessechen.instawifi.billing.BillingService$CheckBillingSupported:
-    501:504:public BillingService$CheckBillingSupported(net.jessechen.instawifi.billing.BillingService,java.lang.String)
+    503:506:public BillingService$CheckBillingSupported(net.jessechen.instawifi.billing.BillingService,java.lang.String)
 net.jessechen.instawifi.billing.BillingService$RequestPurchase:
-    601:602:public BillingService$RequestPurchase(net.jessechen.instawifi.billing.BillingService,java.lang.String)
-    615:616:public BillingService$RequestPurchase(net.jessechen.instawifi.billing.BillingService,java.lang.String,java.lang.String)
+    603:604:public BillingService$RequestPurchase(net.jessechen.instawifi.billing.BillingService,java.lang.String)
+    617:618:public BillingService$RequestPurchase(net.jessechen.instawifi.billing.BillingService,java.lang.String,java.lang.String)
 net.jessechen.instawifi.billing.BillingService$RestoreTransactions
 net.jessechen.instawifi.billing.PurchaseObserver:
     private static final java.lang.String TAG
