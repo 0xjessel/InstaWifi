@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dip"
+        android:layout_marginRight="16dip"
+        android:layout_marginTop="8dip"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/help_contact_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/help_contact_title"
+            android:textAppearance="?android:attr/textAppearanceMedium" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/help_contact_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/help_contact_title"
+            android:autoLink="email"
+            android:text="@string/help_contact_link"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/help_tutorial_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/help_contact_link"
+            android:layout_marginTop="16dip"
+            android:autoLink="web"
+            android:text="@string/help_tutorial_title"
+            android:textAppearance="?android:attr/textAppearanceMedium" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/help_tutorial_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/help_tutorial_title"
+            android:autoLink="web"
+            android:text="@string/help_tutorial_link"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/help_nfc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/help_tutorial_link"
+            android:layout_marginTop="16dip"
+            android:text="@string/help_nfc"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/help_qr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/help_nfc"
+            android:layout_marginTop="16dip"
+            android:autoLink="web"
+            android:text="@string/help_qr"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/help_donate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/help_qr"
+            android:layout_marginTop="16dip"
+            android:text="@string/help_donate"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/fb_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/help_donate"
+            android:layout_marginLeft="32dip"
+            android:layout_marginTop="16dip"
+            android:src="@drawable/fb_logo" />
+
+        <ImageButton
+            android:id="@+id/twitter_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/help_nfc"
+            android:layout_marginRight="32dip"
+            android:src="@drawable/twitter_logo" />
+    </RelativeLayout>
+
+</ScrollView>
