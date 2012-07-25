@@ -4,6 +4,7 @@ import java.nio.charset.Charset;
 
 import net.jessechen.instawifi.R;
 import net.jessechen.instawifi.models.WifiModel;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.nfc.NdefMessage;
@@ -12,22 +13,27 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
+import android.os.Build;
 import android.os.Parcelable;
 import android.util.Log;
 
+@TargetApi(14)
 public class NfcUtil {
 	private static final String TAG = NfcUtil.class.getSimpleName();
-	
+
 	public static NdefMessage getWifiAsNdef(Context c, WifiModel wm) {
-		byte[] url = wm.toWifiUri()
-				.getBytes(Charset.forName("US-ASCII"));
+		byte[] url = wm.toWifiUri().getBytes(Charset.forName("US-ASCII"));
 
 		NdefRecord record = new NdefRecord(NdefRecord.TNF_ABSOLUTE_URI, url,
 				new byte[0], new byte[0]);
-		NdefMessage msg = new NdefMessage(
-				new NdefRecord[] { 
-						record,
-						NdefRecord.createApplicationRecord(c.getPackageName())});
+
+		NdefMessage msg;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			msg = new NdefMessage(new NdefRecord[] { record,
+					NdefRecord.createApplicationRecord(c.getPackageName()) });
+		} else {
+			msg = new NdefMessage(new NdefRecord[] { record });
+		}
 
 		return msg;
 	}
