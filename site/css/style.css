@@ -1,0 +1,58 @@
+
+
+/* ===== Primary Styles ========================================================
+   Author:
+   ========================================================================== */
+
+.hero-unit {
+	position: relative;
+}
+
+.hero-unit .span7 {
+	margin-top: 50px;
+}
+
+.description {
+	margin-top: 30px;
+}
+
+.play {
+	margin-top: 30px;
+}
+
+.container-fluid {
+	width: 75%;
+	margin: 0px auto;
+}
+
+.container-fluid .span7 {
+	margin-top:72px;
+	margin-left:63px;
+}
+
+#myCarousel {
+	margin: 0px auto;
+}
+
+.accordion {
+	margin-top: 30px;
+}
+
+.social {
+	float: right;
+	margin-left: 25px;
+}
+
+footer {
+	margin-top: 20px;
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+.fb-like {
+	margin-top: 6px;
+}
+
+
+
+
