@@ -257,7 +257,6 @@ public class QrFragment extends SherlockFragment implements
 				selectedNetwork = WifiUtil.getWifiModelFromSsid(getActivity(),
 						parent.getItemAtPosition(pos).toString());
 			} catch (PasswordNotFoundException e) {
-				e.printStackTrace();
 				Log.e(TAG, "did not find password on item selected");
 			}
 

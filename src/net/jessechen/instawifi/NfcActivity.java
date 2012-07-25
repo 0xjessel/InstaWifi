@@ -427,7 +427,6 @@ public class NfcActivity extends SherlockFragmentActivity implements
 				selectedNetwork = WifiUtil.getWifiModelFromSsid(this, parent
 						.getItemAtPosition(pos).toString());
 			} catch (PasswordNotFoundException e) {
-				e.printStackTrace();
 				Log.e(TAG, "did not find password on item selected");
 			}
 

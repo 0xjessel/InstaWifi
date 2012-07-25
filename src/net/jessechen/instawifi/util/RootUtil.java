@@ -61,7 +61,7 @@ public class RootUtil {
 		}
 
 		String password = getPasswordFromFile(c, SSID);
-		
+
 		if (password == null) {
 			// get wifi_supplicant.conf file if rooted
 			ExecuteAsRootBase su = new ExecuteAsRootBase() {
@@ -98,9 +98,9 @@ public class RootUtil {
 		if (networkConfigs == null) {
 			return null;
 		}
-		
+
 		String pw = null;
-		
+
 		String key_mgmt = networkConfigs.get("key_mgmt");
 		if (key_mgmt != null) {
 			if (key_mgmt.equals("WPA-PSK")) {
@@ -123,7 +123,7 @@ public class RootUtil {
 					// WEP
 					return pw;
 				}
-			} 
+			}
 		} else {
 			// wild shot, try and grab psk value
 			Log.i(TAG, "did not find key_mgmt value, guessing pw");
@@ -144,7 +144,7 @@ public class RootUtil {
 		if (fileContents == null || fileContents.equals("")) {
 			return null;
 		}
-		
+
 		String lines[] = fileContents.split("\\r?\\n");
 
 		boolean found = false;
@@ -195,7 +195,6 @@ public class RootUtil {
 			}
 		} catch (FileNotFoundException e) {
 			Log.e(TAG, "wifi passwords file not found");
-			e.printStackTrace();
 			return null;
 		} catch (IOException e) {
 			Log.e(TAG, "IOException while reading wifi passwords file");
@@ -259,7 +258,6 @@ public class RootUtil {
 				// Can't get root !
 				// Probably broken pipe exception on trying to write to output
 				// stream after su failed, meaning that the device is not rooted
-
 				retval = false;
 				Log.i(TAG, "Root access rejected [" + e.getClass().getName()
 						+ "] : " + e.getMessage());
