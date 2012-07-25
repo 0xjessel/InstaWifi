@@ -5731,12 +5731,11 @@ net.jessechen.instawifi.DonateActivity -> net.jessechen.instawifi.DonateActivity
     81:88:void onClick(android.view.View) -> onClick
     92:99:void onCheckedChanged(android.widget.RadioGroup,int) -> onCheckedChanged
     30:30:android.widget.Button access$0(net.jessechen.instawifi.DonateActivity) -> a
-    27:27:java.lang.String access$1() -> a
 net.jessechen.instawifi.DonateActivity$DonatePurchaseObserver -> net.jessechen.instawifi.a:
     net.jessechen.instawifi.DonateActivity this$0 -> a
-    109:115:void onBillingSupported$2598ce09(boolean) -> a
-    121:140:void onPurchaseStateChange$767ccba(net.jessechen.instawifi.util.BillingUtil$PurchaseState,java.lang.String,java.lang.String) -> a
-    145:153:void onRequestPurchaseResponse(net.jessechen.instawifi.billing.BillingService$RequestPurchase,net.jessechen.instawifi.util.BillingUtil$ResponseCode) -> a
+    109:117:void onBillingSupported$2598ce09(boolean) -> a
+    127:144:void onPurchaseStateChange$767ccba(net.jessechen.instawifi.util.BillingUtil$PurchaseState,java.lang.String,java.lang.String) -> a
+    152:165:void onRequestPurchaseResponse$6dc29225(net.jessechen.instawifi.util.BillingUtil$ResponseCode) -> a
 net.jessechen.instawifi.HelpActivity -> net.jessechen.instawifi.HelpActivity:
     android.widget.ImageButton fbButton -> a
     android.widget.ImageButton twitterButton -> b
@@ -5844,63 +5843,61 @@ net.jessechen.instawifi.QrFragment$2 -> net.jessechen.instawifi.l:
     98:99:void OnWifiEnabled() -> a
 net.jessechen.instawifi.billing.BillingReceiver -> net.jessechen.instawifi.billing.BillingReceiver:
     java.lang.String TAG -> a
-    15:36:void onReceive(android.content.Context,android.content.Intent) -> onReceive
+    15:38:void onReceive(android.content.Context,android.content.Intent) -> onReceive
 net.jessechen.instawifi.billing.BillingService -> net.jessechen.instawifi.billing.BillingService:
     java.lang.String TAG -> a
     com.android.vending.billing.IMarketBillingService mService -> b
     java.util.LinkedList mPendingRequests -> c
     java.util.HashMap mSentRequests -> d
-    46:57:void onCreate() -> onCreate
-    61:61:android.os.IBinder onBind(android.content.Intent) -> onBind
-    66:70:void onServiceConnected(android.content.ComponentName,android.os.IBinder) -> onServiceConnected
-    74:75:void onServiceDisconnected(android.content.ComponentName) -> onServiceDisconnected
-    83:86:void onStart(android.content.Intent,int) -> onStart
-    89:90:void setContext(android.content.Context) -> a
-    133:146:boolean bindToMarketBillingService() -> f
-    155:159:void unbind() -> a
-    217:217:boolean checkBillingSupported() -> b
-    259:278:void purchaseStateChanged(int,java.lang.String,java.lang.String) -> a
-    295:295:boolean confirmNotifications(int,java.lang.String[]) -> a
-    358:359:boolean requestPurchase$2793e9ec(net.jessechen.instawifi.util.BillingUtil$DonateOption,java.lang.String) -> a
+    46:63:void onCreate() -> onCreate
+    67:67:android.os.IBinder onBind(android.content.Intent) -> onBind
+    75:78:void onServiceConnected(android.content.ComponentName,android.os.IBinder) -> onServiceConnected
+    82:83:void onServiceDisconnected(android.content.ComponentName) -> onServiceDisconnected
+    91:94:void onStart(android.content.Intent,int) -> onStart
+    97:98:void setContext(android.content.Context) -> a
+    146:162:boolean bindToMarketBillingService() -> e
+    171:175:void unbind() -> a
+    235:235:boolean checkBillingSupported() -> b
+    316:316:boolean confirmNotifications(int,java.lang.String[]) -> a
+    379:380:boolean requestPurchase$2793e9ec(net.jessechen.instawifi.util.BillingUtil$DonateOption,java.lang.String) -> a
     28:28:com.android.vending.billing.IMarketBillingService access$0(net.jessechen.instawifi.billing.BillingService) -> a
-    131:131:boolean access$1(net.jessechen.instawifi.billing.BillingService) -> b
+    141:141:boolean access$1(net.jessechen.instawifi.billing.BillingService) -> b
     34:34:java.util.LinkedList access$2() -> c
-    25:25:java.lang.String access$3() -> d
-    41:41:java.util.HashMap access$4() -> e
-    28:28:void access$5$22ff0ec8(net.jessechen.instawifi.billing.BillingService) -> c
+    41:41:java.util.HashMap access$3() -> d
+    28:28:void access$4$22ff0ec8(net.jessechen.instawifi.billing.BillingService) -> c
 net.jessechen.instawifi.billing.BillingService$BillingRequest -> net.jessechen.instawifi.billing.a:
     int mStartId -> c
     long mRequestId -> a
     net.jessechen.instawifi.billing.BillingService this$0 -> b
-    372:372:int getStartId() -> a
-    382:391:boolean runRequest() -> b
-    401:414:boolean runIfConnected() -> c
-    426:428:void onRemoteException(android.os.RemoteException) -> a
+    393:393:int getStartId() -> a
+    403:412:boolean runRequest() -> b
+    425:439:boolean runIfConnected() -> c
+    454:455:void onRemoteException(android.os.RemoteException) -> a
     long run() -> d
-    445:445:void responseCodeReceived(net.jessechen.instawifi.util.BillingUtil$ResponseCode) -> a
-    448:453:android.os.Bundle makeRequestBundle(java.lang.String) -> a
-    457:460:void logResponseCode(java.lang.String,android.os.Bundle) -> a
+    472:472:void responseCodeReceived(net.jessechen.instawifi.util.BillingUtil$ResponseCode) -> a
+    475:480:android.os.Bundle makeRequestBundle(java.lang.String) -> a
+    484:489:void logResponseCode$5dc9c75(android.os.Bundle) -> a
 net.jessechen.instawifi.billing.BillingService$CheckBillingSupported -> net.jessechen.instawifi.billing.b:
     java.lang.String mProductType -> c
     net.jessechen.instawifi.billing.BillingService this$0 -> d
-    510:525:long run() -> d
+    539:555:long run() -> d
 net.jessechen.instawifi.billing.BillingService$ConfirmNotifications -> net.jessechen.instawifi.billing.c:
     java.lang.String[] mNotifyIds -> c
     net.jessechen.instawifi.billing.BillingService this$0 -> d
-    576:581:long run() -> d
+    606:611:long run() -> d
 net.jessechen.instawifi.billing.BillingService$GetPurchaseInformation -> net.jessechen.instawifi.billing.d:
     long mNonce -> c
     java.lang.String[] mNotifyIds -> d
     net.jessechen.instawifi.billing.BillingService this$0 -> e
-    544:552:long run() -> d
-    558:560:void onRemoteException(android.os.RemoteException) -> a
+    574:582:long run() -> d
+    588:590:void onRemoteException(android.os.RemoteException) -> a
 net.jessechen.instawifi.billing.BillingService$RequestPurchase -> net.jessechen.instawifi.billing.e:
     java.lang.String mProductId -> c
     java.lang.String mDeveloperPayload -> d
     java.lang.String mProductType -> e
     net.jessechen.instawifi.billing.BillingService this$0 -> f
-    646:666:long run() -> d
-    672:674:void responseCodeReceived(net.jessechen.instawifi.util.BillingUtil$ResponseCode) -> a
+    676:698:long run() -> d
+    704:706:void responseCodeReceived(net.jessechen.instawifi.util.BillingUtil$ResponseCode) -> a
     1:1:boolean runIfConnected() -> c
     1:1:boolean runRequest() -> b
     1:1:int getStartId() -> a
@@ -5912,9 +5909,9 @@ net.jessechen.instawifi.billing.PurchaseObserver -> net.jessechen.instawifi.bill
     java.lang.Class[] START_INTENT_SENDER_SIG -> e
     void onBillingSupported$2598ce09(boolean) -> a
     void onPurchaseStateChange$767ccba(net.jessechen.instawifi.util.BillingUtil$PurchaseState,java.lang.String,java.lang.String) -> a
-    void onRequestPurchaseResponse(net.jessechen.instawifi.billing.BillingService$RequestPurchase,net.jessechen.instawifi.util.BillingUtil$ResponseCode) -> a
-    116:142:void startBuyPageActivity(android.app.PendingIntent,android.content.Intent) -> a
-    154:161:void postPurchaseStateChange(net.jessechen.instawifi.util.BillingUtil$PurchaseState,java.lang.String,java.lang.String,long,java.lang.String) -> a
+    void onRequestPurchaseResponse$6dc29225(net.jessechen.instawifi.util.BillingUtil$ResponseCode) -> a
+    121:152:void startBuyPageActivity(android.app.PendingIntent,android.content.Intent) -> a
+    168:175:void postPurchaseStateChange(net.jessechen.instawifi.util.BillingUtil$PurchaseState,java.lang.String,java.lang.String,long,java.lang.String) -> a
 net.jessechen.instawifi.billing.PurchaseObserver$1 -> net.jessechen.instawifi.billing.g:
     net.jessechen.instawifi.billing.PurchaseObserver this$0 -> a
     net.jessechen.instawifi.util.BillingUtil$PurchaseState val$purchaseState -> b
@@ -5922,31 +5919,31 @@ net.jessechen.instawifi.billing.PurchaseObserver$1 -> net.jessechen.instawifi.bi
     java.lang.String val$orderId -> d
     long val$purchaseTime -> e
     java.lang.String val$developerPayload -> f
-    157:159:void run() -> run
+    171:173:void run() -> run
 net.jessechen.instawifi.billing.ResponseHandler -> net.jessechen.instawifi.billing.h:
     net.jessechen.instawifi.billing.PurchaseObserver sPurchaseObserver -> a
-    44:45:void register(net.jessechen.instawifi.billing.PurchaseObserver) -> a
-    67:70:void checkBillingSupportedResponse$2598ce09(boolean) -> a
-    86:91:void buyPageIntentResponse(android.app.PendingIntent,android.content.Intent) -> a
-    126:141:void purchaseResponse$33ad767c(net.jessechen.instawifi.util.BillingUtil$PurchaseState,java.lang.String,java.lang.String,long,java.lang.String) -> a
-    162:165:void responseCodeReceived$e2b59e7(net.jessechen.instawifi.billing.BillingService$RequestPurchase,net.jessechen.instawifi.util.BillingUtil$ResponseCode) -> a
-    35:35:net.jessechen.instawifi.billing.PurchaseObserver access$0() -> a
+    45:46:void register(net.jessechen.instawifi.billing.PurchaseObserver) -> a
+    68:71:void checkBillingSupportedResponse$2598ce09(boolean) -> a
+    87:94:void buyPageIntentResponse(android.app.PendingIntent,android.content.Intent) -> a
+    129:144:void purchaseResponse$33ad767c(net.jessechen.instawifi.util.BillingUtil$PurchaseState,java.lang.String,java.lang.String,long,java.lang.String) -> a
+    165:168:void responseCodeReceived$e2b59e7$6dc29225(net.jessechen.instawifi.util.BillingUtil$ResponseCode) -> a
+    36:36:net.jessechen.instawifi.billing.PurchaseObserver access$0() -> a
 net.jessechen.instawifi.billing.ResponseHandler$1 -> net.jessechen.instawifi.billing.i:
     net.jessechen.instawifi.util.BillingUtil$PurchaseState val$purchaseState -> a
     java.lang.String val$productId -> b
     java.lang.String val$orderId -> c
     long val$purchaseTime -> d
     java.lang.String val$developerPayload -> e
-    132:132:void run() -> run
+    135:135:void run() -> run
 net.jessechen.instawifi.billing.Security -> net.jessechen.instawifi.billing.j:
     java.lang.String TAG -> a
     java.security.SecureRandom RANDOM -> b
     java.util.HashSet sKnownNonces -> c
-    85:87:long generateNonce() -> a
-    93:94:void removeNonce(long) -> a
-    116:202:java.util.ArrayList verifyPurchase(java.lang.String,java.lang.String) -> a
-    218:228:java.security.PublicKey generatePublicKey(java.lang.String) -> a
-    249:269:boolean verify(java.security.PublicKey,java.lang.String,java.lang.String) -> a
+    86:88:long generateNonce() -> a
+    94:95:void removeNonce(long) -> a
+    118:215:java.util.ArrayList verifyPurchase(java.lang.String,java.lang.String) -> a
+    231:247:java.security.PublicKey generatePublicKey(java.lang.String) -> a
+    274:301:boolean verify(java.security.PublicKey,java.lang.String,java.lang.String) -> a
 net.jessechen.instawifi.billing.Security$VerifiedPurchase -> net.jessechen.instawifi.billing.k:
     net.jessechen.instawifi.util.BillingUtil$PurchaseState purchaseState -> a
     java.lang.String notificationId -> b

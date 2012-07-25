@@ -89,9 +89,9 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		mBillingService = new BillingService();
 		mBillingService.setContext(c);
 
-		if (Util.hasNfc(c)) {
-			mNfcAdapter = ((NfcManager) getSystemService(Context.NFC_SERVICE))
-					.getDefaultAdapter();
+		if (Util.hasNfc(c)
+				&& (mNfcAdapter = ((NfcManager) getSystemService(Context.NFC_SERVICE))
+						.getDefaultAdapter()) != null) {
 
 			// Android Beam setup
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -330,8 +330,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		switch (item.getItemId()) {
 		case R.id.share:
 			if (Util.isNfcTabSelected()) {
-				Intent intent = Util
-						.buildAppShareIntent(c);
+				Intent intent = Util.buildAppShareIntent(c);
 				startActivity(Intent.createChooser(intent, String
 						.format(getString(R.string.app_share_dialog_title))));
 				return true;
@@ -341,8 +340,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			}
 		case R.id.add:
 			if (WifiUtil.isWifiEnabled(this)) {
-				AddNetworkDialog.show(this, c,
-						networkSpinner);
+				AddNetworkDialog.show(this, c, networkSpinner);
 			} else {
 				WifiUtil.showWifiDialog(this,
 						getString(R.string.show_wifi_msg_add),
@@ -350,10 +348,8 @@ public class NfcActivity extends SherlockFragmentActivity implements
 
 							@Override
 							public void OnWifiEnabled() {
-								AddNetworkDialog
-										.show(NfcActivity.this,
-												c,
-												networkSpinner);
+								AddNetworkDialog.show(NfcActivity.this, c,
+										networkSpinner);
 							}
 						});
 			}

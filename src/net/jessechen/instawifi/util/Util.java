@@ -32,8 +32,8 @@ public class Util {
 	}
 
 	public static boolean hasNfc(Context c) {
-		PackageManager pm = c.getPackageManager();
-		return pm.hasSystemFeature(PackageManager.FEATURE_NFC);
+		return c.getPackageManager().hasSystemFeature(
+				PackageManager.FEATURE_NFC);
 	}
 
 	public static boolean hasQuotes(String s) {
@@ -131,7 +131,7 @@ public class Util {
 
 		String message = String.format(c.getString(R.string.donate_email_body),
 				donateOption.amount, donateOption.numNfcStickers);
-		
+
 		String uriText = String.format(
 				c.getString(R.string.donate_email_template), subject, message);
 		uriText.replace(" ", "%20");

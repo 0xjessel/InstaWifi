@@ -753,8 +753,10 @@ com.gridlayout.R$styleable:
 com.gridlayout.Space:
     51:52:public Space(android.content.Context)
 net.jessechen.instawifi.BuildConfig
+net.jessechen.instawifi.DonateActivity:
+    27:27:static synthetic java.lang.String access$1()
 net.jessechen.instawifi.DonateActivity$DonatePurchaseObserver:
-    158:165:public void onRestoreTransactionsResponse(net.jessechen.instawifi.billing.BillingService$RestoreTransactions,net.jessechen.instawifi.util.BillingUtil$ResponseCode)
+    170:177:public void onRestoreTransactionsResponse(net.jessechen.instawifi.billing.BillingService$RestoreTransactions,net.jessechen.instawifi.util.BillingUtil$ResponseCode)
 net.jessechen.instawifi.NfcActivity:
     static final int MESSAGE_SENT
 net.jessechen.instawifi.QrFragment:
@@ -773,20 +775,20 @@ net.jessechen.instawifi.R$string
 net.jessechen.instawifi.R$style
 net.jessechen.instawifi.R$styleable
 net.jessechen.instawifi.billing.BillingService:
-    162:167:protected android.os.Bundle makeRequestBundle(java.lang.String)
+    178:183:protected android.os.Bundle makeRequestBundle(java.lang.String)
 net.jessechen.instawifi.billing.BillingService$CheckBillingSupported:
-    503:506:public BillingService$CheckBillingSupported(net.jessechen.instawifi.billing.BillingService,java.lang.String)
+    532:535:public BillingService$CheckBillingSupported(net.jessechen.instawifi.billing.BillingService,java.lang.String)
 net.jessechen.instawifi.billing.BillingService$RequestPurchase:
-    603:604:public BillingService$RequestPurchase(net.jessechen.instawifi.billing.BillingService,java.lang.String)
-    617:618:public BillingService$RequestPurchase(net.jessechen.instawifi.billing.BillingService,java.lang.String,java.lang.String)
+    633:634:public BillingService$RequestPurchase(net.jessechen.instawifi.billing.BillingService,java.lang.String)
+    647:648:public BillingService$RequestPurchase(net.jessechen.instawifi.billing.BillingService,java.lang.String,java.lang.String)
 net.jessechen.instawifi.billing.BillingService$RestoreTransactions
 net.jessechen.instawifi.billing.PurchaseObserver:
     private static final java.lang.String TAG
     public abstract void onRestoreTransactionsResponse(net.jessechen.instawifi.billing.BillingService$RestoreTransactions,net.jessechen.instawifi.util.BillingUtil$ResponseCode)
 net.jessechen.instawifi.billing.ResponseHandler:
     private static final java.lang.String TAG
-    54:55:public static synchronized void unregister(net.jessechen.instawifi.billing.PurchaseObserver)
-    182:186:public static void responseCodeReceived(android.content.Context,net.jessechen.instawifi.billing.BillingService$RestoreTransactions,net.jessechen.instawifi.util.BillingUtil$ResponseCode)
+    55:56:public static synchronized void unregister(net.jessechen.instawifi.billing.PurchaseObserver)
+    185:189:public static void responseCodeReceived(android.content.Context,net.jessechen.instawifi.billing.BillingService$RestoreTransactions,net.jessechen.instawifi.util.BillingUtil$ResponseCode)
 net.jessechen.instawifi.billing.Security:
     private static final java.lang.String seg9
     private static final java.lang.String KEY_FACTORY_ALGORITHM
@@ -848,10 +850,11 @@ net.jessechen.instawifi.util.BillingUtil:
     public static final java.lang.String BILLING_RESPONSE_REQUEST_ID
     public static final java.lang.String ITEM_TYPE_INAPP
     public static final java.lang.String ITEM_TYPE_SUBSCRIPTION
+    public static final boolean DEBUG
     8:8:public BillingUtil()
-    134:136:public static long generateNonce()
-    140:141:public static void removeNonce(long)
-    144:144:public static boolean isNonceKnown(long)
+    136:138:public static long generateNonce()
+    142:143:public static void removeNonce(long)
+    146:146:public static boolean isNonceKnown(long)
 net.jessechen.instawifi.util.QrUtil:
     12:12:public QrUtil()
 net.jessechen.instawifi.util.RootUtil:
