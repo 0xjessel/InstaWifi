@@ -162,7 +162,7 @@ public class WifiUtil {
 
 	/**
 	 * validate incoming URI to ensure that it matches this app's URI schema
-	 *
+	 * 
 	 * @param wifiUri
 	 * @return true if valid wifi URI, false otherwise
 	 */
@@ -180,7 +180,7 @@ public class WifiUtil {
 
 	/**
 	 * should call this method before executing an action on the WifiModel
-	 *
+	 * 
 	 * @param wm
 	 * @return true if valid, false otherwise
 	 */
@@ -359,7 +359,8 @@ public class WifiUtil {
 	public static boolean enableWifiAndWait(WifiManager mWm) {
 		if (enableWifi(mWm)) {
 			int wait = 0;
-			// time it so that if waited longer than WAIT_THRESHOLD / 5 seconds, bail out
+			// time it so that if waited longer than WAIT_THRESHOLD / 5 seconds,
+			// bail out
 			while (!mWm.isWifiEnabled() && wait < WAIT_THRESHOLD) {
 				// waiting on wifi
 				Log.v(TAG, "waiting for wifi to be enabled..");
@@ -444,7 +445,7 @@ public class WifiUtil {
 		String mSSID = mWifiModel.getSSID();
 
 		for (WifiConfiguration wifiConfig : configuredNetworks) {
-			if (wifiConfig.SSID.equals(mSSID)) {
+			if ((wifiConfig != null) && wifiConfig.SSID.equals(mSSID)) {
 				return wifiConfig.networkId;
 			}
 		}
