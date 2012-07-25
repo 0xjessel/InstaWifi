@@ -5774,45 +5774,45 @@ net.jessechen.instawifi.NfcActivity -> net.jessechen.instawifi.NfcActivity:
     android.os.Handler mHandler -> q
     android.view.View$OnClickListener mTagWriter -> r
     android.widget.CompoundButton$OnCheckedChangeListener mCheckBoxListener -> s
-    80:160:void onCreate(android.os.Bundle) -> onCreate
-    163:199:void setupNfcView(java.lang.String[]) -> a
-    203:208:void onResume() -> onResume
-    212:220:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
-    224:229:void onPause() -> onPause
-    233:234:void onDestroy() -> onDestroy
-    239:264:void onNewIntent(android.content.Intent) -> onNewIntent
-    323:325:boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu) -> onCreateOptionsMenu
-    330:368:boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem) -> onOptionsItemSelected
-    425:455:void onItemSelected(android.widget.AdapterView,android.view.View,int,long) -> onItemSelected
-    459:459:void onNothingSelected(android.widget.AdapterView) -> onNothingSelected
-    408:408:void access$0(net.jessechen.instawifi.NfcActivity) -> a
-    417:417:void access$1(net.jessechen.instawifi.NfcActivity) -> b
-    162:162:void access$2(net.jessechen.instawifi.NfcActivity,java.lang.String[]) -> a
-    310:310:android.os.Handler access$3() -> a
+    80:162:void onCreate(android.os.Bundle) -> onCreate
+    165:201:void setupNfcView(java.lang.String[]) -> a
+    205:210:void onResume() -> onResume
+    214:222:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
+    226:231:void onPause() -> onPause
+    235:236:void onDestroy() -> onDestroy
+    241:266:void onNewIntent(android.content.Intent) -> onNewIntent
+    325:327:boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu) -> onCreateOptionsMenu
+    332:366:boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem) -> onOptionsItemSelected
+    423:453:void onItemSelected(android.widget.AdapterView,android.view.View,int,long) -> onItemSelected
+    457:457:void onNothingSelected(android.widget.AdapterView) -> onNothingSelected
+    406:406:void access$0(net.jessechen.instawifi.NfcActivity) -> a
+    415:415:void access$1(net.jessechen.instawifi.NfcActivity) -> b
+    164:164:void access$2(net.jessechen.instawifi.NfcActivity,java.lang.String[]) -> a
+    312:312:android.os.Handler access$3() -> a
 net.jessechen.instawifi.NfcActivity$1 -> net.jessechen.instawifi.b:
-    313:318:void handleMessage(android.os.Message) -> handleMessage
+    315:320:void handleMessage(android.os.Message) -> handleMessage
 net.jessechen.instawifi.NfcActivity$2 -> net.jessechen.instawifi.c:
     net.jessechen.instawifi.NfcActivity this$0 -> a
-    375:391:void onClick(android.view.View) -> onClick
-    372:372:net.jessechen.instawifi.NfcActivity access$0(net.jessechen.instawifi.NfcActivity$2) -> a
+    373:389:void onClick(android.view.View) -> onClick
+    370:370:net.jessechen.instawifi.NfcActivity access$0(net.jessechen.instawifi.NfcActivity$2) -> a
 net.jessechen.instawifi.NfcActivity$2$1 -> net.jessechen.instawifi.d:
     net.jessechen.instawifi.NfcActivity$2 this$1 -> a
-    386:387:void onCancel(android.content.DialogInterface) -> onCancel
+    384:385:void onCancel(android.content.DialogInterface) -> onCancel
 net.jessechen.instawifi.NfcActivity$3 -> net.jessechen.instawifi.e:
     net.jessechen.instawifi.NfcActivity this$0 -> a
-    399:405:void onCheckedChanged(android.widget.CompoundButton,boolean) -> onCheckedChanged
+    397:403:void onCheckedChanged(android.widget.CompoundButton,boolean) -> onCheckedChanged
 net.jessechen.instawifi.NfcActivity$4 -> net.jessechen.instawifi.f:
     net.jessechen.instawifi.NfcActivity this$0 -> a
     122:123:void OnWifiEnabled() -> a
 net.jessechen.instawifi.NfcActivity$5 -> net.jessechen.instawifi.g:
     net.jessechen.instawifi.NfcActivity this$0 -> a
-    281:290:android.nfc.NdefMessage createNdefMessage(android.nfc.NfcEvent) -> createNdefMessage
+    283:292:android.nfc.NdefMessage createNdefMessage(android.nfc.NfcEvent) -> createNdefMessage
 net.jessechen.instawifi.NfcActivity$6 -> net.jessechen.instawifi.h:
     net.jessechen.instawifi.NfcActivity this$0 -> a
-    304:305:void onNdefPushComplete(android.nfc.NfcEvent) -> onNdefPushComplete
+    306:307:void onNdefPushComplete(android.nfc.NfcEvent) -> onNdefPushComplete
 net.jessechen.instawifi.NfcActivity$7 -> net.jessechen.instawifi.i:
     net.jessechen.instawifi.NfcActivity this$0 -> a
-    354:357:void OnWifiEnabled() -> a
+    353:355:void OnWifiEnabled() -> a
 net.jessechen.instawifi.QrFragment -> net.jessechen.instawifi.j:
     java.lang.String TAG -> i
     com.gridlayout.GridLayout gridlayout_qr -> a
@@ -6110,7 +6110,7 @@ net.jessechen.instawifi.util.Util -> net.jessechen.instawifi.b.o:
     java.lang.String TAG -> b
     27:28:void shortToast(android.content.Context,java.lang.String) -> a
     31:32:void longToast(android.content.Context,java.lang.String) -> b
-    35:36:boolean hasNfc(android.content.Context) -> a
+    35:35:boolean hasNfc(android.content.Context) -> a
     40:40:boolean hasQuotes(java.lang.String) -> a
     44:44:java.lang.String concatQuotes(java.lang.String) -> b
     48:48:java.lang.String stripQuotes(java.lang.String) -> c

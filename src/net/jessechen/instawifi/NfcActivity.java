@@ -156,6 +156,8 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			// set QR layout
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.fragment, QrFragment.getInstance()).commit();
+
+			Util.curTab = Util.QR;
 		}
 	}
 
