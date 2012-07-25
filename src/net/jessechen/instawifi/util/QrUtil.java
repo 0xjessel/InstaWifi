@@ -29,19 +29,22 @@ public class QrUtil {
 		QRCodeWriter writer = new QRCodeWriter();
 		BitMatrix bm = null;
 		try {
-			// a little hack for open network configurations s.t. barcode
-			// scanner is happy
+			// open network needs protocol to be NOPASS
 			String textProtocol = "";
 			if (wm.getProtocol() == WifiUtil.NONE) {
 				textProtocol = NOPASS;
+			} else if (wm.getProtocol() == WifiUtil.WPA) {
+				// WifiUtil.WPA is "WPA/WPA2", protocol needs to be just "WPA"
+				textProtocol = "WPA";
 			} else {
 				textProtocol = WifiUtil.protocolStrings[wm.getProtocol()];
 			}
 
-			bm = writer.encode(
-					String.format(WifiUtil.QR_WIFI_URI_SCHEME, textProtocol,
-							wm.getSSID(), wm.getPassword()),
-					BarcodeFormat.QR_CODE, DIMENSION, DIMENSION);
+			String qrString =
+					String.format(WifiUtil.QR_WIFI_URI_SCHEME, wm.getTrimmedSSID(), textProtocol,
+							wm.getPassword());
+
+			bm = writer.encode(qrString, BarcodeFormat.QR_CODE, DIMENSION, DIMENSION);
 		} catch (WriterException e) {
 			e.printStackTrace();
 		}
@@ -52,18 +55,16 @@ public class QrUtil {
 		for (int y = MAGIC_NUMBER; y < bm.getHeight() - MAGIC_NUMBER; y++) {
 			int offset = (y - MAGIC_NUMBER) * width;
 			for (int x = MAGIC_NUMBER; x < bm.getWidth() - MAGIC_NUMBER; x++) {
-				pixels[offset + (x - MAGIC_NUMBER)] = bm.get(x, y) ? Color.BLACK
-						: Color.WHITE;
+				pixels[offset + (x - MAGIC_NUMBER)] = bm.get(x, y) ? Color.BLACK : Color.WHITE;
 			}
 		}
 
-		Bitmap bitmap = Bitmap.createBitmap(width, height,
-				Bitmap.Config.ARGB_8888);
+		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
 
 		return bitmap;
 	}
-	
+
 	public static String getQrFilename(String ssid) {
 		if (ssid != null) {
 			return "InstaWifi " + ssid + " QR" + ".jpg";

@@ -22,7 +22,7 @@ import com.bugsense.trace.BugSenseHandler;
 
 public class WifiUtil {
 	public static String WIFI_URI_SCHEME = "wifi://%s/%s#%s";
-	public static String QR_WIFI_URI_SCHEME = "WIFI:T:%s;S:%s;P:%s;;";
+	public static String QR_WIFI_URI_SCHEME = "WIFI:S:%s;T:%s;P:%s;;";
 	public static final int NONE = 0;
 	public static final int WEP = 1;
 	public static final int WPA = 2;
@@ -161,7 +161,7 @@ public class WifiUtil {
 
 	/**
 	 * validate incoming URI to ensure that it matches this app's URI schema
-	 * 
+	 *
 	 * @param wifiUri
 	 * @return true if valid wifi URI, false otherwise
 	 */
@@ -179,7 +179,7 @@ public class WifiUtil {
 
 	/**
 	 * should call this method before executing an action on the WifiModel
-	 * 
+	 *
 	 * @param wm
 	 * @return true if valid, false otherwise
 	 */
