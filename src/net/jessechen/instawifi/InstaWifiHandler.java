@@ -81,6 +81,8 @@ public class InstaWifiHandler extends SherlockActivity {
 	protected void onPause() {
 		super.onPause();
 
+		triedAssociating = false;
+		
 		if (!receiverRemoved) {
 			unregisterWifiReceiver();
 		}
