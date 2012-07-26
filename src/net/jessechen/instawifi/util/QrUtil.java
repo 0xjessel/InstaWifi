@@ -3,6 +3,7 @@ package net.jessechen.instawifi.util;
 import net.jessechen.instawifi.models.WifiModel;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -10,6 +11,8 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 public class QrUtil {
+	private static final String TAG = QrUtil.class.getSimpleName();
+
 	public static String NOPASS = "nopass";
 
 	public enum QrImageSize {
@@ -40,11 +43,31 @@ public class QrUtil {
 				textProtocol = WifiUtil.protocolStrings[wm.getProtocol()];
 			}
 
-			String qrString =
-					String.format(WifiUtil.QR_WIFI_URI_SCHEME, wm.getTrimmedSSID(), textProtocol,
-							wm.getPassword());
+			// we need to escape ":", ";" and "\"
+			StringBuilder textPassword = new StringBuilder();
+			for (char c : wm.getPassword().toCharArray()) {
+				switch (c) {
+				case ':':
+					textPassword.append("\\:");
+					break;
+				case ';':
+					textPassword.append("\\;");
+					break;
+				case '\\':
+					textPassword.append("\\\\");
+					break;
+				default:
+					textPassword.append(c); 
+					break;
+				}
+			}
+			Log.d(TAG, textPassword.toString());
 
-			bm = writer.encode(qrString, BarcodeFormat.QR_CODE, DIMENSION, DIMENSION);
+			String qrString = String.format(WifiUtil.QR_WIFI_URI_SCHEME,
+					wm.getTrimmedSSID(), textProtocol, textPassword.toString());
+
+			bm = writer.encode(qrString, BarcodeFormat.QR_CODE, DIMENSION,
+					DIMENSION);
 		} catch (WriterException e) {
 			e.printStackTrace();
 		}
@@ -55,11 +78,13 @@ public class QrUtil {
 		for (int y = MAGIC_NUMBER; y < bm.getHeight() - MAGIC_NUMBER; y++) {
 			int offset = (y - MAGIC_NUMBER) * width;
 			for (int x = MAGIC_NUMBER; x < bm.getWidth() - MAGIC_NUMBER; x++) {
-				pixels[offset + (x - MAGIC_NUMBER)] = bm.get(x, y) ? Color.BLACK : Color.WHITE;
+				pixels[offset + (x - MAGIC_NUMBER)] = bm.get(x, y) ? Color.BLACK
+						: Color.WHITE;
 			}
 		}
 
-		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		Bitmap bitmap = Bitmap.createBitmap(width, height,
+				Bitmap.Config.ARGB_8888);
 		bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
 
 		return bitmap;
