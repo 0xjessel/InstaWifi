@@ -375,15 +375,15 @@ public class NfcActivity extends SherlockFragmentActivity implements
 				// Write to a tag for as long as the dialog is shown.
 				enableTagWriteMode();
 
-				alert = new AlertDialog.Builder(NfcActivity.this)
-						.setTitle(getString(R.string.dialog_write_tag))
-						.setOnCancelListener(
-								new DialogInterface.OnCancelListener() {
-									@Override
-									public void onCancel(DialogInterface dialog) {
-										disableTagWriteMode();
-									}
-								}).create();
+				alert = new AlertDialog.Builder(NfcActivity.this).setTitle(
+						getString(R.string.dialog_write_tag)).create();
+				alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+					@Override
+					public void onDismiss(DialogInterface dialog) {
+						disableTagWriteMode();
+					}
+				});
 				alert.show();
 			}
 		}
