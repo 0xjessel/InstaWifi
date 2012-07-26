@@ -34,7 +34,7 @@ public class WifiModel {
 		} else {
 			SSID = Util.concatQuotes(ssid);
 		}
-		if (!(protocol == WifiUtil.NONE)) {
+		if (protocol != WifiUtil.NONE) {
 			password = pw;
 		} else {
 			password = "";
@@ -75,7 +75,8 @@ public class WifiModel {
 	}
 
 	public String toWifiUri() {
-		return String.format(WifiUtil.WIFI_URI_SCHEME, SSID, password,
-				protocol);
+		// URL encode to deal with special chars
+		return String.format(WifiUtil.WIFI_URI_SCHEME, Uri.encode(SSID),
+				Uri.encode(password), Uri.encode(Integer.toString(protocol)));
 	}
 }
