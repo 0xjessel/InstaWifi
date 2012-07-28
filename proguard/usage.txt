@@ -855,8 +855,6 @@ net.jessechen.instawifi.util.BillingUtil:
     136:138:public static long generateNonce()
     142:143:public static void removeNonce(long)
     146:146:public static boolean isNonceKnown(long)
-net.jessechen.instawifi.util.QrUtil:
-    12:12:public QrUtil()
 net.jessechen.instawifi.util.RootUtil:
     209:214:public static java.lang.String getFileThenDelete(android.content.Context)
 net.jessechen.instawifi.util.RootUtil$ExecuteAsRootBase:

@@ -5752,8 +5752,8 @@ net.jessechen.instawifi.InstaWifiHandler -> net.jessechen.instawifi.InstaWifiHan
     java.lang.String TAG -> h
     35:51:void onCreate(android.os.Bundle) -> onCreate
     68:78:void onResume() -> onResume
-    82:87:void onPause() -> onPause
-    90:114:void handleConnectionChanged(android.net.wifi.SupplicantState) -> a
+    82:89:void onPause() -> onPause
+    92:116:void handleConnectionChanged(android.net.wifi.SupplicantState) -> a
 net.jessechen.instawifi.NfcActivity -> net.jessechen.instawifi.NfcActivity:
     boolean mWriteMode -> a
     android.nfc.NfcAdapter mNfcAdapter -> b
@@ -5797,7 +5797,7 @@ net.jessechen.instawifi.NfcActivity$2 -> net.jessechen.instawifi.c:
     370:370:net.jessechen.instawifi.NfcActivity access$0(net.jessechen.instawifi.NfcActivity$2) -> a
 net.jessechen.instawifi.NfcActivity$2$1 -> net.jessechen.instawifi.d:
     net.jessechen.instawifi.NfcActivity$2 this$1 -> a
-    384:385:void onCancel(android.content.DialogInterface) -> onCancel
+    384:385:void onDismiss(android.content.DialogInterface) -> onDismiss
 net.jessechen.instawifi.NfcActivity$3 -> net.jessechen.instawifi.e:
     net.jessechen.instawifi.NfcActivity this$0 -> a
     397:403:void onCheckedChanged(android.widget.CompoundButton,boolean) -> onCheckedChanged
@@ -6026,7 +6026,7 @@ net.jessechen.instawifi.models.WifiModel -> net.jessechen.instawifi.a.a:
     62:62:java.lang.String getSSID() -> b
     66:69:java.lang.String getTrimmedSSID() -> c
     74:74:java.lang.String getPassword() -> d
-    78:78:java.lang.String toWifiUri() -> e
+    79:79:java.lang.String toWifiUri() -> e
 net.jessechen.instawifi.util.Base64 -> net.jessechen.instawifi.b.a:
     byte[] ALPHABET -> b
     byte[] WEBSAFE_ALPHABET -> c
@@ -6077,9 +6077,10 @@ net.jessechen.instawifi.util.NfcUtil -> net.jessechen.instawifi.b.h:
     43:66:android.nfc.NdefMessage[] getNdefMessages(android.content.Intent) -> a
     73:117:boolean writeTag(android.nfc.NdefMessage,android.nfc.Tag,android.content.Context) -> a
 net.jessechen.instawifi.util.QrUtil -> net.jessechen.instawifi.b.i:
+    java.lang.String TAG -> b
     java.lang.String NOPASS -> a
-    21:65:android.graphics.Bitmap generateQrCode(net.jessechen.instawifi.models.WifiModel,net.jessechen.instawifi.util.QrUtil$QrImageSize) -> a
-    69:72:java.lang.String getQrFilename(java.lang.String) -> a
+    24:90:android.graphics.Bitmap generateQrCode(net.jessechen.instawifi.models.WifiModel,net.jessechen.instawifi.util.QrUtil$QrImageSize) -> a
+    94:97:java.lang.String getQrFilename(java.lang.String) -> a
 net.jessechen.instawifi.util.QrUtil$QrImageSize -> net.jessechen.instawifi.b.j:
     net.jessechen.instawifi.util.QrUtil$QrImageSize SMALL -> a
     net.jessechen.instawifi.util.QrUtil$QrImageSize LARGE -> b

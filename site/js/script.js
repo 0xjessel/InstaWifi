@@ -9,6 +9,9 @@ $(document).ready(function() {
 	$('.social.twitter').click(function() {
 		mixpanel.track("Twitter Page Outbound Clicked");
 	});
+	$('.play').click(function() {
+		mixpanel.track("Android Market Page Clicked");
+	});
 });
 
 

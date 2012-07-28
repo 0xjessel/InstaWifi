@@ -66,7 +66,7 @@ public class QrFragment extends SherlockFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.qr_activity, container, false);
+		View view = inflater.inflate(R.layout.qr_frag, container, false);
 
 		picIntent = new Intent(android.content.Intent.ACTION_SEND);
 		picIntent.setType("image/*");
@@ -133,8 +133,6 @@ public class QrFragment extends SherlockFragment implements
 		protocolSpinner_qr.setAdapter(protocolAdapter);
 		protocolSpinner_qr.setOnItemSelectedListener(this);
 		protocolSpinner_qr.setSelection(WifiUtil.DEFAULT_PROTOCOL);
-
-		setQrImage(getActivity());
 	}
 
 	private OnCheckedChangeListener mCheckBoxListener = new CompoundButton.OnCheckedChangeListener() {
