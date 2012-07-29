@@ -141,10 +141,16 @@ public class QrFragment extends SherlockFragment implements
 		public void onCheckedChanged(CompoundButton buttonView,
 				boolean isChecked) {
 			if (isChecked) {
+				int start = passwordField_qr.getSelectionStart();
+				int stop = passwordField_qr.getSelectionEnd();
 				passwordField_qr.setTransformationMethod(null);
+				passwordField_qr.setSelection(start, stop);
 			} else {
+				int start = passwordField_qr.getSelectionStart();
+				int stop = passwordField_qr.getSelectionEnd();
 				passwordField_qr
 						.setTransformationMethod(new PasswordTransformationMethod());
+				passwordField_qr.setSelection(start, stop);
 			}
 		}
 	};

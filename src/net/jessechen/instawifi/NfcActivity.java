@@ -395,10 +395,16 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		public void onCheckedChanged(CompoundButton buttonView,
 				boolean isChecked) {
 			if (isChecked) {
+				int start = passwordField.getSelectionStart();
+				int stop = passwordField.getSelectionEnd();
 				passwordField.setTransformationMethod(null);
+				passwordField.setSelection(start, stop);
 			} else {
+				int start = passwordField.getSelectionStart();
+				int stop = passwordField.getSelectionEnd();
 				passwordField
 						.setTransformationMethod(new PasswordTransformationMethod());
+				passwordField.setSelection(start, stop);
 			}
 		}
 	};
