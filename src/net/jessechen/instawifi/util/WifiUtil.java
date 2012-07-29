@@ -240,11 +240,6 @@ public class WifiUtil {
 			return ConnectToWifiResult.INVALID_NET_ID;
 		}
 
-		// connect to wifi if disabled, wait until finished
-		if (!enableWifiAndWait(mWm)) {
-			return ConnectToWifiResult.NETWORK_ENABLED_FAILED;
-		}
-
 		if (mWm.enableNetwork(netId, true)) {
 			Log.i(TAG, "attemping to connect to network..");
 			return ConnectToWifiResult.NETWORK_ENABLED;

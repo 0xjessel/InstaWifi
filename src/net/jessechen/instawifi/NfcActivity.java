@@ -53,7 +53,6 @@ import com.bugsense.trace.BugSenseHandler;
 @TargetApi(14)
 public class NfcActivity extends SherlockFragmentActivity implements
 		OnItemSelectedListener {
-	boolean mWriteMode = false;
 
 	NfcAdapter mNfcAdapter;
 	PendingIntent mNfcPendingIntent;
@@ -199,21 +198,23 @@ public class NfcActivity extends SherlockFragmentActivity implements
 
 		picIntent = new Intent(android.content.Intent.ACTION_SEND);
 		picIntent.setType("image/*");
-		
+
 		// check if NFC is enabled
 		if (!Util.isNfcEnabled(getApplicationContext())) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(NfcActivity.this);
-			builder.setTitle(
-					getString(R.string.dialog_enable_nfc_title));;
+			AlertDialog.Builder builder = new AlertDialog.Builder(
+					NfcActivity.this);
+			builder.setTitle(getString(R.string.dialog_enable_nfc_title));
+			;
 			builder.setMessage(R.string.dialog_enable_nfc_msg);
 			builder.setPositiveButton(R.string.enable, new OnClickListener() {
-				
+
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+					startActivity(new Intent(
+							android.provider.Settings.ACTION_WIRELESS_SETTINGS));
 				}
 			});
-			
+
 			builder.show();
 		}
 	}
@@ -240,10 +241,10 @@ public class NfcActivity extends SherlockFragmentActivity implements
 	}
 
 	@Override
-	public void onPause() {
+	protected void onPause() {
 		super.onPause();
-
 		if (alert != null) {
+			mNfcAdapter.disableForegroundDispatch(this);
 			alert.dismiss();
 		}
 	}
@@ -258,8 +259,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		// onResume gets called after this to handle the intent
 		setIntent(intent);
 
-		if (mWriteMode
-				&& NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
+		if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
 			Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
 			WifiModel selectedWifi = new WifiModel(networkSpinner
@@ -395,13 +395,6 @@ public class NfcActivity extends SherlockFragmentActivity implements
 
 				alert = new AlertDialog.Builder(NfcActivity.this).setTitle(
 						getString(R.string.dialog_write_tag)).create();
-				alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
-
-					@Override
-					public void onDismiss(DialogInterface dialog) {
-						disableTagWriteMode();
-					}
-				});
 				alert.show();
 			}
 		}
@@ -428,17 +421,11 @@ public class NfcActivity extends SherlockFragmentActivity implements
 	};
 
 	private void enableTagWriteMode() {
-		mWriteMode = true;
 		IntentFilter tagDetected = new IntentFilter(
 				NfcAdapter.ACTION_TAG_DISCOVERED);
 		mWriteTagFilters = new IntentFilter[] { tagDetected };
 		mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent,
 				mWriteTagFilters, null);
-	}
-
-	private void disableTagWriteMode() {
-		mWriteMode = false;
-		mNfcAdapter.disableForegroundDispatch(this);
 	}
 
 	@Override
