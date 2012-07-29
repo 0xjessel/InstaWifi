@@ -410,7 +410,13 @@ public class WifiUtil {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			pd.dismiss();
+			try {
+				pd.dismiss();
+				pd = null;
+			} catch (Exception e) {
+				// do nothing
+			}
+			
 			if (listener != null) {
 				listener.OnWifiEnabled();
 			}
