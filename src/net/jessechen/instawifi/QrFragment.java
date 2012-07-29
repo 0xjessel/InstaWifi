@@ -48,6 +48,7 @@ public class QrFragment extends SherlockFragment implements
 	static PasswordEditText passwordField_qr;
 	CheckBox revealPassword_qr;
 	static ImageView qrImage;
+	boolean firstLoad = true;
 
 	Activity a;
 	Intent picIntent;
@@ -285,6 +286,11 @@ public class QrFragment extends SherlockFragment implements
 			break;
 		}
 
+		// only want to call setQrImage() once on startup
+		if (firstLoad) {
+			firstLoad = false;
+			return;
+		}
 		setQrImage(a);
 	}
 
