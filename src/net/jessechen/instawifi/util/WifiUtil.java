@@ -34,8 +34,8 @@ public class WifiUtil {
 		ALREADY_CONNECTED, INVALID_NET_ID, NETWORK_ENABLED, NETWORK_ENABLED_FAILED
 	}
 
-	// wait up to 8 seconds for wifi to enable
-	private static final int WAIT_THRESHOLD = 40;
+	// wait up to 10 seconds for wifi to enable
+	private static final int WAIT_THRESHOLD = 50;
 
 	private static final String TAG = WifiUtil.class.getSimpleName();
 
