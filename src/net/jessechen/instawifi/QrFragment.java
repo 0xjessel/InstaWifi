@@ -97,7 +97,7 @@ public class QrFragment extends SherlockFragment implements
 						public void OnWifiEnabled() {
 							setupQrView();
 						}
-					});
+					}, false);
 		} else {
 			setupQrView();
 		}

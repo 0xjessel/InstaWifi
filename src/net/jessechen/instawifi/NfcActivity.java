@@ -121,7 +121,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 							public void OnWifiEnabled() {
 								setupNfcView(WifiUtil.getConfiguredNetworks(c));
 							}
-						});
+						}, true);
 			} else {
 				setupNfcView(networks);
 			}
@@ -353,7 +353,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 								AddNetworkDialog.show(NfcActivity.this, c,
 										networkSpinner);
 							}
-						});
+						}, false);
 			}
 			return true;
 		case R.id.donate:

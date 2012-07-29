@@ -161,7 +161,7 @@ public class WifiUtil {
 
 	/**
 	 * validate incoming URI to ensure that it matches this app's URI schema
-	 *
+	 * 
 	 * @param wifiUri
 	 * @return true if valid wifi URI, false otherwise
 	 */
@@ -179,7 +179,7 @@ public class WifiUtil {
 
 	/**
 	 * should call this method before executing an action on the WifiModel
-	 *
+	 * 
 	 * @param wm
 	 * @return true if valid, false otherwise
 	 */
@@ -473,7 +473,7 @@ public class WifiUtil {
 
 	// dialog to prompt user to enable wifi
 	public static void showWifiDialog(final Context c, String msg,
-			final EnableWifiTaskListener listener) {
+			final EnableWifiTaskListener listener, boolean enforced) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(c);
 
 		builder.setTitle(R.string.show_wifi_add_title);
@@ -485,8 +485,13 @@ public class WifiUtil {
 				new WifiUtil.EnableWifiTask(c, listener).execute();
 			}
 		});
-		builder.setCancelable(false);
 
+		if (enforced) {
+			builder.setCancelable(false);
+		} else {
+			builder.setCancelable(true);
+		}
+		
 		builder.create().show();
 	}
 
