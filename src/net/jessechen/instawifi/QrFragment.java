@@ -49,6 +49,7 @@ public class QrFragment extends SherlockFragment implements
 	CheckBox revealPassword_qr;
 	static ImageView qrImage;
 
+	Activity a;
 	Intent picIntent;
 
 	public static QrFragment getInstance() {
@@ -67,7 +68,8 @@ public class QrFragment extends SherlockFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.qr_frag, container, false);
-
+		a = getActivity();
+		
 		picIntent = new Intent(android.content.Intent.ACTION_SEND);
 		picIntent.setType("image/*");
 
@@ -80,16 +82,16 @@ public class QrFragment extends SherlockFragment implements
 		passwordText_qr = (TextView) view.findViewById(R.id.password_text_qr);
 		passwordField_qr = (PasswordEditText) view
 				.findViewById(R.id.password_field_qr);
-		passwordField_qr.init(getActivity(), qrImage);
+		passwordField_qr.init(a, qrImage);
 		revealPassword_qr = (CheckBox) view
 				.findViewById(R.id.password_checkbox_qr);
 
 		revealPassword_qr.setOnCheckedChangeListener(mCheckBoxListener);
 
 		// test point to see if device can get configured networks w/o wifi
-		final String[] test = WifiUtil.getConfiguredNetworks(getActivity());
+		final String[] test = WifiUtil.getConfiguredNetworks(a);
 		if (test.length == 0) {
-			WifiUtil.showWifiDialog(getActivity(),
+			WifiUtil.showWifiDialog(a,
 					getString(R.string.show_wifi_msg_default),
 					new WifiUtil.EnableWifiTaskListener() {
 
@@ -97,7 +99,7 @@ public class QrFragment extends SherlockFragment implements
 						public void OnWifiEnabled() {
 							setupQrView();
 						}
-					}, false);
+					}, true);
 		} else {
 			setupQrView();
 		}
@@ -106,16 +108,16 @@ public class QrFragment extends SherlockFragment implements
 	}
 
 	private void setupQrView() {
-		String[] networks = WifiUtil.getConfiguredNetworks(getActivity());
+		String[] networks = WifiUtil.getConfiguredNetworks(a);
 		ArrayAdapter<String> networkAdapter = new ArrayAdapter<String>(
-				getActivity(), android.R.layout.simple_spinner_item, networks);
+				a, android.R.layout.simple_spinner_item, networks);
 		networkAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		networkSpinner_qr.setAdapter(networkAdapter);
 		networkSpinner_qr.setOnItemSelectedListener(this);
 
 		// set spinner to current wifi config if connected to wifi
-		WifiModel curWifi = WifiUtil.getCurrentWifiModel(getActivity()
+		WifiModel curWifi = WifiUtil.getCurrentWifiModel(a
 				.getApplicationContext());
 		if (curWifi != null) {
 			for (int i = 0; i < networks.length; i++) {
@@ -126,7 +128,7 @@ public class QrFragment extends SherlockFragment implements
 		}
 
 		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(
-				getActivity(), android.R.layout.simple_spinner_item,
+				a, android.R.layout.simple_spinner_item,
 				WifiUtil.protocolStrings);
 		protocolAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -232,7 +234,7 @@ public class QrFragment extends SherlockFragment implements
 		String filename = "";
 		try {
 			filename = QrUtil.getQrFilename(selectedSsid);
-			file = new File(getActivity().getExternalFilesDir(null), filename);
+			file = new File(a.getExternalFilesDir(null), filename);
 
 			FileOutputStream fos = new FileOutputStream(file);
 			bitmap.compress(CompressFormat.JPEG, 100, fos);
@@ -240,14 +242,14 @@ public class QrFragment extends SherlockFragment implements
 			fos.flush();
 			fos.close();
 
-			Intent picIntent = Util.buildQrShareIntent(getActivity(), file,
+			Intent picIntent = Util.buildQrShareIntent(a, file,
 					selectedSsid);
 			startActivity(Intent.createChooser(picIntent, String.format(
 					getString(R.string.qr_share_dialog_title), selectedSsid)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.e(TAG, getString(R.string.qr_share_fail));
-			Util.shortToast(getActivity(), getString(R.string.qr_share_fail));
+			Util.shortToast(a, getString(R.string.qr_share_fail));
 		}
 	}
 
@@ -258,7 +260,7 @@ public class QrFragment extends SherlockFragment implements
 		case R.id.network_spinner_qr:
 			WifiModel selectedNetwork = null;
 			try {
-				selectedNetwork = WifiUtil.getWifiModelFromSsid(getActivity(),
+				selectedNetwork = WifiUtil.getWifiModelFromSsid(a,
 						parent.getItemAtPosition(pos).toString());
 			} catch (PasswordNotFoundException e) {
 				Log.e(TAG, "did not find password on item selected");
@@ -283,7 +285,7 @@ public class QrFragment extends SherlockFragment implements
 			break;
 		}
 
-		setQrImage(getActivity());
+		setQrImage(a);
 	}
 
 	@Override
