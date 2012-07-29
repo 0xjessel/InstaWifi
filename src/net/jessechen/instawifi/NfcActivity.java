@@ -15,6 +15,7 @@ import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NdefMessage;
@@ -198,6 +199,23 @@ public class NfcActivity extends SherlockFragmentActivity implements
 
 		picIntent = new Intent(android.content.Intent.ACTION_SEND);
 		picIntent.setType("image/*");
+		
+		// check if NFC is enabled
+		if (!Util.isNfcEnabled(getApplicationContext())) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(NfcActivity.this);
+			builder.setTitle(
+					getString(R.string.dialog_enable_nfc_title));;
+			builder.setMessage(R.string.dialog_enable_nfc_msg);
+			builder.setPositiveButton(R.string.enable, new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+				}
+			});
+			
+			builder.show();
+		}
 	}
 
 	@Override

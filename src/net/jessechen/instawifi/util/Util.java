@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.nfc.NfcAdapter;
+import android.nfc.NfcManager;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -34,6 +36,16 @@ public class Util {
 	public static boolean hasNfc(Context c) {
 		return c.getPackageManager().hasSystemFeature(
 				PackageManager.FEATURE_NFC);
+	}
+
+	public static boolean isNfcEnabled(Context c) {
+		NfcManager manager = (NfcManager) c
+				.getSystemService(Context.NFC_SERVICE);
+		NfcAdapter adapter = manager.getDefaultAdapter();
+		if (adapter != null && adapter.isEnabled()) {
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean hasQuotes(String s) {

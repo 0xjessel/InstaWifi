@@ -9,6 +9,8 @@
     <string name="tag_format_connect_fail">NdefFormatable format.connect fail</string>
     <string name="tag_ndef_not_supported">Tag does not support NDEF</string>
     <string name="dialog_write_tag">Touch tag to write</string>
+    <string name="dialog_enable_nfc_title">NFC is disabled</string>
+    <string name="dialog_enable_nfc_msg">NFC needs to be enabled in order to read and write data from a NFC tag.  If you do not enable NFC, then the NFC features of this app will not work.</string>
     <string name="nfc_not_available">NFC is not available</string>
     <string name="beam_success">WiFi configuration successfully sent!</string>
     <string name="wifi_connect_success">Successfully connected to %1$s!</string>
