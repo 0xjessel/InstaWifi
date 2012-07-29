@@ -14,9 +14,9 @@
     <string name="nfc_not_available">NFC is not available</string>
     <string name="beam_success">WiFi configuration successfully sent!</string>
     <string name="wifi_connect_success">Successfully connected to %1$s!</string>
-    <string name="wifi_connect_fail">Failed to connect to WiFi</string>
-    <string name="invalid_wifi_sticker">WiFi sticker data is invalid.  Please rewrite WiFi sticker.</string>
-    <string name="write_tag_fail">Failed to write to tag</string>
+    <string name="wifi_connect_fail">Failed to connect to WiFi network, please try again</string>
+    <string name="invalid_wifi_sticker">WiFi sticker data is invalid.  Please rewrite WiFi sticker</string>
+    <string name="write_tag_fail">Failed to write to tag, please try again</string>
     <string name="write_tag_success">WiFi configuration saved to tag!</string>
     <string name="wifi_connect_already">Already connected to %1$s, disabling WiFi</string>
     <string name="password_text">Password</string>
@@ -42,7 +42,7 @@
     <string name="show_wifi_msg_add">To add a new network, WiFi needs to be on.</string>
     <string name="enable">Enable</string>
     <string name="status_associating">Associating..</string>
-    <string name="status_disconnected">Disconnected! :(</string>
+    <string name="status_disconnected">Disconnected</string>
     <string name="status_scanning">Scanning..</string>
     <string name="status_connected">Connected!</string>
     <string name="show_wifi_msg_default">This app requires WiFi to work.</string>

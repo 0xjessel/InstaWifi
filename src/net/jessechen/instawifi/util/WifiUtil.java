@@ -439,7 +439,8 @@ public class WifiUtil {
 		String mSSID = mWifiModel.getSSID();
 
 		for (WifiConfiguration wifiConfig : configuredNetworks) {
-			if ((wifiConfig != null) && wifiConfig.SSID.equals(mSSID)) {
+			if ((wifiConfig != null) && (wifiConfig.SSID != null)
+					&& wifiConfig.SSID.equals(mSSID)) {
 				return wifiConfig.networkId;
 			}
 		}
@@ -486,7 +487,7 @@ public class WifiUtil {
 		} else {
 			builder.setCancelable(true);
 		}
-		
+
 		builder.create().show();
 	}
 
@@ -495,8 +496,7 @@ public class WifiUtil {
 		if (WifiUtil.isValidWifiModel(receivedWifiModel)) {
 			switch (connectToWifi(a, receivedWifiModel)) {
 			case NETWORK_ENABLED:
-				Log.i(TAG,
-						"successfully connected to network, successfully processed");
+				Log.i(TAG, "successfully connected to network");
 				break;
 			case ALREADY_CONNECTED:
 				Log.i(TAG, "tried to connect to current network");

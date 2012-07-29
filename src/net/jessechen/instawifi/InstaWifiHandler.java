@@ -112,6 +112,7 @@ public class InstaWifiHandler extends SherlockActivity {
 			status.setText(R.string.status_disconnected);
 			Log.e(TAG, "wifi connection failed");
 			Util.shortToast(a, a.getString(R.string.wifi_connect_fail));
+			a.finish();
 		}
 	}
 }
