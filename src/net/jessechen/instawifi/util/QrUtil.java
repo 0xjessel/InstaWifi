@@ -20,10 +20,10 @@ public class QrUtil {
 	}
 
 	public static Bitmap generateQrCode(WifiModel wm, QrImageSize size) {
-		// padding around the edges
-		final int MAGIC_NUMBER = (size.equals(QrImageSize.SMALL)) ? 30 : 60;
+		// padding around the edges (bigger is smaller)
+		final int MAGIC_NUMBER = (size.equals(QrImageSize.SMALL)) ? 40 : 75;
 		// height and width of qr code
-		final int DIMENSION = (size.equals(QrImageSize.SMALL)) ? 350 : 600;
+		final int DIMENSION = (size.equals(QrImageSize.SMALL)) ? 400 : 700;
 
 		if (!WifiUtil.isValidWifiModel(wm)) {
 			return null;

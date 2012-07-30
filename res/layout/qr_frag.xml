@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dip"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:background="@drawable/placeholder"
             android:contentDescription="@string/qr_code_image_description" />
@@ -71,13 +71,14 @@
                 android:text="@string/password_text"
                 android:textSize="16dp"
                 android:visibility="gone" />
-
+
             <net.jessechen.instawifi.misc.PasswordEditText
                 android:id="@+id/password_field_qr"
                 android:layout_margin="4dp"
                 android:ems="7"
                 android:inputType="textPassword"
                 android:visibility="gone" />
+
         </com.gridlayout.GridLayout>
 
         <CheckBox
