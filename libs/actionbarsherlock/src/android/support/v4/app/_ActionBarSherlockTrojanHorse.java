@@ -48,7 +48,7 @@ public abstract class _ActionBarSherlockTrojanHorse extends FragmentActivity imp
             MenuInflater inflater = getSupportMenuInflater();
             boolean show = false;
             ArrayList<Fragment> newMenus = null;
-            if (mFragments.mActive != null) {
+            if (mFragments.mAdded != null) {
                 for (int i = 0; i < mFragments.mAdded.size(); i++) {
                     Fragment f = mFragments.mAdded.get(i);
                     if (f != null && !f.mHidden && f.mHasMenu && f.mMenuVisible && f instanceof OnCreateOptionsMenuListener) {
@@ -91,7 +91,7 @@ public abstract class _ActionBarSherlockTrojanHorse extends FragmentActivity imp
             if (DEBUG) Log.d(TAG, "[onPreparePanel] activity prepare result: " + result);
 
             boolean show = false;
-            if (mFragments.mActive != null) {
+            if (mFragments.mAdded != null) {
                 for (int i = 0; i < mFragments.mAdded.size(); i++) {
                     Fragment f = mFragments.mAdded.get(i);
                     if (f != null && !f.mHidden && f.mHasMenu && f.mMenuVisible && f instanceof OnPrepareOptionsMenuListener) {
