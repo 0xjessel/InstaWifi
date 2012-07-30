@@ -166,7 +166,8 @@ public class WifiUtil {
 	 * @return true if valid wifi URI, false otherwise
 	 */
 	public static boolean isValidWifiUri(Uri wifiUri) {
-		if (wifiUri.getScheme().equals("wifi") && wifiUri.getHost() != null
+		if (wifiUri.getScheme() != null && wifiUri.getScheme().equals("wifi")
+				&& wifiUri.getHost() != null
 				&& wifiUri.getLastPathSegment() != null
 				&& wifiUri.getFragment() != null
 				&& wifiUri.getPathSegments().size() == 1
@@ -416,7 +417,7 @@ public class WifiUtil {
 			} catch (Exception e) {
 				// do nothing
 			}
-			
+
 			if (listener != null) {
 				listener.OnWifiEnabled();
 			}
