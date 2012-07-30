@@ -120,7 +120,7 @@ public abstract class _ActionBarSherlockTrojanHorse extends FragmentActivity imp
                 return true;
             }
 
-            if (mFragments.mActive != null) {
+            if (mFragments.mAdded != null) {
                 for (int i = 0; i < mFragments.mAdded.size(); i++) {
                     Fragment f = mFragments.mAdded.get(i);
                     if (f != null && !f.mHidden && f.mHasMenu && f.mMenuVisible && f instanceof OnOptionsItemSelectedListener) {
