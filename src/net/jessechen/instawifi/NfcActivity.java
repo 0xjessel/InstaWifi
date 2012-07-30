@@ -89,7 +89,17 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		mBillingService = new BillingService();
 		mBillingService.setContext(c);
 
+		// some devices say they have NFC but NfcManager DNE
+		boolean nfcManagerClassFound = true;
+		try {
+			Class.forName("android.nfc.NfcManager");
+		} catch (ClassNotFoundException e) {
+			nfcManagerClassFound = false;
+			Log.v(TAG, "android.nfc.NfcManager class not found on your device");
+		}
+
 		if (Util.hasNfc(c)
+				&& nfcManagerClassFound
 				&& (mNfcAdapter = ((NfcManager) getSystemService(Context.NFC_SERVICE))
 						.getDefaultAdapter()) != null) {
 
