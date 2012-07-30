@@ -36,8 +36,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.MenuItem;
 import com.gridlayout.GridLayout;
 
-public class QrFragment extends SherlockFragment implements
-		OnItemSelectedListener {
+public class QrFragment extends SherlockFragment implements OnItemSelectedListener {
 	private static final String TAG = QrFragment.class.getSimpleName();
 
 	GridLayout gridlayout_qr;
@@ -63,100 +62,132 @@ public class QrFragment extends SherlockFragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+		setRetainInstance(true);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+			final Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.qr_frag, container, false);
+
 		a = getActivity();
-		
+
 		picIntent = new Intent(android.content.Intent.ACTION_SEND);
 		picIntent.setType("image/*");
 
 		qrImage = (ImageView) view.findViewById(R.id.qr_code_image);
 		gridlayout_qr = (GridLayout) view.findViewById(R.id.gridlayout_qr);
-		networkSpinner_qr = (Spinner) view
-				.findViewById(R.id.network_spinner_qr);
-		protocolSpinner_qr = (Spinner) view
-				.findViewById(R.id.protocol_spinner_qr);
+		networkSpinner_qr = (Spinner) view.findViewById(R.id.network_spinner_qr);
+		protocolSpinner_qr = (Spinner) view.findViewById(R.id.protocol_spinner_qr);
 		passwordText_qr = (TextView) view.findViewById(R.id.password_text_qr);
-		passwordField_qr = (PasswordEditText) view
-				.findViewById(R.id.password_field_qr);
+		passwordField_qr = (PasswordEditText) view.findViewById(R.id.password_field_qr);
 		passwordField_qr.init(a, qrImage);
-		revealPassword_qr = (CheckBox) view
-				.findViewById(R.id.password_checkbox_qr);
+		revealPassword_qr = (CheckBox) view.findViewById(R.id.password_checkbox_qr);
 
 		revealPassword_qr.setOnCheckedChangeListener(mCheckBoxListener);
 
 		// test point to see if device can get configured networks w/o wifi
 		final String[] test = WifiUtil.getConfiguredNetworks(a);
 		if (test.length == 0) {
-			WifiUtil.showWifiDialog(a,
-					getString(R.string.show_wifi_msg_default),
+			WifiUtil.showWifiDialog(a, getString(R.string.show_wifi_msg_default),
 					new WifiUtil.EnableWifiTaskListener() {
 
 						@Override
 						public void OnWifiEnabled() {
-							setupQrView();
+							setupQrView(savedInstanceState);
 						}
 					}, true);
 		} else {
-			setupQrView();
+			setupQrView(savedInstanceState);
 		}
 
 		return view;
 	}
 
-	private void setupQrView() {
+//	@Override
+//	public void onSaveInstanceState(Bundle outstate) {
+//		super.onSaveInstanceState(outstate);
+//
+//		Log.d(TAG, Util.curTab);
+//		if (Util.curTab.equals(Util.QR)) {
+//			int network = networkSpinner_qr.getSelectedItemPosition();
+//			int protocol = protocolSpinner_qr.getSelectedItemPosition();
+//			String password = passwordField_qr.getText().toString();
+//
+//			boolean revealed;
+//			if (revealPassword_qr == null) {
+//				revealed = false;
+//			} else {
+//				revealed = revealPassword_qr.isChecked();
+//			}
+//
+//			outstate.putInt("network", network);
+//			outstate.putInt("protocol", protocol);
+//			outstate.putString("password", password);
+//			outstate.putBoolean("revealed", revealed);
+//		}
+//
+//	}
+
+	private void setupQrView(Bundle savedInstanceState) {
 		String[] networks = WifiUtil.getConfiguredNetworks(a);
-		ArrayAdapter<String> networkAdapter = new ArrayAdapter<String>(
-				a, android.R.layout.simple_spinner_item, networks);
-		networkAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ArrayAdapter<String> networkAdapter =
+				new ArrayAdapter<String>(a, android.R.layout.simple_spinner_item, networks);
+		networkAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		networkSpinner_qr.setAdapter(networkAdapter);
 		networkSpinner_qr.setOnItemSelectedListener(this);
 
-		// set spinner to current wifi config if connected to wifi
-		WifiModel curWifi = WifiUtil.getCurrentWifiModel(a
-				.getApplicationContext());
-		if (curWifi != null) {
-			for (int i = 0; i < networks.length; i++) {
-				if (curWifi.getTrimmedSSID().equals(networks[i])) {
-					networkSpinner_qr.setSelection(i);
-				}
-			}
-		}
-
-		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(
-				a, android.R.layout.simple_spinner_item,
-				WifiUtil.protocolStrings);
-		protocolAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ArrayAdapter<String> protocolAdapter =
+				new ArrayAdapter<String>(a, android.R.layout.simple_spinner_item,
+						WifiUtil.protocolStrings);
+		protocolAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		protocolSpinner_qr.setAdapter(protocolAdapter);
 		protocolSpinner_qr.setOnItemSelectedListener(this);
-		protocolSpinner_qr.setSelection(WifiUtil.DEFAULT_PROTOCOL);
+
+		if (savedInstanceState != null) {
+			int network = savedInstanceState.getInt("network");
+			int protocol = savedInstanceState.getInt("protocol");
+			String password = savedInstanceState.getString("password");
+			boolean revealed = savedInstanceState.getBoolean("revealed");
+
+			networkSpinner_qr.setSelection(network);
+			protocolSpinner_qr.setSelection(protocol);
+			passwordField_qr.setText(password);
+			revealPassword_qr.setChecked(revealed);
+		} else {
+			// set spinner to current wifi config if connected to wifi
+			WifiModel curWifi = WifiUtil.getCurrentWifiModel(a.getApplicationContext());
+			if (curWifi != null) {
+				for (int i = 0; i < networks.length; i++) {
+					if (curWifi.getTrimmedSSID().equals(networks[i])) {
+						networkSpinner_qr.setSelection(i);
+					}
+				}
+			}
+
+			protocolSpinner_qr.setSelection(WifiUtil.DEFAULT_PROTOCOL);
+		}
 	}
 
-	private OnCheckedChangeListener mCheckBoxListener = new CompoundButton.OnCheckedChangeListener() {
+	private final OnCheckedChangeListener mCheckBoxListener =
+			new CompoundButton.OnCheckedChangeListener() {
 
-		@Override
-		public void onCheckedChanged(CompoundButton buttonView,
-				boolean isChecked) {
-			if (isChecked) {
-				int start = passwordField_qr.getSelectionStart();
-				int stop = passwordField_qr.getSelectionEnd();
-				passwordField_qr.setTransformationMethod(null);
-				passwordField_qr.setSelection(start, stop);
-			} else {
-				int start = passwordField_qr.getSelectionStart();
-				int stop = passwordField_qr.getSelectionEnd();
-				passwordField_qr
-						.setTransformationMethod(new PasswordTransformationMethod());
-				passwordField_qr.setSelection(start, stop);
-			}
-		}
-	};
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+					if (isChecked) {
+						int start = passwordField_qr.getSelectionStart();
+						int stop = passwordField_qr.getSelectionEnd();
+						passwordField_qr.setTransformationMethod(null);
+						passwordField_qr.setSelection(start, stop);
+					} else {
+						int start = passwordField_qr.getSelectionStart();
+						int stop = passwordField_qr.getSelectionEnd();
+						passwordField_qr
+								.setTransformationMethod(new PasswordTransformationMethod());
+						passwordField_qr.setSelection(start, stop);
+					}
+				}
+			};
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -214,8 +245,7 @@ public class QrFragment extends SherlockFragment implements
 
 			return QrUtil.generateQrCode(selectedWifi, size);
 		} catch (Exception e) {
-			Log.e(TAG,
-					"spinner adapters are null, wifi is probably not enabled");
+			Log.e(TAG, "spinner adapters are null, wifi is probably not enabled");
 		}
 		return null;
 	}
@@ -243,10 +273,9 @@ public class QrFragment extends SherlockFragment implements
 			fos.flush();
 			fos.close();
 
-			Intent picIntent = Util.buildQrShareIntent(a, file,
-					selectedSsid);
-			startActivity(Intent.createChooser(picIntent, String.format(
-					getString(R.string.qr_share_dialog_title), selectedSsid)));
+			Intent picIntent = Util.buildQrShareIntent(a, file, selectedSsid);
+			startActivity(Intent.createChooser(picIntent,
+					String.format(getString(R.string.qr_share_dialog_title), selectedSsid)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.e(TAG, getString(R.string.qr_share_fail));
@@ -255,22 +284,20 @@ public class QrFragment extends SherlockFragment implements
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int pos,
-			long id) {
+	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 		switch (parent.getId()) {
 		case R.id.network_spinner_qr:
 			WifiModel selectedNetwork = null;
 			try {
-				selectedNetwork = WifiUtil.getWifiModelFromSsid(a,
-						parent.getItemAtPosition(pos).toString());
+				selectedNetwork =
+						WifiUtil.getWifiModelFromSsid(a, parent.getItemAtPosition(pos).toString());
 			} catch (PasswordNotFoundException e) {
 				Log.e(TAG, "did not find password on item selected");
 			}
 
 			if (selectedNetwork != null) {
 				protocolSpinner_qr.setSelection(selectedNetwork.getProtocol());
-				passwordField_qr.setText(Util.stripQuotes(selectedNetwork
-						.getPassword()));
+				passwordField_qr.setText(Util.stripQuotes(selectedNetwork.getPassword()));
 			}
 			break;
 		case R.id.protocol_spinner_qr:
