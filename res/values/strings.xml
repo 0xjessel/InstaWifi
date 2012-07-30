@@ -36,7 +36,7 @@
     <string name="qr_code_image_description">qr code for selected WiFi</string>
     <string name="qr_share_fail">Failed to generate QR image :(</string>
     <string name="qr_share_subject">WiFi QR code for %1$s</string>
-    <string name="qr_share_text">Scan this QR code to connect to the WiFi network \&quot;%1$s\&quot;.  For Android devices, use the \&quot;Barcode Scanner\&quot; app, download link (https://play.google.com/store/apps/details?id=com.google.zxing.client.android).\n\nThis QR code was generated via InstaWifi (https://play.google.com/store/apps/details?id=net.jessechen.instawifi).</string>
+    <string name="qr_share_text">Scan this QR code to connect to the WiFi network \&quot;%1$s\&quot;.  For Android devices, use the \&quot;Barcode Scanner\&quot; app, download link ( https://play.google.com/store/apps/details?id=com.google.zxing.client.android ).\n\nThis QR code was generated via InstaWifi ( https://play.google.com/store/apps/details?id=net.jessechen.instawifi ).</string>
     <string name="qr_share_dialog_title">Share QR Code for \&quot;%1$s\&quot; via</string>
     <string name="show_wifi_add_title">Enable WiFi</string>
     <string name="show_wifi_msg_add">To add a new network, WiFi needs to be on.</string>
