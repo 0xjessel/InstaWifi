@@ -49,8 +49,6 @@ public class WifiUtil {
 			try {
 				password = RootUtil.getWifiPassword(c, ssid);
 			} catch (PasswordNotFoundException e) {
-				Log.e(TAG,
-						"password not found when trying to get it using root access");
 			}
 			return new WifiModel(ssid, password, protocol);
 		} else {

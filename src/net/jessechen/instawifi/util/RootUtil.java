@@ -194,11 +194,8 @@ public class RootUtil {
 				content += new String(buffer);
 			}
 		} catch (FileNotFoundException e) {
-			Log.e(TAG, "wifi passwords file not found");
 			return null;
 		} catch (IOException e) {
-			Log.e(TAG, "IOException while reading wifi passwords file");
-			e.printStackTrace();
 			return null;
 		}
 
@@ -273,7 +270,6 @@ public class RootUtil {
 				ArrayList<String> commands = getCommandsToExecute();
 				if (null != commands && commands.size() > 0) {
 					Process suProcess = Runtime.getRuntime().exec("su");
-
 					DataOutputStream os = new DataOutputStream(
 							suProcess.getOutputStream());
 
@@ -286,25 +282,21 @@ public class RootUtil {
 					os.writeBytes("exit\n");
 					os.flush();
 
-					try {
-						int suProcessRetval = suProcess.waitFor();
-						if (255 != suProcessRetval) {
-							// Root access granted
-							retval = true;
-						} else {
-							// Root access denied
-							retval = false;
-						}
-					} catch (Exception ex) {
-						Log.e(TAG, "Error executing root action");
+					int suProcessRetval = suProcess.waitFor();
+					if (255 != suProcessRetval) {
+						// Root access granted
+						retval = true;
+					} else {
+						// Root access denied
+						retval = false;
 					}
 				}
 			} catch (IOException ex) {
-				Log.w(TAG, "Can't get root access", ex);
+				Log.w(TAG, "Can't get root access");
 			} catch (SecurityException ex) {
-				Log.w(TAG, "Can't get root access", ex);
+				Log.w(TAG, "Can't get root access");
 			} catch (Exception ex) {
-				Log.w(TAG, "Error executing internal operation", ex);
+				Log.w(TAG, "Error executing internal operation");
 			}
 			return retval;
 		}
