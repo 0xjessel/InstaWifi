@@ -147,6 +147,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			bar.addTab(
 					bar.newTab()
 							.setText(Util.NFC)
+							.setTag(Util.NFC)
 							.setTabListener(
 									new MyTabListener(this,
 											getSupportFragmentManager(),
@@ -154,6 +155,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			bar.addTab(
 					bar.newTab()
 							.setText(Util.QR)
+							.setTag(Util.QR)
 							.setTabListener(
 									new MyTabListener(this,
 											getSupportFragmentManager(),
@@ -165,7 +167,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 
 			// set QR layout
 			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.fragment, QrFragment.getInstance()).commit();
+					.replace(R.id.container_frag, QrFragment.getInstance()).commit();
 
 			Util.curTab = Util.QR;
 		}
@@ -448,7 +450,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 				selectedNetwork = WifiUtil.getWifiModelFromSsid(this, parent
 						.getItemAtPosition(pos).toString());
 			} catch (PasswordNotFoundException e) {
-				Log.e(TAG, "did not find password on item selected");
+				Log.w(TAG, "did not find password on item selected");
 			}
 
 			if (selectedNetwork != null) {

@@ -3,7 +3,6 @@ package net.jessechen.instawifi.util;
 import net.jessechen.instawifi.models.WifiModel;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -11,6 +10,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 public class QrUtil {
+	@SuppressWarnings("unused")
 	private static final String TAG = QrUtil.class.getSimpleName();
 
 	public static String NOPASS = "nopass";
@@ -61,7 +61,6 @@ public class QrUtil {
 					break;
 				}
 			}
-			Log.d(TAG, textPassword.toString());
 
 			String qrString = String.format(WifiUtil.QR_WIFI_URI_SCHEME,
 					wm.getTrimmedSSID(), textProtocol, textPassword.toString());

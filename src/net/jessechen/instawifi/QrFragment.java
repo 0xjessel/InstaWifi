@@ -62,7 +62,6 @@ public class QrFragment extends SherlockFragment implements OnItemSelectedListen
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		setRetainInstance(true);
 	}
 
 	@Override
@@ -104,45 +103,44 @@ public class QrFragment extends SherlockFragment implements OnItemSelectedListen
 		return view;
 	}
 
-//	@Override
-//	public void onSaveInstanceState(Bundle outstate) {
-//		super.onSaveInstanceState(outstate);
-//
-//		Log.d(TAG, Util.curTab);
-//		if (Util.curTab.equals(Util.QR)) {
-//			int network = networkSpinner_qr.getSelectedItemPosition();
-//			int protocol = protocolSpinner_qr.getSelectedItemPosition();
-//			String password = passwordField_qr.getText().toString();
-//
-//			boolean revealed;
-//			if (revealPassword_qr == null) {
-//				revealed = false;
-//			} else {
-//				revealed = revealPassword_qr.isChecked();
-//			}
-//
-//			outstate.putInt("network", network);
-//			outstate.putInt("protocol", protocol);
-//			outstate.putString("password", password);
-//			outstate.putBoolean("revealed", revealed);
-//		}
-//
-//	}
+	@Override
+	public void onSaveInstanceState(Bundle outstate) {
+		super.onSaveInstanceState(outstate);
+
+		if (Util.curTab.equals(Util.QR)) {
+			int network = networkSpinner_qr.getSelectedItemPosition();
+			int protocol = protocolSpinner_qr.getSelectedItemPosition();
+			String password = passwordField_qr.getText().toString();
+
+			boolean revealed;
+			if (revealPassword_qr == null) {
+				revealed = false;
+			} else {
+				revealed = revealPassword_qr.isChecked();
+			}
+
+			outstate.putInt("network", network);
+			outstate.putInt("protocol", protocol);
+			outstate.putString("password", password);
+			outstate.putBoolean("revealed", revealed);
+		}
+
+	}
 
 	private void setupQrView(Bundle savedInstanceState) {
 		String[] networks = WifiUtil.getConfiguredNetworks(a);
 		ArrayAdapter<String> networkAdapter =
 				new ArrayAdapter<String>(a, android.R.layout.simple_spinner_item, networks);
 		networkAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		networkSpinner_qr.setAdapter(networkAdapter);
 		networkSpinner_qr.setOnItemSelectedListener(this);
+		networkSpinner_qr.setAdapter(networkAdapter);
 
 		ArrayAdapter<String> protocolAdapter =
 				new ArrayAdapter<String>(a, android.R.layout.simple_spinner_item,
 						WifiUtil.protocolStrings);
 		protocolAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		protocolSpinner_qr.setAdapter(protocolAdapter);
 		protocolSpinner_qr.setOnItemSelectedListener(this);
+		protocolSpinner_qr.setAdapter(protocolAdapter);
 
 		if (savedInstanceState != null) {
 			int network = savedInstanceState.getInt("network");
@@ -292,7 +290,7 @@ public class QrFragment extends SherlockFragment implements OnItemSelectedListen
 				selectedNetwork =
 						WifiUtil.getWifiModelFromSsid(a, parent.getItemAtPosition(pos).toString());
 			} catch (PasswordNotFoundException e) {
-				Log.e(TAG, "did not find password on item selected");
+				Log.w(TAG, "did not find password on item selected");
 			}
 
 			if (selectedNetwork != null) {

@@ -107,7 +107,7 @@ public class AddNetworkDialog {
 
 					QrFragment qrFrag = (QrFragment) a
 							.getSupportFragmentManager().findFragmentById(
-									R.id.fragment);
+									R.id.container_frag);
 					if (qrFrag != null) {
 						qrFrag.updateNetworkSpinner(networkAdapter);
 					}
