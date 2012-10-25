@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="com_facebook_dialogloginactivity_ok_button">OK</string>
+    <string name="com_facebook_loginview_log_out_button">Log Out</string>
+    <string name="com_facebook_loginview_log_in_button">Log In</string>
+    <string name="com_facebook_loginview_logged_in_as">Logged in as: %1$s</string>
+    <string name="com_facebook_loginview_logged_in_using_facebook">Logged in using Facebook</string>
+    <string name="com_facebook_loginview_log_out_action">Log Out</string>
+    <string name="com_facebook_loginview_cancel_action">Cancel</string>
+    <string name="com_facebook_logo_content_description">Facebook Logo</string>
+    <string name="com_facebook_loginfragment_log_in_button">Log In&#8230;</string>
+    <string name="com_facebook_loginfragment_logged_in">Logged In</string>
+    <string name="com_facebook_loginfragment_not_logged_in">Not Logged In</string>
+    <string name="com_facebook_placepicker_subtitle_format">%1$s • %2$,d were here</string>
+    <string name="com_facebook_placepicker_subtitle_catetory_only_format">%1$s</string>
+    <string name="com_facebook_placepicker_subtitle_were_here_only_format">%1$,d were here</string>
+    <string name="com_facebook_picker_done_button_text">Done</string>
+    <string name="com_facebook_choose_friends">Choose Friends</string>
+    <string name="com_facebook_nearby">Nearby</string>
+</resources>

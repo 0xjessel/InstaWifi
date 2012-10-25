@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="libs/bugsense-trace-1-1-2.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="/FacebookSDK/libs/android-support-v4.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
