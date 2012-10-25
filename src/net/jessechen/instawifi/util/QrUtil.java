@@ -56,8 +56,11 @@ public class QrUtil {
 				case '\\':
 					textPassword.append("\\\\");
 					break;
+				case ',':
+					textPassword.append("\\,");
+					break;
 				default:
-					textPassword.append(c); 
+					textPassword.append(c);
 					break;
 				}
 			}
