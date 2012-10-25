@@ -228,10 +228,11 @@ public class WifiUtil {
 							mWifiModel.getSSID()));
 			return ConnectToWifiResult.ALREADY_CONNECTED;
 		}
-		return connectToNetwork(c, netId);
+		return connectToNetwork(c, mWifiModel.getSSID(), netId);
 	}
 
-	public static ConnectToWifiResult connectToNetwork(Context c, int netId) {
+	public static ConnectToWifiResult connectToNetwork(Context c, String SSID,
+			int netId) {
 		WifiManager mWm = (WifiManager) c
 				.getSystemService(Context.WIFI_SERVICE);
 
@@ -241,6 +242,8 @@ public class WifiUtil {
 
 		if (mWm.enableNetwork(netId, true)) {
 			Log.i(TAG, "attemping to connect to network..");
+			// publish OG action
+			FBUtil.publishOG(c, SSID);
 			return ConnectToWifiResult.NETWORK_ENABLED;
 		} else {
 			Log.e(TAG, "failed attempt to connect to network");
