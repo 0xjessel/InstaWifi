@@ -7,6 +7,7 @@ import net.jessechen.instawifi.misc.SpinnerArrayAdapter;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
+import net.jessechen.instawifi.util.FBUtil;
 import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
 import android.annotation.TargetApi;
@@ -82,6 +83,14 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 		setContentView(R.layout.nfc_activity);
 
 		c = getApplicationContext();
+
+		//
+		new Thread() {
+			@Override
+			public void run() {
+				com.facebook.Settings.publishInstall(getApplicationContext(), "210286649104315");
+			}
+		}.start();
 
 		// crash reporting and analytics
 		BugSenseHandler.setup(this, Util.bugsenseKey);
