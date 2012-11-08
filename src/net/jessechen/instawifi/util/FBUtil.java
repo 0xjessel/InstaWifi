@@ -19,8 +19,8 @@ import com.facebook.Session;
 import com.facebook.android.Util;
 
 public class FBUtil {
-	public static final String namespace = "instawifi";
-	public static final String POST_ACTION_PATH = "me/" + namespace + ":connect";
+	public static final String NAMESPACE = "instawifi";
+	public static final String POST_ACTION_PATH = "me/" + NAMESPACE + ":connect";
 	public static final String POST_OG_URL = "http://www.instawifi.jessechen.net/network.php";
 	public static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
 	public static final int REAUTH_ACTIVITY_CODE = 100;

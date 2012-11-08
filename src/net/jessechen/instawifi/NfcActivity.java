@@ -88,7 +88,8 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 		new Thread() {
 			@Override
 			public void run() {
-				com.facebook.Settings.publishInstall(getApplicationContext(), "210286649104315");
+				com.facebook.Settings.publishInstall(getApplicationContext(),
+						getString(R.string.app_id));
 			}
 		}.start();
 
