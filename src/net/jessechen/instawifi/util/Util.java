@@ -4,6 +4,7 @@ import java.io.File;
 
 import net.jessechen.instawifi.R;
 import net.jessechen.instawifi.util.BillingUtil.DonateOption;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -38,6 +39,7 @@ public class Util {
 				PackageManager.FEATURE_NFC);
 	}
 
+	@TargetApi(10)
 	public static boolean isNfcEnabled(Context c) {
 		NfcManager manager = (NfcManager) c
 				.getSystemService(Context.NFC_SERVICE);
