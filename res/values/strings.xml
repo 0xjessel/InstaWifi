@@ -22,6 +22,7 @@
     <string name="wifi_connect_already">Already connected to %1$s, disabling WiFi</string>
     <string name="password_text">Password</string>
     <string name="protocol_text">Security</string>
+    <string name="read_only_text">Make read-only</string>
     <string name="show_password_text">Show password</string>
     <string name="ssid_text">SSID</string>
     <string name="add_new_network">Add New Network</string>

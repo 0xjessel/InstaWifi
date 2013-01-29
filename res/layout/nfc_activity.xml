@@ -91,6 +91,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/show_password_text" />
+
+            <CheckBox
+                android:id="@+id/readonly_checkbox"
+                style="@style/white_inset_shadow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/read_only_text" />
         </LinearLayout>
     </FrameLayout>
 

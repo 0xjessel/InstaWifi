@@ -52,7 +52,8 @@ import com.actionbarsherlock.view.MenuItem;
 import com.bugsense.trace.BugSenseHandler;
 
 @TargetApi(14)
-public class NfcActivity extends SherlockFragmentActivity implements OnItemSelectedListener {
+public class NfcActivity extends SherlockFragmentActivity implements
+		OnItemSelectedListener {
 
 	NfcAdapter mNfcAdapter;
 	PendingIntent mNfcPendingIntent;
@@ -66,7 +67,7 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 	Spinner protocolSpinner;
 	TextView passwordText;
 	EditText passwordField;
-	CheckBox revealPassword;
+	CheckBox revealPassword, makeReadOnly;
 
 	static Context c;
 	Intent picIntent;
@@ -100,13 +101,14 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 
 		if (Util.hasNfc(c)
 				&& nfcManagerClassFound
-				&& (mNfcAdapter =
-						((NfcManager) getSystemService(Context.NFC_SERVICE)).getDefaultAdapter()) != null) {
+				&& (mNfcAdapter = ((NfcManager) getSystemService(Context.NFC_SERVICE))
+						.getDefaultAdapter()) != null) {
 
 			// Android Beam setup
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 				mNfcAdapter.setNdefPushMessageCallback(beamPushSetup(), this);
-				mNfcAdapter.setOnNdefPushCompleteCallback(beamPushCompleteSetup(), this);
+				mNfcAdapter.setOnNdefPushCompleteCallback(
+						beamPushCompleteSetup(), this);
 			}
 
 			writeTag = (Button) findViewById(R.id.b_write_tag);
@@ -115,6 +117,7 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 			passwordText = (TextView) findViewById(R.id.password_text);
 			passwordField = (EditText) findViewById(R.id.password_field);
 			revealPassword = (CheckBox) findViewById(R.id.password_checkbox);
+			makeReadOnly = (CheckBox) findViewById(R.id.readonly_checkbox);
 
 			writeTag.setOnClickListener(mTagWriter);
 
@@ -122,7 +125,8 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 
 			String[] networks = WifiUtil.getConfiguredNetworks(this);
 			if (networks.length == 0) {
-				WifiUtil.showWifiDialog(this, getString(R.string.show_wifi_msg_default),
+				WifiUtil.showWifiDialog(this,
+						getString(R.string.show_wifi_msg_default),
 						new WifiUtil.EnableWifiTaskListener() {
 
 							@Override
@@ -135,7 +139,8 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 			}
 
 			// restore QR tab if it was previously selected
-			if (savedInstanceState != null && savedInstanceState.getString("tab").equals(Util.QR)) {
+			if (savedInstanceState != null
+					&& savedInstanceState.getString("tab").equals(Util.QR)) {
 				Util.curTab = Util.QR;
 			}
 
@@ -146,35 +151,40 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 							.setText(Util.NFC)
 							.setTag(Util.NFC)
 							.setTabListener(
-									new MyTabListener(this, getSupportFragmentManager(), Util.NFC)),
-					Util.isNfcTabSelected());
+									new MyTabListener(this,
+											getSupportFragmentManager(),
+											Util.NFC)), Util.isNfcTabSelected());
 			bar.addTab(
 					bar.newTab()
 							.setText(Util.QR)
 							.setTag(Util.QR)
 							.setTabListener(
-									new MyTabListener(this, getSupportFragmentManager(), Util.QR)),
-					!Util.isNfcTabSelected());
+									new MyTabListener(this,
+											getSupportFragmentManager(),
+											Util.QR)), !Util.isNfcTabSelected());
 		} else {
 			// hide NFC layout
 			View layout = findViewById(R.id.nfc_layout);
 			layout.setVisibility(View.GONE);
 
 			// set QR layout
-			Fragment qrFrag = getSupportFragmentManager().findFragmentById(R.id.container_frag);
+			Fragment qrFrag = getSupportFragmentManager().findFragmentById(
+					R.id.container_frag);
 			if (qrFrag == null) {
 				qrFrag = QrFragment.getInstance();
 			}
-			getSupportFragmentManager().beginTransaction().replace(R.id.container_frag, qrFrag)
-					.commit();
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.container_frag, qrFrag).commit();
 
 			Util.curTab = Util.QR;
 		}
 	}
 
 	private void setupNfcView(String[] networks) {
-		networkAdapter = new SpinnerArrayAdapter<String>(getApplication(), networks);
-		networkAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		networkAdapter = new SpinnerArrayAdapter<String>(getApplication(),
+				networks);
+		networkAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		networkSpinner.setAdapter(networkAdapter);
 		networkSpinner.setOnItemSelectedListener(this);
 
@@ -188,21 +198,21 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 			}
 		}
 
-		ArrayAdapter<String> protocolAdapter =
-				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
-						WifiUtil.protocolStrings);
-		protocolAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, WifiUtil.protocolStrings);
+		protocolAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		protocolSpinner.setAdapter(protocolAdapter);
 		protocolSpinner.setOnItemSelectedListener(this);
 		protocolSpinner.setSelection(WifiUtil.DEFAULT_PROTOCOL);
 
 		// Handle all of our received NFC intents in this activity.
-		mNfcPendingIntent =
-				PendingIntent.getActivity(this, 0,
-						new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+		mNfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
+				getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
 		// Intent filters for writing to a tag
-		IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+		IntentFilter tagDetected = new IntentFilter(
+				NfcAdapter.ACTION_TAG_DISCOVERED);
 		mWriteTagFilters = new IntentFilter[] { tagDetected };
 
 		picIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -210,7 +220,8 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 
 		// check if NFC is enabled
 		if (!Util.isNfcEnabled(getApplicationContext())) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(NfcActivity.this);
+			AlertDialog.Builder builder = new AlertDialog.Builder(
+					NfcActivity.this);
 			builder.setTitle(getString(R.string.dialog_enable_nfc_title));
 			;
 			builder.setMessage(R.string.dialog_enable_nfc_msg);
@@ -218,7 +229,8 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+					startActivity(new Intent(
+							android.provider.Settings.ACTION_WIRELESS_SETTINGS));
 				}
 			});
 
@@ -269,15 +281,17 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 		if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
 			Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
-			WifiModel selectedWifi =
-					new WifiModel(networkSpinner.getSelectedItem().toString(), passwordField
-							.getText().toString(), protocolSpinner.getSelectedItemPosition());
+			WifiModel selectedWifi = new WifiModel(networkSpinner
+					.getSelectedItem().toString(), passwordField.getText()
+					.toString(), protocolSpinner.getSelectedItemPosition());
 			if (WifiUtil.isValidWifiModel(selectedWifi)) {
-				NdefMessage wifiNdefMessage = NfcUtil.getWifiAsNdef(c, selectedWifi);
-				if (NfcUtil.writeTag(wifiNdefMessage, detectedTag, this)) {
-					Log.i(TAG,
-							String.format("successfully wrote %s to tag",
-									selectedWifi.getTrimmedSSID()));
+				NdefMessage wifiNdefMessage = NfcUtil.getWifiAsNdef(c,
+						selectedWifi);
+				boolean wantsReadOnly = makeReadOnly.isChecked();
+				if (NfcUtil.writeTag(wifiNdefMessage, detectedTag,
+						wantsReadOnly, this)) {
+					Log.i(TAG, String.format("successfully wrote %s to tag",
+							selectedWifi.getTrimmedSSID()));
 					Util.longToast(this, getString(R.string.write_tag_success));
 				} else {
 					Util.longToast(this, getString(R.string.write_tag_fail));
@@ -291,7 +305,8 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 	}
 
 	protected void processIntent(Intent intent) {
-		Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+		Parcelable[] rawMsgs = intent
+				.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
 		// only one message sent during the beam
 		NdefMessage msg = (NdefMessage) rawMsgs[0];
 		// record 0 contains the MIME type, record 1 is the AAR, if present
@@ -304,14 +319,15 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 
 			@Override
 			public NdefMessage createNdefMessage(NfcEvent event) {
-				WifiModel selectedWifi =
-						new WifiModel(networkSpinner.getSelectedItem().toString(), passwordField
-								.getText().toString(), protocolSpinner.getSelectedItemPosition());
+				WifiModel selectedWifi = new WifiModel(networkSpinner
+						.getSelectedItem().toString(), passwordField.getText()
+						.toString(), protocolSpinner.getSelectedItemPosition());
 
 				if (WifiUtil.isValidWifiModel(selectedWifi)) {
 					return NfcUtil.getWifiAsNdef(c, selectedWifi);
 				} else {
-					Util.longToast(c, "Error: could not get current wifi configurations");
+					Util.longToast(c,
+							"Error: could not get current wifi configurations");
 					return null;
 				}
 			}
@@ -356,8 +372,8 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 		case R.id.share:
 			if (Util.isNfcTabSelected()) {
 				Intent intent = Util.buildAppShareIntent(c);
-				startActivity(Intent.createChooser(intent,
-						String.format(getString(R.string.app_share_dialog_title))));
+				startActivity(Intent.createChooser(intent, String
+						.format(getString(R.string.app_share_dialog_title))));
 				return true;
 			} else {
 				// let QrFragment handle R.id.share
@@ -367,12 +383,14 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 			if (WifiUtil.isWifiEnabled(this)) {
 				AddNetworkDialog.show(this, c, networkSpinner);
 			} else {
-				WifiUtil.showWifiDialog(this, getString(R.string.show_wifi_msg_add),
+				WifiUtil.showWifiDialog(this,
+						getString(R.string.show_wifi_msg_add),
 						new WifiUtil.EnableWifiTaskListener() {
 
 							@Override
 							public void OnWifiEnabled() {
-								AddNetworkDialog.show(NfcActivity.this, c, networkSpinner);
+								AddNetworkDialog.show(NfcActivity.this, c,
+										networkSpinner);
 							}
 						}, false);
 			}
@@ -396,48 +414,50 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 				// Write to a tag for as long as the dialog is shown.
 				enableTagWriteMode();
 
-				alert =
-						new AlertDialog.Builder(NfcActivity.this).setTitle(
-								getString(R.string.dialog_write_tag)).create();
+				alert = new AlertDialog.Builder(NfcActivity.this).setTitle(
+						getString(R.string.dialog_write_tag)).create();
 				alert.show();
 			}
 		}
 	};
 
-	private final OnCheckedChangeListener mCheckBoxListener =
-			new CompoundButton.OnCheckedChangeListener() {
+	private final OnCheckedChangeListener mCheckBoxListener = new CompoundButton.OnCheckedChangeListener() {
 
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					if (isChecked) {
-						int start = passwordField.getSelectionStart();
-						int stop = passwordField.getSelectionEnd();
-						passwordField.setTransformationMethod(null);
-						passwordField.setSelection(start, stop);
-					} else {
-						int start = passwordField.getSelectionStart();
-						int stop = passwordField.getSelectionEnd();
-						passwordField.setTransformationMethod(new PasswordTransformationMethod());
-						passwordField.setSelection(start, stop);
-					}
-				}
-			};
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView,
+				boolean isChecked) {
+			if (isChecked) {
+				int start = passwordField.getSelectionStart();
+				int stop = passwordField.getSelectionEnd();
+				passwordField.setTransformationMethod(null);
+				passwordField.setSelection(start, stop);
+			} else {
+				int start = passwordField.getSelectionStart();
+				int stop = passwordField.getSelectionEnd();
+				passwordField
+						.setTransformationMethod(new PasswordTransformationMethod());
+				passwordField.setSelection(start, stop);
+			}
+		}
+	};
 
 	private void enableTagWriteMode() {
-		IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+		IntentFilter tagDetected = new IntentFilter(
+				NfcAdapter.ACTION_TAG_DISCOVERED);
 		mWriteTagFilters = new IntentFilter[] { tagDetected };
-		mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mWriteTagFilters, null);
+		mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent,
+				mWriteTagFilters, null);
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+	public void onItemSelected(AdapterView<?> parent, View view, int pos,
+			long id) {
 		switch (parent.getId()) {
 		case R.id.network_spinner:
 			WifiModel selectedNetwork = null;
 			try {
-				selectedNetwork =
-						WifiUtil.getWifiModelFromSsid(this, parent.getItemAtPosition(pos)
-								.toString());
+				selectedNetwork = WifiUtil.getWifiModelFromSsid(this, parent
+						.getItemAtPosition(pos).toString());
 			} catch (PasswordNotFoundException e) {
 				Log.w(TAG, "did not find password on item selected");
 			}
@@ -445,7 +465,8 @@ public class NfcActivity extends SherlockFragmentActivity implements OnItemSelec
 			if (selectedNetwork != null) {
 				protocolSpinner.setSelection(selectedNetwork.getProtocol());
 
-				passwordField.setText(Util.stripQuotes(selectedNetwork.getPassword()));
+				passwordField.setText(Util.stripQuotes(selectedNetwork
+						.getPassword()));
 			}
 			break;
 		case R.id.protocol_spinner:

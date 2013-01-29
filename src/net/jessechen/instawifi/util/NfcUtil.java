@@ -69,7 +69,8 @@ public class NfcUtil {
 	/*
 	 * Writes an NdefMessage to a NFC tag
 	 */
-	public static boolean writeTag(NdefMessage message, Tag tag, Context c) {
+	public static boolean writeTag(NdefMessage message, Tag tag,
+			boolean readOnly, Context c) {
 		int size = message.toByteArray().length;
 		try {
 			Ndef ndef = Ndef.get(tag);
@@ -82,6 +83,19 @@ public class NfcUtil {
 				if (ndef.getMaxSize() < size) {
 					Util.shortToast(c, c.getString(R.string.tag_too_small));
 					return false;
+				}
+				if (readOnly) {
+					if (ndef.canMakeReadOnly()) {
+						if (ndef.makeReadOnly()) {
+							// success
+							// TODO: maybe make a result dialog instead of
+							// toasts and catch the exceptions thrown here
+						} else {
+							// failed to make read only
+						}
+					} else {
+						// throw an error, tag cannot be made read only
+					}
 				}
 				ndef.writeNdefMessage(message);
 				return true;
