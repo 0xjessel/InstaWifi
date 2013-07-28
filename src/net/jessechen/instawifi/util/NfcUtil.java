@@ -84,21 +84,29 @@ public class NfcUtil {
 					Util.shortToast(c, c.getString(R.string.tag_too_small));
 					return false;
 				}
-				if (readOnly) {
-					if (ndef.canMakeReadOnly()) {
-						if (ndef.makeReadOnly()) {
-							// success
-							// TODO: maybe make a result dialog instead of
-							// toasts and catch the exceptions thrown here
-						} else {
-							// failed to make read only
-						}
-					} else {
-						// throw an error, tag cannot be made read only
-					}
-				}
+
 				ndef.writeNdefMessage(message);
-				return true;
+
+				if (!readOnly) {
+					return true;
+				}
+
+				// wants to make it read only, but unable to
+				if (!ndef.canMakeReadOnly()) {
+					Util.longToast(c,
+							"Sorry, it is not possible to make this NFC tag read-only");
+					return false;
+				}
+
+				// make it read only
+				if (ndef.makeReadOnly()) {
+					Util.longToast(c, "Successfully made tag read-only");
+					return true;
+				} else {
+					// failed to make it read only
+					Util.longToast(c, "Failed to make tag read-only");
+					return false;
+				}
 			} else {
 				NdefFormatable format = NdefFormatable.get(tag);
 				if (format != null) {
