@@ -71,6 +71,14 @@ public class DonateActivity extends SherlockActivity implements
 	}
 
 	@Override
+	public void onResume() {
+		super.onResume();
+
+		com.facebook.Settings.publishInstallAsync(getApplicationContext(),
+				getString(R.string.app_id));
+	}
+
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		mBillingService.unbind();

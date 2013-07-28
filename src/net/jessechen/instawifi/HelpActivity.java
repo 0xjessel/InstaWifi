@@ -98,6 +98,9 @@ public class HelpActivity extends Activity implements OnClickListener {
 	public void onResume() {
 		super.onResume();
 		uiHelper.onResume();
+
+		com.facebook.Settings.publishInstallAsync(getApplicationContext(),
+				getString(R.string.app_id));
 	}
 
 	@Override
