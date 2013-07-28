@@ -242,8 +242,6 @@ public class WifiUtil {
 
 		if (mWm.enableNetwork(netId, true)) {
 			Log.i(TAG, "attemping to connect to network..");
-			// publish OG action
-			FBUtil.publishOG(c, SSID);
 			return ConnectToWifiResult.NETWORK_ENABLED;
 		} else {
 			Log.e(TAG, "failed attempt to connect to network");

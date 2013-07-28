@@ -72,6 +72,4 @@
     <string name="help_donate">Your donation will support an independent developer who wants to make life easier for people like you by writing Android apps.  If you live in USA, Canada or Mexico, then as a token of appreciation I will send you a Android-themed NFC sticker as a gift if you donate 4$, 2 for 6$, and if you\'re awesome, 4 for 10$.  After going through the in-app billing system, your email application will launch.  Just fill out the email and I will ship your Android-themed stickers to you as soon as possible.  Thanks!</string>
     <string name="fb_url">http://www.facebook.com/instawifi</string>
     <string name="twitter_url">http://www.twitter.com/instawifi</string>
-    <string name="publish_og">Publish connect to wifi actions to Facebook</string>
-
-</resources>
+</resources>

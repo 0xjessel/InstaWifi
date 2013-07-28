@@ -13,26 +13,10 @@
         android:gravity="center_horizontal"
         android:orientation="vertical" >
 
-        <com.facebook.widget.LoginButton
-            android:id="@+id/authButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp" />
-
-        <Button
-            android:id="@+id/publishOG"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/authButton"
-            android:text="@string/publish_og"
-            android:visibility="invisible" />
-
         <TextView
             android:id="@+id/help_contact_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/publishOG"
             android:text="@string/help_contact_title"
             android:textAppearance="?android:attr/textAppearanceMedium" >
         </TextView>
