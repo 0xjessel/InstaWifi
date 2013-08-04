@@ -7,5 +7,6 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="/FacebookSDK/libs/android-support-v4.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="lib" path="libs/crittercism_v3_0_11_sdkonly.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -49,6 +49,7 @@ import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.crittercism.app.Crittercism;
 
 @TargetApi(14)
 public class NfcActivity extends SherlockFragmentActivity implements
@@ -82,6 +83,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		setContentView(R.layout.nfc_activity);
 
 		c = getApplicationContext();
+		Crittercism.init(c, "51fe08168b2e3332ba000002");
 
 		mBillingService = new BillingService();
 		mBillingService.setContext(c);
@@ -94,7 +96,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			nfcManagerClassFound = false;
 			Log.v(TAG, "android.nfc.NfcManager class not found on your device");
 		}
-
+		
 		if (Util.hasNfc(c)
 				&& nfcManagerClassFound
 				&& (mNfcAdapter = ((NfcManager) getSystemService(Context.NFC_SERVICE))
