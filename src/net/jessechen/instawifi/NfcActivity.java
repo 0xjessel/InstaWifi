@@ -49,7 +49,6 @@ import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.bugsense.trace.BugSenseHandler;
 
 @TargetApi(14)
 public class NfcActivity extends SherlockFragmentActivity implements
@@ -83,9 +82,6 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		setContentView(R.layout.nfc_activity);
 
 		c = getApplicationContext();
-
-		// crash reporting and analytics
-		BugSenseHandler.setup(this, Util.bugsenseKey);
 
 		mBillingService = new BillingService();
 		mBillingService.setContext(c);
