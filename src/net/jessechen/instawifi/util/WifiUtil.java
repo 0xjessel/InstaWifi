@@ -18,8 +18,6 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.bugsense.trace.BugSenseHandler;
-
 public class WifiUtil {
 	public static String WIFI_URI_SCHEME = "wifi://%s/%s#%s";
 	public static String QR_WIFI_URI_SCHEME = "WIFI:S:%s;T:%s;P:%s;;";
@@ -370,8 +368,6 @@ public class WifiUtil {
 			if (wait >= WAIT_THRESHOLD) {
 				Log.e(TAG,
 						"waited for wifi to enable for longer than 8 seconds, bailing out");
-				BugSenseHandler.log("ENABLEWIFI", new Exception(
-						"enabling wifi timed out, user does not have wifi?"));
 				return false;
 			}
 			return true;

@@ -19,7 +19,6 @@ import android.widget.Toast;
 public class Util {
 	public static final String NFC = "NFC";
 	public static final String QR = "QR";
-	public static final String bugsenseKey = "5dfdfe33";
 
 	public static String curTab = NFC;
 
@@ -130,7 +129,6 @@ public class Util {
 			DonateOption donateOption) {
 		Intent intent = new Intent(Intent.ACTION_SENDTO);
 		if (donateOption == null || donateOption.numNfcStickers == 0) {
-			// bugsense track
 			return null;
 		}
 
