@@ -83,6 +83,8 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		setContentView(R.layout.nfc_activity);
 
 		c = getApplicationContext();
+
+		// crash reporting and analytics
 		Crittercism.init(c, "51fe08168b2e3332ba000002");
 
 		mBillingService = new BillingService();
@@ -96,7 +98,7 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			nfcManagerClassFound = false;
 			Log.v(TAG, "android.nfc.NfcManager class not found on your device");
 		}
-		
+
 		if (Util.hasNfc(c)
 				&& nfcManagerClassFound
 				&& (mNfcAdapter = ((NfcManager) getSystemService(Context.NFC_SERVICE))
