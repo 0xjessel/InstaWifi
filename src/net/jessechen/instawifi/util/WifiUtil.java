@@ -163,7 +163,7 @@ public class WifiUtil {
 
 		if (currentWifiInfo.getSSID() != null
 				&& currentWifiInfo.getNetworkId() != -1) {
-			String curSSID = currentWifiInfo.getSSID(); // Util.concatQuotes(currentWifiInfo.getSSID());
+			String curSSID = currentWifiInfo.getSSID();
 
 			WifiConfiguration activeConfig = null;
 			for (WifiConfiguration conn : mWifiManager.getConfiguredNetworks()) {
