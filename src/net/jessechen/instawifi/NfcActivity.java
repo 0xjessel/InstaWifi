@@ -6,7 +6,6 @@ import net.jessechen.instawifi.misc.MyTabListener;
 import net.jessechen.instawifi.misc.SpinnerArrayAdapter;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.NfcUtil;
-import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
 import android.annotation.TargetApi;
@@ -189,14 +188,8 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		networkSpinner.setOnItemSelectedListener(this);
 
 		// set spinner to current wifi config if connected to wifi
-		WifiModel curWifi = WifiUtil.getCurrentWifiModel(this);
-		if (curWifi != null) {
-			for (int i = 0; i < networks.length; i++) {
-				if (curWifi.getTrimmedSSID().equals(networks[i])) {
-					networkSpinner.setSelection(i);
-				}
-			}
-		}
+		new WifiUtil.getCurrentWifiModel(networks, networkSpinner)
+				.execute(this);
 
 		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, WifiUtil.protocolStrings);
@@ -457,20 +450,8 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			long id) {
 		switch (parent.getId()) {
 		case R.id.network_spinner:
-			WifiModel selectedNetwork = null;
-			try {
-				selectedNetwork = WifiUtil.getWifiModelFromSsid(this, parent
-						.getItemAtPosition(pos).toString());
-			} catch (PasswordNotFoundException e) {
-				Log.w(TAG, "did not find password on item selected");
-			}
-
-			if (selectedNetwork != null) {
-				protocolSpinner.setSelection(selectedNetwork.getProtocol());
-
-				passwordField.setText(Util.stripQuotes(selectedNetwork
-						.getPassword()));
-			}
+			new WifiUtil.getWifiModelFromSSID(protocolSpinner, passwordField,
+					parent.getItemAtPosition(pos).toString()).execute(this);
 			break;
 		case R.id.protocol_spinner:
 			if (protocolSpinner.getSelectedItemPosition() == WifiUtil.NONE) {

@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
+import android.os.Build;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -33,6 +34,7 @@ public class Util {
 		Toast.makeText(c, msg, Toast.LENGTH_LONG).show();
 	}
 
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	public static boolean hasNfc(Context c) {
 		return c.getPackageManager().hasSystemFeature(
 				PackageManager.FEATURE_NFC);

@@ -17,6 +17,8 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 public class WifiUtil {
 	public static String WIFI_URI_SCHEME = "wifi://%s/%s#%s";
@@ -37,20 +39,45 @@ public class WifiUtil {
 
 	private static final String TAG = WifiUtil.class.getSimpleName();
 
-	public static WifiModel getCurrentWifiModel(Context c) {
-		WifiConfiguration wc = getCurrentWifiConfig(c);
-		if (wc != null) {
-			String ssid = wc.SSID;
-			int protocol = getWifiProtocol(wc);
-			protocol = (protocol == -1) ? 1 : protocol;
-			String password = null;
-			try {
-				password = RootUtil.getWifiPassword(c, ssid);
-			} catch (PasswordNotFoundException e) {
+	public static class getCurrentWifiModel extends
+			AsyncTask<Context, Void, WifiModel> {
+
+		private String[] networks;
+		private Spinner networkSpinner;
+
+		public getCurrentWifiModel(String[] networks, Spinner networkSpinner) {
+			this.networks = networks;
+			this.networkSpinner = networkSpinner;
+		}
+
+		@Override
+		protected WifiModel doInBackground(Context... params) {
+			Context c = params[0];
+			WifiConfiguration wc = getCurrentWifiConfig(c);
+			if (wc != null) {
+				String ssid = wc.SSID;
+				int protocol = getWifiProtocol(wc);
+				protocol = (protocol == -1) ? 1 : protocol;
+				String password = null;
+				try {
+					password = RootUtil.getWifiPassword(c, ssid);
+				} catch (PasswordNotFoundException e) {
+				}
+				return new WifiModel(ssid, password, protocol);
+			} else {
+				return null;
 			}
-			return new WifiModel(ssid, password, protocol);
-		} else {
-			return null;
+		}
+
+		@Override
+		protected void onPostExecute(WifiModel curWifi) {
+			if (curWifi != null) {
+				for (int i = 0; i < networks.length; i++) {
+					if (curWifi.getTrimmedSSID().equals(networks[i])) {
+						networkSpinner.setSelection(i);
+					}
+				}
+			}
 		}
 	}
 
@@ -66,19 +93,48 @@ public class WifiUtil {
 		return new WifiModel(ssid, pw, protocol);
 	}
 
-	public static WifiModel getWifiModelFromSsid(Context c, String SSID)
-			throws PasswordNotFoundException {
-		SSID = Util.concatQuotes(SSID);
-		WifiConfiguration wc = getWifiConfig(c, SSID);
-		int protocol = getWifiProtocol(wc);
-		protocol = (protocol == -1) ? 1 : protocol;
-		String pw = RootUtil.getWifiPassword(c, SSID);
-		if (SSID == null) {
-			Log.e(TAG, "SSID is null when getting wifi model");
-			Util.shortToast(c, "ERROR: SSID is null");
-			return null;
+	public static class getWifiModelFromSSID extends
+			AsyncTask<Context, Void, WifiModel> {
+		private String SSID;
+		private Spinner protocolSpinner;
+		private EditText passwordField;
+
+		public getWifiModelFromSSID(Spinner protocolSpinner,
+				EditText passwordField, String SSID) {
+			this.protocolSpinner = protocolSpinner;
+			this.passwordField = passwordField;
+			this.SSID = Util.concatQuotes(SSID);
 		}
-		return new WifiModel(SSID, pw, protocol);
+
+		@Override
+		protected WifiModel doInBackground(Context... params) {
+			Context c = params[0];
+			WifiConfiguration wc = getWifiConfig(c, SSID);
+			int protocol = getWifiProtocol(wc);
+			protocol = (protocol == -1) ? 1 : protocol;
+			String pw = null;
+			try {
+				pw = RootUtil.getWifiPassword(c, SSID);
+			} catch (PasswordNotFoundException e) {
+			}
+			if (SSID == null) {
+				Log.e(TAG, "SSID is null when getting wifi model");
+				Util.shortToast(c, "ERROR: SSID is null");
+				return null;
+			}
+
+			return new WifiModel(SSID, pw, protocol);
+		}
+
+		@Override
+		protected void onPostExecute(WifiModel selectedNetwork) {
+			if (selectedNetwork != null) {
+				protocolSpinner.setSelection(selectedNetwork.getProtocol());
+
+				passwordField.setText(Util.stripQuotes(selectedNetwork
+						.getPassword()));
+			}
+		}
 	}
 
 	public static WifiConfiguration getWifiConfig(Context c, String SSID) {
@@ -107,7 +163,7 @@ public class WifiUtil {
 
 		if (currentWifiInfo.getSSID() != null
 				&& currentWifiInfo.getNetworkId() != -1) {
-			String curSSID = Util.concatQuotes(currentWifiInfo.getSSID());
+			String curSSID = currentWifiInfo.getSSID(); // Util.concatQuotes(currentWifiInfo.getSSID());
 
 			WifiConfiguration activeConfig = null;
 			for (WifiConfiguration conn : mWifiManager.getConfiguredNetworks()) {

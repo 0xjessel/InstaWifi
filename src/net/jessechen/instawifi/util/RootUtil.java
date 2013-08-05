@@ -1,5 +1,6 @@
 package net.jessechen.instawifi.util;
 
+import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
@@ -281,6 +282,15 @@ public class RootUtil {
 
 					os.writeBytes("exit\n");
 					os.flush();
+
+					// process can get blocked if the output stream is full,
+					// solution is to continually read from the process's input
+					// stream to ensure it doesn't block
+					BufferedInputStream in = new BufferedInputStream(
+							suProcess.getInputStream());
+					byte[] bytes = new byte[4096];
+					while (in.read(bytes) != 1) {
+					}
 
 					int suProcessRetval = suProcess.waitFor();
 					if (255 != suProcessRetval) {
