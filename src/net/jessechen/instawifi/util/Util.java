@@ -23,6 +23,8 @@ public class Util {
 
 	public static String curTab = NFC;
 
+	public static final String PREFS_NAME = "WIFI_PW";
+
 	@SuppressWarnings("unused")
 	private static final String TAG = Util.class.getSimpleName();
 

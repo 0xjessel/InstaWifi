@@ -11,6 +11,7 @@ import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.os.Bundle;
@@ -49,7 +50,7 @@ public class QrFragment extends SherlockFragment implements
 	static ImageView qrImage;
 	boolean firstLoad = true;
 
-	Activity a;
+	static Activity a;
 	Intent picIntent;
 
 	public static QrFragment getInstance() {
@@ -235,11 +236,18 @@ public class QrFragment extends SherlockFragment implements
 	private static Bitmap getSelectedWifiBitmap(QrImageSize size) {
 		// spinner adapters might be null, which throws a npe
 		try {
-			String ssid = networkSpinner_qr.getSelectedItem().toString();
+			String SSID = networkSpinner_qr.getSelectedItem().toString();
 			String pw = passwordField_qr.getText().toString();
 			int protocol = protocolSpinner_qr.getSelectedItemPosition();
 
-			WifiModel selectedWifi = new WifiModel(ssid, pw, protocol);
+			WifiModel selectedWifi = new WifiModel(SSID, pw, protocol);
+
+			// save the updated password in preferences
+			SharedPreferences passwords = a.getApplicationContext()
+					.getSharedPreferences(Util.PREFS_NAME, 0);
+			SharedPreferences.Editor editor = passwords.edit();
+			editor.putString(SSID, pw);
+			editor.commit();
 
 			return QrUtil.generateQrCode(selectedWifi, size);
 		} catch (Exception e) {

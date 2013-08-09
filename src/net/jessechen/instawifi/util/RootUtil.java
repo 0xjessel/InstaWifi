@@ -55,7 +55,7 @@ public class RootUtil {
 	 */
 	public static String getWifiPassword(final Context c, String SSID)
 			throws PasswordNotFoundException {
-		if (SSID == null || SSID == null) {
+		if (SSID == null) {
 			Log.e(TAG,
 					"could not get wifi password because WifiModel is invalid");
 			throw new PasswordNotFoundException("WifiModel is invalid");

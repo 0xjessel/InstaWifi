@@ -11,6 +11,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
@@ -39,6 +40,37 @@ public class WifiUtil {
 
 	private static final String TAG = WifiUtil.class.getSimpleName();
 
+	/**
+	 * always use this to get the wifi password given a SSID, it fetches a
+	 * password in this order: 1) search the wifipw.txt file to try and get the
+	 * pw if rooted 2) try and retrieve it from SharedPreferences if it has been
+	 * saved before
+	 * 
+	 * IMPORTANT: this should be called on a non-UI thread, it is blocking
+	 * 
+	 * @param c
+	 * @param SSID
+	 * @return string password if found, null otherwise
+	 */
+	public static String fetchWifiPassword(Context c, String SSID) {
+		String password = null;
+		try {
+			// try to get it via root methods
+			password = RootUtil.getWifiPassword(c, SSID);
+		} catch (PasswordNotFoundException e) {
+		}
+		if (password != null) {
+			return password;
+		}
+
+		// try to get it via Shared Preferences
+		SharedPreferences passwords = c
+				.getSharedPreferences(Util.PREFS_NAME, 0);
+		password = passwords.getString(SSID, null);
+
+		return password;
+	}
+
 	public static class getCurrentWifiModel extends
 			AsyncTask<Context, Void, WifiModel> {
 
@@ -55,15 +87,11 @@ public class WifiUtil {
 			Context c = params[0];
 			WifiConfiguration wc = getCurrentWifiConfig(c);
 			if (wc != null) {
-				String ssid = wc.SSID;
+				String SSID = wc.SSID;
 				int protocol = getWifiProtocol(wc);
 				protocol = (protocol == -1) ? 1 : protocol;
-				String password = null;
-				try {
-					password = RootUtil.getWifiPassword(c, ssid);
-				} catch (PasswordNotFoundException e) {
-				}
-				return new WifiModel(ssid, password, protocol);
+				String password = fetchWifiPassword(c, SSID);
+				return new WifiModel(SSID, password, protocol);
 			} else {
 				return null;
 			}
@@ -112,11 +140,7 @@ public class WifiUtil {
 			WifiConfiguration wc = getWifiConfig(c, SSID);
 			int protocol = getWifiProtocol(wc);
 			protocol = (protocol == -1) ? 1 : protocol;
-			String pw = null;
-			try {
-				pw = RootUtil.getWifiPassword(c, SSID);
-			} catch (PasswordNotFoundException e) {
-			}
+			String pw = fetchWifiPassword(c, SSID);
 			if (SSID == null) {
 				Log.e(TAG, "SSID is null when getting wifi model");
 				Util.shortToast(c, "ERROR: SSID is null");

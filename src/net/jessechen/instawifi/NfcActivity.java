@@ -14,6 +14,7 @@ import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -280,6 +281,14 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			WifiModel selectedWifi = new WifiModel(networkSpinner
 					.getSelectedItem().toString(), passwordField.getText()
 					.toString(), protocolSpinner.getSelectedItemPosition());
+
+			// save the updated password in preferences
+			SharedPreferences passwords = getSharedPreferences(Util.PREFS_NAME,
+					0);
+			SharedPreferences.Editor editor = passwords.edit();
+			editor.putString(selectedWifi.getSSID(), selectedWifi.getPassword());
+			editor.commit();
+
 			if (WifiUtil.isValidWifiModel(selectedWifi)) {
 				NdefMessage wifiNdefMessage = NfcUtil.getWifiAsNdef(c,
 						selectedWifi);
