@@ -213,13 +213,19 @@ public class NfcActivity extends SherlockFragmentActivity implements
 
 		picIntent = new Intent(android.content.Intent.ACTION_SEND);
 		picIntent.setType("image/*");
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
 
 		// check if NFC is enabled
 		if (!Util.isNfcEnabled(getApplicationContext())) {
+			writeTag.setEnabled(false);
+
 			AlertDialog.Builder builder = new AlertDialog.Builder(
 					NfcActivity.this);
 			builder.setTitle(getString(R.string.dialog_enable_nfc_title));
-			;
 			builder.setMessage(R.string.dialog_enable_nfc_msg);
 			builder.setPositiveButton(R.string.enable, new OnClickListener() {
 
@@ -231,17 +237,16 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			});
 
 			builder.show();
+		} else {
+			writeTag.setEnabled(true);
 		}
-	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
 		// Check to see that the Activity started due to an Android Beam
 		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
 			processIntent(getIntent());
 		}
 
+		// facebook app install ads publish
 		com.facebook.Settings.publishInstallAsync(getApplicationContext(),
 				getString(R.string.app_id));
 	}
