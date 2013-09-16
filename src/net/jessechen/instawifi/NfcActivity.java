@@ -61,6 +61,8 @@ public class NfcActivity extends SherlockFragmentActivity implements
 	PendingIntent mNfcPendingIntent;
 	IntentFilter[] mWriteTagFilters;
 	final static int MESSAGE_SENT = 1;
+	AlertDialog enableNFCDialog;
+	boolean shownEnableNFCDialog = false;
 
 	AlertDialog alert;
 	Button writeTag;
@@ -223,20 +225,27 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		if (!Util.isNfcEnabled(getApplicationContext())) {
 			writeTag.setEnabled(false);
 
-			AlertDialog.Builder builder = new AlertDialog.Builder(
-					NfcActivity.this);
-			builder.setTitle(getString(R.string.dialog_enable_nfc_title));
-			builder.setMessage(R.string.dialog_enable_nfc_msg);
-			builder.setPositiveButton(R.string.enable, new OnClickListener() {
+			if (!shownEnableNFCDialog) {
+				shownEnableNFCDialog = true;
 
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					startActivity(new Intent(
-							android.provider.Settings.ACTION_WIRELESS_SETTINGS));
-				}
-			});
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						NfcActivity.this);
+				builder.setTitle(getString(R.string.dialog_enable_nfc_title));
+				builder.setMessage(R.string.dialog_enable_nfc_msg);
+				builder.setPositiveButton(R.string.enable,
+						new OnClickListener() {
 
-			builder.show();
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								startActivity(new Intent(
+										android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+							}
+						});
+
+				enableNFCDialog = builder.create();
+				enableNFCDialog.show();
+			}
 		} else {
 			writeTag.setEnabled(true);
 		}
@@ -275,6 +284,11 @@ public class NfcActivity extends SherlockFragmentActivity implements
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+
+		if (enableNFCDialog != null) {
+			enableNFCDialog.dismiss();
+			enableNFCDialog = null;
+		}
 	}
 
 	@Override
