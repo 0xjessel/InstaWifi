@@ -1,5 +1,7 @@
 package net.jessechen.instawifi;
 
+import net.jessechen.instawifi.asynctask.GetCurrentWifiModel;
+import net.jessechen.instawifi.asynctask.SetWifiProtocolAndPasswordInputFields;
 import net.jessechen.instawifi.billing.BillingService;
 import net.jessechen.instawifi.misc.AddNetworkDialog;
 import net.jessechen.instawifi.misc.MyTabListener;
@@ -7,6 +9,7 @@ import net.jessechen.instawifi.misc.SpinnerArrayAdapter;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.NfcUtil;
 import net.jessechen.instawifi.util.Util;
+import net.jessechen.instawifi.util.WifiPreferences;
 import net.jessechen.instawifi.util.WifiUtil;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -14,7 +17,6 @@ import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -189,8 +191,8 @@ public class NfcActivity extends SherlockFragmentActivity implements
 		networkSpinner.setOnItemSelectedListener(this);
 
 		// set spinner to current wifi config if connected to wifi
-		new WifiUtil.getCurrentWifiModel(networks, networkSpinner)
-				.execute(this);
+		Util.startMyTask(new GetCurrentWifiModel(networks, networkSpinner),
+				getApplicationContext());
 
 		ArrayAdapter<String> protocolAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, WifiUtil.protocolStrings);
@@ -282,12 +284,9 @@ public class NfcActivity extends SherlockFragmentActivity implements
 					.getSelectedItem().toString(), passwordField.getText()
 					.toString(), protocolSpinner.getSelectedItemPosition());
 
-			// save the updated password in preferences
-			SharedPreferences passwords = getSharedPreferences(Util.PREFS_NAME,
-					0);
-			SharedPreferences.Editor editor = passwords.edit();
-			editor.putString(selectedWifi.getSSID(), selectedWifi.getPassword());
-			editor.commit();
+			// save this password in preferences
+			WifiPreferences.saveWifiPassword(c, selectedWifi.getSSID(),
+					selectedWifi.getPassword());
 
 			if (WifiUtil.isValidWifiModel(selectedWifi)) {
 				NdefMessage wifiNdefMessage = NfcUtil.getWifiAsNdef(c,
@@ -459,8 +458,10 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			long id) {
 		switch (parent.getId()) {
 		case R.id.network_spinner:
-			new WifiUtil.getWifiModelFromSSID(protocolSpinner, passwordField,
-					parent.getItemAtPosition(pos).toString()).execute(this);
+			Util.startMyTask(new SetWifiProtocolAndPasswordInputFields(
+					protocolSpinner, passwordText, passwordField,
+					revealPassword, parent.getItemAtPosition(pos).toString()),
+					getApplicationContext());
 			break;
 		case R.id.protocol_spinner:
 			if (protocolSpinner.getSelectedItemPosition() == WifiUtil.NONE) {

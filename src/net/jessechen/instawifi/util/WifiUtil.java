@@ -3,23 +3,19 @@ package net.jessechen.instawifi.util;
 import java.util.List;
 
 import net.jessechen.instawifi.R;
+import net.jessechen.instawifi.asynctask.EnableWifiTask;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.RootUtil.PasswordNotFoundException;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.Spinner;
 
 public class WifiUtil {
 	public static String WIFI_URI_SCHEME = "wifi://%s/%s#%s";
@@ -41,7 +37,7 @@ public class WifiUtil {
 	private static final String TAG = WifiUtil.class.getSimpleName();
 
 	/**
-	 * always use this to get the wifi password given a SSID, it fetches a
+	 * Always use this to get the wifi password given a SSID, it fetches a
 	 * password in this order: 1) search the wifipw.txt file to try and get the
 	 * pw if rooted 2) try and retrieve it from SharedPreferences if it has been
 	 * saved before
@@ -52,7 +48,7 @@ public class WifiUtil {
 	 * @param SSID
 	 * @return string password if found, null otherwise
 	 */
-	public static String fetchWifiPassword(Context c, String SSID) {
+	public static String fetchWifiPasswordNow(Context c, String SSID) {
 		String password = null;
 		try {
 			// try to get it via root methods
@@ -64,49 +60,7 @@ public class WifiUtil {
 		}
 
 		// try to get it via Shared Preferences
-		SharedPreferences passwords = c
-				.getSharedPreferences(Util.PREFS_NAME, 0);
-		password = passwords.getString(SSID, null);
-
-		return password;
-	}
-
-	public static class getCurrentWifiModel extends
-			AsyncTask<Context, Void, WifiModel> {
-
-		private String[] networks;
-		private Spinner networkSpinner;
-
-		public getCurrentWifiModel(String[] networks, Spinner networkSpinner) {
-			this.networks = networks;
-			this.networkSpinner = networkSpinner;
-		}
-
-		@Override
-		protected WifiModel doInBackground(Context... params) {
-			Context c = params[0];
-			WifiConfiguration wc = getCurrentWifiConfig(c);
-			if (wc != null) {
-				String SSID = wc.SSID;
-				int protocol = getWifiProtocol(wc);
-				protocol = (protocol == -1) ? 1 : protocol;
-				String password = fetchWifiPassword(c, SSID);
-				return new WifiModel(SSID, password, protocol);
-			} else {
-				return null;
-			}
-		}
-
-		@Override
-		protected void onPostExecute(WifiModel curWifi) {
-			if (curWifi != null) {
-				for (int i = 0; i < networks.length; i++) {
-					if (curWifi.getTrimmedSSID().equals(networks[i])) {
-						networkSpinner.setSelection(i);
-					}
-				}
-			}
-		}
+		return WifiPreferences.getWifiPassword(c, SSID);
 	}
 
 	public static WifiModel getWifiModelFromUri(Context c, Uri wifiUri) {
@@ -119,46 +73,6 @@ public class WifiUtil {
 			return null;
 		}
 		return new WifiModel(ssid, pw, protocol);
-	}
-
-	public static class getWifiModelFromSSID extends
-			AsyncTask<Context, Void, WifiModel> {
-		private String SSID;
-		private Spinner protocolSpinner;
-		private EditText passwordField;
-
-		public getWifiModelFromSSID(Spinner protocolSpinner,
-				EditText passwordField, String SSID) {
-			this.protocolSpinner = protocolSpinner;
-			this.passwordField = passwordField;
-			this.SSID = Util.concatQuotes(SSID);
-		}
-
-		@Override
-		protected WifiModel doInBackground(Context... params) {
-			Context c = params[0];
-			WifiConfiguration wc = getWifiConfig(c, SSID);
-			int protocol = getWifiProtocol(wc);
-			protocol = (protocol == -1) ? 1 : protocol;
-			String pw = fetchWifiPassword(c, SSID);
-			if (SSID == null) {
-				Log.e(TAG, "SSID is null when getting wifi model");
-				Util.shortToast(c, "ERROR: SSID is null");
-				return null;
-			}
-
-			return new WifiModel(SSID, pw, protocol);
-		}
-
-		@Override
-		protected void onPostExecute(WifiModel selectedNetwork) {
-			if (selectedNetwork != null) {
-				protocolSpinner.setSelection(selectedNetwork.getProtocol());
-
-				passwordField.setText(Util.stripQuotes(selectedNetwork
-						.getPassword()));
-			}
-		}
 	}
 
 	public static WifiConfiguration getWifiConfig(Context c, String SSID) {
@@ -455,50 +369,6 @@ public class WifiUtil {
 		return false;
 	}
 
-	// use this for front-facing enabling wifi tasks
-	public static class EnableWifiTask extends AsyncTask<Void, Void, Void> {
-		Context c;
-		ProgressDialog pd;
-		EnableWifiTaskListener listener;
-
-		public EnableWifiTask(Context c, EnableWifiTaskListener listener) {
-			this.c = c;
-			this.listener = listener;
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			WifiManager mWm = (WifiManager) c
-					.getSystemService(Context.WIFI_SERVICE);
-
-			if (!enableWifiAndWait(mWm)) {
-				Log.e(TAG,
-						"enabling wifi timed out in WifiUtil.EnableWifiTask.doInBackground");
-			}
-
-			return null;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			pd = ProgressDialog.show(c, "WiFi", "Turning on..", true);
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			try {
-				pd.dismiss();
-				pd = null;
-			} catch (Exception e) {
-				// do nothing
-			}
-
-			if (listener != null) {
-				listener.OnWifiEnabled();
-			}
-		}
-	}
-
 	public static class EnableWifiTaskBundle {
 		Context c;
 		EnableWifiTaskListener listener;
@@ -560,7 +430,7 @@ public class WifiUtil {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				new WifiUtil.EnableWifiTask(c, listener).execute();
+				Util.startMyTask(new EnableWifiTask(c, listener));
 			}
 		});
 

@@ -64,6 +64,12 @@ public class RootUtil {
 		String password = getPasswordFromFile(c, SSID);
 
 		if (password == null) {
+			if (!ExecuteAsRootBase.canRunRootCommands()) {
+				Log.e(TAG, "cannot run root commands, throwing exception");
+				throw new PasswordNotFoundException(
+						"we do not have root permissions");
+			}
+
 			// get wifi_supplicant.conf file if rooted
 			ExecuteAsRootBase su = new ExecuteAsRootBase() {
 
@@ -289,7 +295,8 @@ public class RootUtil {
 					BufferedInputStream in = new BufferedInputStream(
 							suProcess.getInputStream());
 					byte[] bytes = new byte[4096];
-					while (in.read(bytes) != 1) {
+					while (in.read(bytes) != -1) {
+						Log.e(TAG, "ughhhhh");
 					}
 
 					int suProcessRetval = suProcess.waitFor();

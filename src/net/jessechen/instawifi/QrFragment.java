@@ -3,6 +3,8 @@ package net.jessechen.instawifi;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import net.jessechen.instawifi.asynctask.GetCurrentWifiModel;
+import net.jessechen.instawifi.asynctask.SetWifiProtocolAndPasswordInputFields;
 import net.jessechen.instawifi.misc.PasswordEditText;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.QrUtil;
@@ -11,7 +13,6 @@ import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiUtil;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.os.Bundle;
@@ -161,8 +162,8 @@ public class QrFragment extends SherlockFragment implements
 			revealPassword_qr.setChecked(revealed);
 		} else {
 			// set spinner to current wifi config if connected to wifi
-			new WifiUtil.getCurrentWifiModel(networks, networkSpinner_qr)
-					.execute(a.getApplicationContext());
+			Util.startMyTask(new GetCurrentWifiModel(networks,
+					networkSpinner_qr), getActivity().getApplicationContext());
 
 			protocolSpinner_qr.setSelection(WifiUtil.DEFAULT_PROTOCOL);
 		}
@@ -233,28 +234,23 @@ public class QrFragment extends SherlockFragment implements
 		}
 	}
 
-	private static Bitmap getSelectedWifiBitmap(QrImageSize size) {
+	public static WifiModel getWifiModelFromInputs() {
 		// spinner adapters might be null, which throws a npe
 		try {
 			String SSID = networkSpinner_qr.getSelectedItem().toString();
 			String pw = passwordField_qr.getText().toString();
 			int protocol = protocolSpinner_qr.getSelectedItemPosition();
 
-			WifiModel selectedWifi = new WifiModel(SSID, pw, protocol);
-
-			// save the updated password in preferences
-			SharedPreferences passwords = a.getApplicationContext()
-					.getSharedPreferences(Util.PREFS_NAME, 0);
-			SharedPreferences.Editor editor = passwords.edit();
-			editor.putString(SSID, pw);
-			editor.commit();
-
-			return QrUtil.generateQrCode(selectedWifi, size);
+			return new WifiModel(SSID, pw, protocol);
 		} catch (Exception e) {
 			Log.e(TAG,
 					"spinner adapters are null, wifi is probably not enabled");
 		}
 		return null;
+	}
+
+	private static Bitmap getSelectedWifiBitmap(QrImageSize size) {
+		return QrUtil.generateQrCode(getWifiModelFromInputs(), size);
 	}
 
 	private void shareQrImage() {
@@ -295,9 +291,12 @@ public class QrFragment extends SherlockFragment implements
 			long id) {
 		switch (parent.getId()) {
 		case R.id.network_spinner_qr:
-			new WifiUtil.getWifiModelFromSSID(protocolSpinner_qr,
-					passwordField_qr, parent.getItemAtPosition(pos).toString())
-					.execute(a);
+			Util.startMyTask(
+					new SetWifiProtocolAndPasswordInputFields(
+							protocolSpinner_qr, passwordText_qr,
+							passwordField_qr, revealPassword_qr, parent
+									.getItemAtPosition(pos).toString()), a
+							.getApplicationContext());
 			break;
 		case R.id.protocol_spinner_qr:
 			if (protocolSpinner_qr.getSelectedItemPosition() == WifiUtil.NONE) {

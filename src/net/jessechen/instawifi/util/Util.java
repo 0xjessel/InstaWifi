@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -22,8 +23,6 @@ public class Util {
 	public static final String QR = "QR";
 
 	public static String curTab = NFC;
-
-	public static final String PREFS_NAME = "WIFI_PW";
 
 	@SuppressWarnings("unused")
 	private static final String TAG = Util.class.getSimpleName();
@@ -154,5 +153,18 @@ public class Util {
 		Uri uri = Uri.parse(uriText);
 		intent.setData(uri);
 		return intent;
+	}
+
+	/**
+	 * Wrapper function to run in parallel when device > Honeycomb, otherwise
+	 * run serially
+	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public static <T> void startMyTask(AsyncTask<T, ?, ?> asyncTask,
+			T... params) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+			asyncTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, params);
+		else
+			asyncTask.execute(params);
 	}
 }

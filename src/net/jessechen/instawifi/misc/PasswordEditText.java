@@ -2,7 +2,9 @@ package net.jessechen.instawifi.misc;
 
 import net.jessechen.instawifi.QrFragment;
 import net.jessechen.instawifi.R;
+import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.Util;
+import net.jessechen.instawifi.util.WifiPreferences;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -62,6 +64,12 @@ public class PasswordEditText extends EditText {
 
 		Log.i(TAG, "done with pw changes, redrawing qr image");
 		Util.shortToast(a, a.getString(R.string.updated_qr_code));
+
+		WifiModel selectedWifiModel = QrFragment.getWifiModelFromInputs();
+
+		// save the password in preferences
+		WifiPreferences.saveWifiPassword(a.getApplicationContext(),
+				selectedWifiModel.getSSID(), selectedWifiModel.getPassword());
 
 		QrFragment.setQrImage(a);
 	}
