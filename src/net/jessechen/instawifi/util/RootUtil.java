@@ -65,7 +65,6 @@ public class RootUtil {
 
 		if (password == null) {
 			if (!ExecuteAsRootBase.canRunRootCommands()) {
-				Log.e(TAG, "cannot run root commands, throwing exception");
 				throw new PasswordNotFoundException(
 						"we do not have root permissions");
 			}

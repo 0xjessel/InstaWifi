@@ -5,18 +5,16 @@ import net.jessechen.instawifi.util.WifiUtil;
 import android.content.Context;
 import android.net.wifi.WifiConfiguration;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Spinner;
 
 public class GetCurrentWifiModel extends AsyncTask<Context, Void, WifiModel> {
+	@SuppressWarnings("unused")
 	private static final String TAG = GetCurrentWifiModel.class.getSimpleName();
 
 	private String[] networks;
 	private Spinner networkSpinner;
 
 	public GetCurrentWifiModel(String[] networks, Spinner networkSpinner) {
-		Log.e(TAG, "constructing getcurrentwifimodel");
-
 		this.networks = networks;
 		this.networkSpinner = networkSpinner;
 	}
