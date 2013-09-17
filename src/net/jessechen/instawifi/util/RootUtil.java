@@ -188,7 +188,7 @@ public class RootUtil {
 
 		HashMap<String, String> toReturn = new HashMap<String, String>();
 		for (String row : rows) {
-			String[] kv = row.split("=");
+			String[] kv = row.split("=", 2);
 			if (kv.length != 2) {
 				return null;
 			}
