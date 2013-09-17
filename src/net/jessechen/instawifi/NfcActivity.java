@@ -8,6 +8,7 @@ import net.jessechen.instawifi.misc.MyTabListener;
 import net.jessechen.instawifi.misc.SpinnerArrayAdapter;
 import net.jessechen.instawifi.models.WifiModel;
 import net.jessechen.instawifi.util.NfcUtil;
+import net.jessechen.instawifi.util.RootUtil;
 import net.jessechen.instawifi.util.Util;
 import net.jessechen.instawifi.util.WifiPreferences;
 import net.jessechen.instawifi.util.WifiUtil;
@@ -289,6 +290,8 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			enableNFCDialog.dismiss();
 			enableNFCDialog = null;
 		}
+
+		RootUtil.deleteWifiPwFile(getApplicationContext());
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package net.jessechen.instawifi.util;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -42,6 +43,14 @@ public class RootUtil {
 	}
 
 	private static final String TAG = RootUtil.class.getSimpleName();
+
+	public static void deleteWifiPwFile(Context c) {
+		File file = new File(ABSOLUTE_DESTINATION_PATH(c));
+
+		if (file.exists()) {
+			file.delete();
+		}
+	}
 
 	/**
 	 * gets the wifi password from the current connected network. requires root
