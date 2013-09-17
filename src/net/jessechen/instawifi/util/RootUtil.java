@@ -280,7 +280,7 @@ public class RootUtil {
 
 		public final boolean execute() {
 			boolean retval = false;
-
+			
 			try {
 				ArrayList<String> commands = getCommandsToExecute();
 				if (null != commands && commands.size() > 0) {

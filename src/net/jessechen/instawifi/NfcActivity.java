@@ -281,6 +281,15 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			alert.dismiss();
 		}
 	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+
+		if (isFinishing()) {
+			RootUtil.deleteWifiPwFile(getApplicationContext());
+		}
+	}
 
 	@Override
 	protected void onDestroy() {
@@ -290,8 +299,6 @@ public class NfcActivity extends SherlockFragmentActivity implements
 			enableNFCDialog.dismiss();
 			enableNFCDialog = null;
 		}
-
-		RootUtil.deleteWifiPwFile(getApplicationContext());
 	}
 
 	@Override
